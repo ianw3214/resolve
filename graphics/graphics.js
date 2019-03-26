@@ -4,8 +4,13 @@ const vertex = `
     // TODO: (Ian) Add conversion from pixels to normalized float
     attribute vec4 a_pos;
     
+    uniform float u_screenWidth;
+    uniform float u_screenHeight;
+
     void main() {
-        gl_Position = a_pos;
+        float x = (a_pos.x / u_screenWidth) * 2.0 - 1.0;
+        float y = (a_pos.y / u_screenHeight) * 2.0 - 1.0;
+        gl_Position = vec4(x, y, 0.0, 1.0);
     }`;
 
 const fragment = `   
@@ -32,6 +37,9 @@ function init() {
     // webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
     shader_program = createShaderProgram(vertex, fragment);
+    gl.useProgram(shader_program);
+    gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenWidth"), gl.canvas.clientWidth);
+    gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenHeight"), gl.canvas.clientHeight);
 
 }
 
@@ -73,16 +81,12 @@ function clearBuffer() {
 
 // Function to draw a rectangle
 // TODO: (Ian) Also take in position as a parameter
-function drawRect(colour = [1.0, 0.0, 1.0, 1.0]) {
-
-    // This is how to get the canvas width/height
-    console.log(gl.canvas.clientWidth);
-    console.log(gl.canvas.clientHeight);
+function drawRect(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1.0, 1.0]) {
 
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // Add rectangle data to the buffer
-    setBufferRectangle(0.0, 0.0, 0.5, 0.5);
+    setBufferRectangle(x, y, w, h);
     var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
     gl.useProgram(shader_program);
     gl.enableVertexAttribArray(positionLocation);
@@ -97,6 +101,7 @@ function drawRect(colour = [1.0, 0.0, 1.0, 1.0]) {
 
 // Helper function to fill buffer data with rectangle data
 function setBufferRectangle(x, y, width, height) {
+
     var x1 = x;
     var x2 = x + width;
     var y1 = y;
