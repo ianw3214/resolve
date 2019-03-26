@@ -6,5 +6,5 @@ function main() {
     
     clearBuffer();
 
-    drawRect();
+    drawRect([0.0, 0.0, 1.0, 1.0]);
 }

@@ -9,9 +9,10 @@ const vertex = `
     }`;
 
 const fragment = `   
-    // TODO: (Ian) Add uniform to adjust colour
+    precision mediump float;
+    uniform vec4 u_colour;
     void main() {
-        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        gl_FragColor = u_colour;
     }`;
 
 // GLOBAL VARIABLES
@@ -71,7 +72,13 @@ function clearBuffer() {
 }
 
 // Function to draw a rectangle
-function drawRect() {
+// TODO: (Ian) Also take in position as a parameter
+function drawRect(colour = [1.0, 0.0, 1.0, 1.0]) {
+
+    // This is how to get the canvas width/height
+    console.log(gl.canvas.clientWidth);
+    console.log(gl.canvas.clientHeight);
+
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // Add rectangle data to the buffer
@@ -81,6 +88,10 @@ function drawRect() {
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    // Set the colour
+    var colourLocation = gl.getUniformLocation(shader_program, "u_colour");
+    gl.uniform4fv(colourLocation, colour);
+    // Draw the actual rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 
