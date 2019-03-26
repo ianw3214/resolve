@@ -1,7 +1,8 @@
+var graphics = {};
+
 // TODO: (Ian) Move functions into a namespace
 // Simple vertex shader for 2D drawing
 const vertex = `
-    // TODO: (Ian) Add conversion from pixels to normalized float
     attribute vec4 a_pos;
     
     uniform float u_screenWidth;
@@ -25,7 +26,7 @@ var gl;
 var shader_info;
 
 // Initialize webGL
-function init() {
+graphics.init = function() {
     const canvas = document.querySelector("#glCanvas");
     gl = canvas.getContext("webgl");
     if (!gl) {
@@ -36,7 +37,7 @@ function init() {
     // TODO: ??
     // webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    shader_program = createShaderProgram(vertex, fragment);
+    shader_program = graphics.createShaderProgram(vertex, fragment);
     gl.useProgram(shader_program);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenWidth"), gl.canvas.clientWidth);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenHeight"), gl.canvas.clientHeight);
@@ -44,9 +45,9 @@ function init() {
 }
 
 // Function to create and link shaders
-function createShaderProgram(v_src, f_src) {
-    const vertexShader = loadShader(gl.VERTEX_SHADER, v_src);
-    const fragmentShader = loadShader(gl.FRAGMENT_SHADER, f_src);
+graphics.createShaderProgram = function(v_src, f_src) {
+    const vertexShader = graphics.loadShader(gl.VERTEX_SHADER, v_src);
+    const fragmentShader = graphics.loadShader(gl.FRAGMENT_SHADER, f_src);
 
     const shaderProgram = gl.createProgram();
     gl.attachShader(shaderProgram, vertexShader);
@@ -60,7 +61,7 @@ function createShaderProgram(v_src, f_src) {
 }
 
 // Function to create and compile a shader
-function loadShader(type, src) {
+graphics.loadShader = function(type, src) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, src);
     gl.compileShader(shader);
@@ -74,19 +75,18 @@ function loadShader(type, src) {
 }
 
 // Function to clear the screen
-function clearBuffer() {
+graphics.clearBuffer = function() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
 // Function to draw a rectangle
-// TODO: (Ian) Also take in position as a parameter
-function drawRect(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1.0, 1.0]) {
+graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1.0, 1.0]) {
 
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // Add rectangle data to the buffer
-    setBufferRectangle(x, y, w, h);
+    graphics.setBufferRectangle(x, y, w, h);
     var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
     gl.useProgram(shader_program);
     gl.enableVertexAttribArray(positionLocation);
@@ -100,7 +100,7 @@ function drawRect(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1.0, 1.0]) {
 }
 
 // Helper function to fill buffer data with rectangle data
-function setBufferRectangle(x, y, width, height) {
+graphics.setBufferRectangle = function(x, y, width, height) {
 
     var x1 = x;
     var x2 = x + width;
