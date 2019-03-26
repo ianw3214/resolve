@@ -4,14 +4,19 @@ var graphics = {};
 // Simple vertex shader for 2D drawing
 const vertex = `
     attribute vec4 a_pos;
+    attribute vec2 a_tex;
     
     uniform float u_screenWidth;
     uniform float u_screenHeight;
+
+    varying vec2 v_texCoord;
 
     void main() {
         float x = (a_pos.x / u_screenWidth) * 2.0 - 1.0;
         float y = (a_pos.y / u_screenHeight) * 2.0 - 1.0;
         gl_Position = vec4(x, y, 0.0, 1.0);
+
+        v_texCoord = a_tex;
     }`;
 
 const fragment = `   
@@ -21,9 +26,18 @@ const fragment = `
         gl_FragColor = u_colour;
     }`;
 
+const texture = `
+    precision mediump float;
+    uniform sampler2D u_image;
+    varying vec2 v_texCoord;
+    void main() {
+        gl_FragColor = texture2D(u_image, v_texCoord);
+    }`;
+
 // GLOBAL VARIABLES
 var gl;
-var shader_info;
+var shader_program;
+var texture_shader;
 
 // Initialize webGL
 graphics.init = function() {
@@ -41,6 +55,10 @@ graphics.init = function() {
     gl.useProgram(shader_program);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenWidth"), gl.canvas.clientWidth);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenHeight"), gl.canvas.clientHeight);
+    texture_shader = graphics.createShaderProgram(vertex, texture);
+    gl.useProgram(texture_shader);
+    gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenWidth"), gl.canvas.clientWidth);
+    gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenHeight"), gl.canvas.clientHeight);
 
 }
 
@@ -97,6 +115,69 @@ graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1
     gl.uniform4fv(colourLocation, colour);
     // Draw the actual rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+
+// Function to draw an image
+graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
+
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.useProgram(texture_shader);
+
+    var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
+    var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+
+    var positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    graphics.setBufferRectangle(x, y, w, h);
+    var texcoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+    graphics.setBufferRectangle(0.0, 0.0, 1.0, 1.0);        
+
+    gl.enableVertexAttribArray(positionLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    // TODO: GET UNIFORM LOCATION
+    gl.enableVertexAttribArray(texCoordLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+    gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+    // Draw the actual rectangle
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+
+// creates a texture info { width: w, height: h, texture: tex }
+graphics.loadImage = function (path) {
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+
+    // let's assume all images are not a power of 2
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+    var textureInfo = {
+        width: 1,   // we don't know the size until it loads
+        height: 1,
+        loaded: false,
+        texture: tex,
+    };
+    var image = new Image();
+    image.src = path;
+    image.onload = function() {
+        console.log("FLAG");
+        textureInfo.width = image.width;
+        textureInfo.height = image.height;
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+        textureInfo.loaded = true;
+    }
+
+    return textureInfo;
 }
 
 // Helper function to fill buffer data with rectangle data

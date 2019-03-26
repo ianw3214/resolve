@@ -1,9 +1,13 @@
+var tex;
+
 main();
 
 // Function to represent entry point
 function main() {
     input.init();
     graphics.init();
+
+    tex = graphics.loadImage("test.png");
 
     run();
 }
@@ -33,4 +37,6 @@ function tick() {
 
     graphics.drawRect(x, y);
     graphics.drawRect(50, 50, 100, 100, [1.0, 1.0, 0.0, 1.0]);
+
+    if (tex.loaded) graphics.drawImage(tex.texture);
 }
