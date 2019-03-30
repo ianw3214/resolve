@@ -14,6 +14,11 @@ engine.start = function(state = null) {
 }
 
 engine.setState = function(state) {
+    if (engine.state.hasOwnProperty("close")) {
+        if (typeof engine.state.close === "function") {
+            engine.state.close();
+        }
+    }
     if (state.hasOwnProperty("init")) {
         if (typeof state.init === "function") {
             state.init();

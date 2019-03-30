@@ -3,6 +3,9 @@ var menu = {
     init: function() {
         tex = graphics.loadImage("res/menu/background.png");
     },
+    close: function() {
+        console.log("CLOSE");
+    },
     update: function() {
         if (input.keyPressed(68)) {
             engine.setState(game);
