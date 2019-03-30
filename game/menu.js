@@ -1,7 +1,7 @@
 var menu = {
-    tex: null,
+    background: null,
     init: function() {
-        tex = graphics.loadImage("test.png");
+        tex = graphics.loadImage("res/menu/background.png");
     },
     update: function() {
         if (input.keyPressed(68)) {
@@ -9,6 +9,6 @@ var menu = {
         }
     },
     draw: function() {
-        if (tex.loaded) graphics.drawImage(tex.texture, 50, 50);
+        if (tex.loaded) graphics.drawImage(tex.texture, 0, 0, 640, 480);
     }
 }

@@ -1,10 +1,21 @@
+// REFERENCE TO THE CANVAS
+var canvas = document.getElementById("glCanvas");
+
 var input = {
-    keys: []
+    keys: [],
+    mouse: {
+        x: 0,
+        y: 0,
+        clicked: false
+    }
 };
 
 input.init = function() {
     document.addEventListener("keydown", input.keyDownHandler, false)
     document.addEventListener("keyup", input.keyUpHandler, false);
+    document.addEventListener("mousemove", input.updateMousePos, false);
+    document.addEventListener("mousedown", input.mouseDown, false);
+    document.addEventListener("mouseup", input.mouseUp, false);
 }
 
 input.keyDownHandler = function(event) {
@@ -21,4 +32,18 @@ input.keyUpHandler = function(event) {
 
 input.keyPressed = function(key) {
     return input.keys.indexOf(key) >= 0;
+}
+
+input.updateMousePos = function(evt) {
+    var rect = canvas.getBoundingClientRect();
+    input.mouse.x = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
+    input.mouse.y = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+}
+
+input.mouseDown = function(event) {
+    input.mouse.clicked = true;
+}
+
+input.mouseUp = function(event) {
+    input.mouse.clicked = false;
 }

@@ -13,7 +13,7 @@ const vertex = `
 
     void main() {
         float x = (a_pos.x / u_screenWidth) * 2.0 - 1.0;
-        float y = (a_pos.y / u_screenHeight) * 2.0 - 1.0;
+        float y = -((a_pos.y / u_screenHeight) * 2.0 - 1.0);
         gl_Position = vec4(x, y, 0.0, 1.0);
 
         v_texCoord = a_tex;
@@ -164,7 +164,6 @@ graphics.loadImage = function (path) {
     var image = new Image();
     image.src = path;
     image.onload = function() {
-        console.log("FLAG");
         textureInfo.width = image.width;
         textureInfo.height = image.height;
 
@@ -195,4 +194,12 @@ graphics.setBufferRectangle = function(x, y, width, height) {
         x2, y1,
         x2, y2,
     ]), gl.STATIC_DRAW);
+}
+
+graphics.width = function() {
+    return gl.canvas.clientWidth;   
+}
+
+graphics.height = function() {
+    return gl.canvas.clientHeight;
 }
