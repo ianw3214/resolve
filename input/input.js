@@ -19,11 +19,11 @@ input.init = function() {
 }
 
 input.keyDownHandler = function(event) {
+    // LOG THE KEYCODE IF SHIFT IS PRESSED (for debugging)
     if (input.keyPressed(16)) {
         console.log("KEY PRESSED: " + event.keyCode);
     }
     if (!input.keyPressed(event.keyCode)) input.keys.push(event.keyCode);
-    // LOG THE KEYCODE IF SHIFT IS PRESSED (for debugging)
 }
 
 input.keyUpHandler = function(event) {

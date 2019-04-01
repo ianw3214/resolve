@@ -1,6 +1,5 @@
 var graphics = {};
 
-// TODO: (Ian) Move functions into a namespace
 // Simple vertex shader for 2D drawing
 const vertex = `
     attribute vec4 a_pos;
@@ -120,31 +119,35 @@ graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1
 // Function to draw an image
 graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
 
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.useProgram(texture_shader);
+    if (tex !== null && tex.loaded) {
+        gl.bindTexture(gl.TEXTURE_2D, tex.texture);
+        gl.useProgram(texture_shader);
 
-    var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
-    var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+        var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
+        var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
 
-    var positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    graphics.setBufferRectangle(x, y, w, h);
-    var texcoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-    graphics.setBufferRectangle(0.0, 0.0, 1.0, 1.0);        
+        var positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        graphics.setBufferRectangle(x, y, w, h);
+        var texcoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+        graphics.setBufferRectangle(0.0, 0.0, 1.0, 1.0);
 
-    gl.enableVertexAttribArray(positionLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-    // TODO: GET UNIFORM LOCATION
-    gl.enableVertexAttribArray(texCoordLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-    gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(positionLocation);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(texCoordLocation);
+        gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+        gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-    // Draw the actual rectangle
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+        // Draw the actual rectangle
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+    } else {
+        graphics.drawRect(x, y, w, h, [1.0, 0.0, 1.0, 1.0]);
+    }
 }
 
+// TODO: Implement this with a resource manager
 // creates a texture info { width: w, height: h, texture: tex }
 graphics.loadImage = function (path) {
     var tex = gl.createTexture();

@@ -1,17 +1,43 @@
+const STATE_CONTINUE = 0;
+const STATE_SETTINGS = 1;
+const STATE_CREDITS = 2;
+
 var menu = {
     background: null,
+    tex: null,
+    state: 0,
     init: function() {
         tex = graphics.loadImage("res/menu/background.png");
     },
     close: function() {
-        console.log("CLOSE");
+        // Clean up any resources here...
     },
     update: function() {
-        if (input.keyPressed(68)) {
-            engine.setState(game);
+        if (input.keyPressed(13) || input.keyPressed(32)) {
+            // DO THINGS DEPENDING ON THE MENU STATE
+            if (menu.state === STATE_CONTINUE) {
+                engine.setState(game);
+            }
+            if (menu.state === STATE_SETTINGS) {
+
+            }
+            if (menu.state === STATE_CREDITS) {
+
+            }
+        }
+        if (input.keyPressed(87) || input.keyPressed(38)) {
+            // UP
+            menu.state -= 1;
+            if (menu.state < STATE_CONTINUE) menu.state = STATE_CONTINUE;
+        }
+        if (input.keyPressed(83) || input.keyPressed(40)) {
+            // DOWN
+            menu.state += 1;
+            if (menu.state > STATE_CREDITS) menu.state = STATE_CREDITS;
         }
     },
     draw: function() {
-        if (tex.loaded) graphics.drawImage(tex.texture, 0, 0, 640, 480);
+        // DRAW THE BACKGROUND
+        graphics.drawImage(tex, 0, 0, 640, 480);
     }
 }
