@@ -155,8 +155,6 @@ graphics.loadImage = function (path) {
     if (!!texture_cache[path]) {
         return texture_cache[path];
     }
-
-    console.log("LOADING IMAGE");
     var tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
 

@@ -6,10 +6,10 @@ var ECS = {
     // The tick function that updates all entities with systems
     update: function(delta) {
         for (var i in systems) {
-            var system = systems[i]
+            var system = systems[i];
             if (system.hasOwnProperty("update")) {
                 if (typeof system.update === "function") {
-                    system.update(delta);
+                    system.update(entities, delta);
                 }
             }
         }
@@ -18,9 +18,9 @@ var ECS = {
         if (system.hasOwnProperty("init")) {
             if (typeof system.init === "function") {
                 system.init();
-                systems.push(system);
             }
         }
+        systems.push(system);
     },
     addEntity: function(entity) {
         if (typeof entity === "object") {
