@@ -35,6 +35,9 @@ const texture = `
 
 // GLOBAL VARIABLES
 var gl;
+var texture_cache = {};
+
+// SHADERS
 var shader_program;
 var texture_shader;
 
@@ -147,9 +150,13 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
     }
 }
 
-// TODO: Implement this with a resource manager
 // creates a texture info { width: w, height: h, texture: tex }
 graphics.loadImage = function (path) {
+    if (!!texture_cache[path]) {
+        return texture_cache[path];
+    }
+
+    console.log("LOADING IMAGE");
     var tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
@@ -178,7 +185,11 @@ graphics.loadImage = function (path) {
 
         textureInfo.loaded = true;
     }
+    image.onerror = function() {
+        textureInfo.loaded = false;
+    }
 
+    texture_cache[path] = textureInfo;
     return textureInfo;
 }
 
