@@ -224,6 +224,7 @@ graphics.loadImage = function (path) {
     var image = new Image();
     image.src = path;
     image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, tex);
         textureInfo.width = image.width;
         textureInfo.height = image.height;
 
