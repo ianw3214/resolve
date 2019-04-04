@@ -1,5 +1,4 @@
 // TODO: Implement texture sourcing in the future
-// TODO: Put this in draw function of state instead of in ECS lmao
 var renderSystem = {
     update: function (entities, delta) {
         for (var i in entities) {
@@ -124,8 +123,13 @@ var player = {
 }
 
 var game = {
+    tile_map: [],
     draw_objects: [],
     init: function () {
+        // Generate a map
+        for (i = 0; i < 10 * 10; ++i) {
+            game.tile_map.push(0);
+        }
         // Reset the ECS in case it was in use previously
         ECS.reset();
         ECS.addSystem(cameraSystem);
@@ -151,6 +155,28 @@ var game = {
         ECS.update(delta);
     },
     draw: function (delta) {
+        // Draw the map first
+        // TODO: Get map dimensions from somewhere
+        for (y = 0; y < 10; ++y) {
+            for (x = 0; x < 10; ++x) {
+                var target_x = x * 100 - cameraSystem.x;
+                var target_y = y * 100 - cameraSystem.y;
+                if (target_y < -100 || target_y > 480) break;
+                if (target_x < -100 || target_x > 640) continue;
+                var tile = game.tile_map[y * 10 + x];
+                // TODO: Use a dictionary of sorts
+                if (tile === 0) {
+                    graphics.drawImage(
+                        graphics.loadImage("res/test.png"),
+                        target_x,
+                        target_y,
+                        100,
+                        100
+                    );
+                }
+            }
+        }
+        // Then draw any game objects
         game.draw_objects.sort(function(a, b) { return a.z - b.z });
         for (var i in game.draw_objects) {
             var obj = game.draw_objects[i];

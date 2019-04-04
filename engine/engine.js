@@ -47,11 +47,12 @@ engine.draw = function(delta) {
 }
 
 engine.tick = function(timestamp) {
-    var delta = timestamp - engine.lastRender
+    var delta = timestamp - engine.lastRender;
+    document.getElementById("debug").innerHTML = "frame: " + delta + " ms";
 
-    engine.update(delta)
-    engine.draw(delta)
+    engine.update(delta);
+    engine.draw(delta);
 
-    engine.lastRender = timestamp
-    window.requestAnimationFrame(engine.tick)
+    engine.lastRender = timestamp;
+    window.requestAnimationFrame(engine.tick);
 }

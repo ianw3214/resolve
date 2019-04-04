@@ -5,6 +5,8 @@ const vertex = `
     attribute vec4 a_pos;
     attribute vec2 a_tex;
     
+    uniform vec2 u_position;
+
     uniform float u_screenWidth;
     uniform float u_screenHeight;
 
@@ -40,6 +42,16 @@ var texture_cache = {};
 // SHADERS
 var shader_program;
 var texture_shader;
+
+// CONSTANTS
+const full_rect = new Float32Array([
+    0.0, 0.0,
+    1.0, 0.0,
+    0.0, 1.0,
+    0.0, 1.0,
+    1.0, 0.0,
+    1.0, 1.0,]);
+const error_color = [1.0, 0.0, 1.0, 1.0];
 
 // Initialize webGL
 graphics.init = function() {
@@ -101,7 +113,7 @@ graphics.clearBuffer = function() {
 }
 
 // Function to draw a rectangle
-graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = [1.0, 0.0, 1.0, 1.0]) {
+graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = error_color) {
 
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -126,7 +138,7 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
         gl.bindTexture(gl.TEXTURE_2D, tex.texture);
         gl.useProgram(texture_shader);
 
-        var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
+        var positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
         var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
 
         var positionBuffer = gl.createBuffer();
@@ -134,7 +146,7 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
         graphics.setBufferRectangle(x, y, w, h);
         var texcoordBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-        graphics.setBufferRectangle(0.0, 0.0, 1.0, 1.0);
+        gl.bufferData(gl.ARRAY_BUFFER, full_rect, gl.DYNAMIC_DRAW);
 
         gl.enableVertexAttribArray(positionLocation);
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -146,7 +158,7 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
         // Draw the actual rectangle
         gl.drawArrays(gl.TRIANGLES, 0, 6);
     } else {
-        graphics.drawRect(x, y, w, h, [1.0, 0.0, 1.0, 1.0]);
+        graphics.drawRect(x, y, w, h, error_color);
     }
 }
 
@@ -205,7 +217,7 @@ graphics.setBufferRectangle = function(x, y, width, height) {
         x1, y2,
         x2, y1,
         x2, y2,
-    ]), gl.STATIC_DRAW);
+    ]), gl.DYNAMIC_DRAW);
 }
 
 graphics.width = function() {
