@@ -1,4 +1,3 @@
-// TODO: Implement texture sourcing in the future
 var renderSystem = {
     update: function (entities, delta) {
         for (var i in entities) {
@@ -117,6 +116,13 @@ var animationSystem = {
         for (var i in entities) {
             var entity = entities[i];
             if (entity.hasOwnProperty("animation")) {
+                // Skip all the calculating if the time is not up yet
+                if (entity.time < 41.0) {    // 24 FPS
+                    entity.time += delta;
+                    continue;
+                } else {
+                    entity.time = 0.0;
+                }
                 const data = entity.animation.data;
                 // Set the default state if not yet set
                 if (entity.animation.state === "") {
@@ -239,6 +245,7 @@ var player = {
         state: "",
         hint: "",
         frame: 0,
+        time: 0,
         source: {},
         data: player_animation
     }
@@ -305,7 +312,6 @@ var game = {
             var obj = game.draw_objects[i];
             if (obj.type == "texture") {
                 if (obj.source !== null) {
-                    console.log(obj.source);
                     graphics.drawImageSource(
                         graphics.loadImage(obj.path),
                         obj.source,
