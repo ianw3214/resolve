@@ -11,6 +11,12 @@ var renderSystem = {
                     x = entity.position.x;
                     y = entity.position.y;
                 }
+                if (entity.hasOwnProperty("camera")) {
+                    if (entity.camera.affect) {
+                        x -= cameraSystem.x;
+                        y -= cameraSystem.y;
+                    }
+                }
                 if (entity.render.type == "texture") {
                     game.drawImage(
                         entity.render.path,
@@ -41,7 +47,6 @@ var moveSystem = {
                     entity.position.y -= 5;
                 }
                 if (entity.move.down) {
-                    console.log("DOWN");
                     entity.position.y += 5;
                 }
                 if (entity.move.left) {
@@ -58,6 +63,39 @@ var moveSystem = {
                 left: false,
                 right: false
             };
+        }
+    }
+}
+
+var cameraSystem = {
+    x: 0,
+    y: 0,
+    init: function() {
+        cameraSystem.x = -100;
+        cameraSystem.y = -100;
+    },
+    update: function(entities, delta) {
+        // Have the camera follow the player
+        // TODO: Calculate target based on movement inputs
+        // TODO: Use delta time for camera movement time
+        // TODO: Actually center the camera
+        var target_x = player.position.x - graphics.width() / 2;
+        var target_y = player.position.y - graphics.height() / 2;
+        if (cameraSystem.x < target_x) {
+            cameraSystem.x += 3;
+            if (cameraSystem.x > target_x) cameraSystem.x = target_x;
+        }
+        if (cameraSystem.x > target_x) {
+            cameraSystem.x -= 3;
+            if (cameraSystem.x < target_x) cameraSystem.x = target_x;
+        }
+        if (cameraSystem.y < target_y) {
+            cameraSystem.y += 3;
+            if (cameraSystem.y > target_y) cameraSystem.y = target_y;
+        }
+        if (cameraSystem.y > target_y) {
+            cameraSystem.y -= 3;
+            if (cameraSystem.y < target_y) cameraSystem.y = target_y;
         }
     }
 }
@@ -79,6 +117,9 @@ var player = {
         down: false,
         left: false,
         right: false
+    },
+    camera: {
+        affect: true
     }
 }
 
@@ -87,6 +128,7 @@ var game = {
     init: function () {
         // Reset the ECS in case it was in use previously
         ECS.reset();
+        ECS.addSystem(cameraSystem);
         ECS.addSystem(renderSystem);
         ECS.addSystem(moveSystem);
         ECS.addEntity(player);
