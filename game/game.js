@@ -18,15 +18,17 @@ var renderSystem = {
                 if (entity.render.type == "texture") {
                     // If there is an animation component, also set the source
                     if (entity.hasOwnProperty("animation")) {
-                        game.drawImage(
-                            entity.render.path,
-                            x,
-                            y,
-                            entity.render.w,
-                            entity.render.h,
-                            100,
-                            entity.animation.source
-                        );
+                        if (entity.animation.loaded) {
+                            game.drawImage(
+                                entity.render.path,
+                                x,
+                                y,
+                                entity.render.w,
+                                entity.render.h,
+                                100,
+                                entity.animation.source
+                            );
+                        }
                     } else {
                         game.drawImage(
                             entity.render.path,
@@ -116,6 +118,18 @@ var animationSystem = {
         for (var i in entities) {
             var entity = entities[i];
             if (entity.hasOwnProperty("animation")) {
+                // Load the animation if it isn't loaded yet
+                if (!entity.animation.loaded) {
+                    if (!entity.animation.loading) {
+                        file.loadJSON(entity.animation.path, function (response) {
+                            // Parse JSON string into object
+                            entity.animation.data = JSON.parse(response);
+                            entity.animation.loaded = true;
+                        });
+                        entity.animation.loading = true;
+                    }
+                    continue;
+                }
                 // Skip all the calculating if the time is not up yet
                 if (entity.time < 41.0) {    // 24 FPS
                     entity.time += delta;
@@ -163,63 +177,6 @@ var animationSystem = {
     }
 }
 
-var player_animation = {
-    default: "IDLE_RIGHT",
-    frame_width: 100,
-    frame_height: 100,
-    tilesheet: {
-        width: 200,
-        height: 100,
-        columns: 10
-    },
-    states: {
-        "IDLE_RIGHT": {
-            start: 0,
-            end: 1,
-            transition: {
-                "RUN_RIGHT": "RUN_RIGHT",
-                "RUN_LEFT": "RUN_LEFT",
-                "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
-            },
-            loop: true
-        },
-        "IDLE_LEFT": {
-            start: 0,
-            end: 1,
-            transition: {
-                "RUN_RIGHT": "RUN_RIGHT",
-                "RUN_LEFT": "RUN_LEFT",
-                "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
-            },
-            loop: true
-        },
-        "IDLE_UP": {
-            start: 0,
-            end: 1,
-            transition: {
-                "RUN_RIGHT": "RUN_RIGHT",
-                "RUN_LEFT": "RUN_LEFT",
-                "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
-            },
-            loop: true
-        },
-        "IDLE_DOWN": {
-            start: 0,
-            end: 1,
-            transition: {
-                "RUN_RIGHT": "RUN_RIGHT",
-                "RUN_LEFT": "RUN_LEFT",
-                "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
-            },
-            loop: true
-        }
-    }
-}
-
 var player = {
     render: {
         type: "texture",
@@ -247,7 +204,11 @@ var player = {
         frame: 0,
         time: 0,
         source: {},
-        data: player_animation
+        // Loading the data in from another file
+        data: {},
+        path: "res/player.json",
+        loaded: false,
+        loading: false
     }
 }
 
