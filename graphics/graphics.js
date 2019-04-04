@@ -1,4 +1,5 @@
 var graphics = {};
+// TODO: Maybe cache vertex buffers and stuff for optimization
 
 // Simple vertex shader for 2D drawing
 const vertex = `
@@ -147,6 +148,45 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
         var texcoordBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, full_rect, gl.DYNAMIC_DRAW);
+
+        gl.enableVertexAttribArray(positionLocation);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(texCoordLocation);
+        gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+        gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+        // Draw the actual rectangle
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+    } else {
+        graphics.drawRect(x, y, w, h, error_color);
+    }
+}
+
+// Function to draw an image
+graphics.drawImageSource = function (tex, source = null, x = 0, y = 0, w = 30, h = 30) {
+
+    if (tex !== null && tex.loaded) {
+        gl.bindTexture(gl.TEXTURE_2D, tex.texture);
+        gl.useProgram(texture_shader);
+
+        var positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
+        var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+
+        var positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        graphics.setBufferRectangle(x, y, w, h);
+        var texcoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+        if (source === null) {
+            gl.bufferData(gl.ARRAY_BUFFER, full_rect, gl.DYNAMIC_DRAW);
+        } else {
+            graphics.setBufferRectangle(
+                source.target.x / source.w,
+                source.target.y / source.h,
+                source.target.w / source.w,
+                source.target.h / source.h);
+        }
 
         gl.enableVertexAttribArray(positionLocation);
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);

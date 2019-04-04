@@ -195,6 +195,16 @@ var game = {
                 // TODO: Implement this
             }
         }
+        graphics.drawImageSource(graphics.loadImage("res/test.png"), {
+            target: {
+                x: 10,
+                y: 10,
+                w: 100,
+                h: 100
+            },
+            w: 200,
+            h: 200
+        }, 0, 0, 50, 50);
         game.draw_objects = [];
     },
     drawImage: function(path, x=0, y=0, w=0, h=0, z=0) {
