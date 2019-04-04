@@ -55,18 +55,40 @@ var moveSystem = {
     update: function(entities, delta) {
         for (var i in entities) {
             var entity = entities[i];
+            var moving = false;
             if(entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
                 if (entity.move.up) {
+                    moving = true;
                     entity.position.y -= 5;
+                    if (entity.hasOwnProperty("animation")) {
+                        entity.animation.hint = "RUN_UP";
+                    }
                 }
                 if (entity.move.down) {
+                    moving = true;
                     entity.position.y += 5;
+                    if (entity.hasOwnProperty("animation")) {
+                        entity.animation.hint = "RUN_DOWN";
+                    }
                 }
                 if (entity.move.left) {
+                    moving = true;
                     entity.position.x -= 5;
+                    if (entity.hasOwnProperty("animation")) {
+                        entity.animation.hint = "RUN_LEFT";
+                    }
                 }
                 if (entity.move.right) {
+                    moving = true;
                     entity.position.x += 5;
+                    if (entity.hasOwnProperty("animation")) {
+                        entity.animation.hint = "RUN_UP";
+                    }
+                }
+            }
+            if (entity.move.was_moving && moving == false) {
+                if (entity.hasOwnProperty("animation")) {
+                    entity.animation.hint = "IDLE";
                 }
             }
             // RESET MOVEMENT AFTER HANDLING
@@ -74,7 +96,8 @@ var moveSystem = {
                 up: false,
                 down: false,
                 left: false,
-                right: false
+                right: false,
+                was_moving: moving
             };
         }
     }
@@ -148,11 +171,13 @@ var animationSystem = {
                 if (entity.animation.hint !== "") {
                     if (data.states[curr].transition[entity.animation.hint] !== undefined) {
                         entity.animation.state = data.states[curr].transition[entity.animation.hint];
+                        entity.animation.frame = data.states[entity.animation.state].start;
                     }
                     entity.animation.hint = "";
                 } else {
                     // Update the frame and see if it needs to be reset
                     entity.animation.frame += 1;
+                    // TODO: If the animation shouldn't loop, go to some other state
                     if (entity.animation.frame > data.states[curr].end) {
                         entity.animation.frame = data.states[curr].start;
                     }
@@ -172,6 +197,7 @@ var animationSystem = {
                     w: tilesheet.width,
                     h: tilesheet.height
                 };
+                console.log(entity.animation.state);
             }
         }
     }
@@ -193,7 +219,8 @@ var player = {
         up: false,
         down: false,
         left: false,
-        right: false
+        right: false,
+        was_moving: false
     },
     camera: {
         affect: true
@@ -296,16 +323,6 @@ var game = {
                 // TODO: Implement this
             }
         }
-        graphics.drawImageSource(graphics.loadImage("res/test.png"), {
-            target: {
-                x: 10,
-                y: 10,
-                w: 100,
-                h: 100
-            },
-            w: 200,
-            h: 200
-        }, 0, 0, 50, 50);
         game.draw_objects = [];
     },
     drawImage: function (path, x = 0, y = 0, w = 0, h = 0, z = 0, source = null,) {

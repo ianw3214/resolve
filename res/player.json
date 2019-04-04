@@ -4,8 +4,8 @@
     "frame_height": 100,
     "tilesheet": {
         "width": 200,
-        "height": 100,
-        "columns": 10
+        "height": 200,
+        "columns": 2
     },
     "states": {
         "IDLE_RIGHT": {
@@ -49,6 +49,54 @@
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "RUN_RIGHT": {
+            "start": 2,
+            "end": 3,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_RIGHT"
+            },
+            "loop": true
+        },
+        "RUN_LEFT": {
+            "start": 2,
+            "end": 3,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_LEFT"
+            },
+            "loop": true
+        },
+        "RUN_UP": {
+            "start": 2,
+            "end": 3,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_UP"
+            },
+            "loop": true
+        },
+        "RUN_DOWN": {
+            "start": 2,
+            "end": 3,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_DOWN"
             },
             "loop": true
         }
