@@ -58,6 +58,8 @@ const error_color = [1.0, 0.0, 1.0, 1.0];
 graphics.init = function() {
     const canvas = document.querySelector("#glCanvas");
     gl = canvas.getContext("webgl");
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     if (!gl) {
         alert("Unable to initialize webGL");
         return;

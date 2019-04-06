@@ -82,7 +82,7 @@ var moveSystem = {
                     moving = true;
                     entity.position.x += 5;
                     if (entity.hasOwnProperty("animation")) {
-                        entity.animation.hint = "RUN_UP";
+                        entity.animation.hint = "RUN_RIGHT";
                     }
                 }
             }
@@ -197,7 +197,6 @@ var animationSystem = {
                     w: tilesheet.width,
                     h: tilesheet.height
                 };
-                console.log(entity.animation.state);
             }
         }
     }
