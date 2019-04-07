@@ -79,6 +79,56 @@ graphics.init = function() {
 
 }
 
+graphics.resize = function() {
+    // Lookup the size the browser is displaying the canvas.
+    let canvas = document.getElementById("glCanvas");
+    var displayWidth = canvas.clientWidth;
+    var displayHeight = canvas.clientHeight;
+
+    // Check if the canvas is not the same size.
+    if (canvas.width != displayWidth ||
+        canvas.height != displayHeight) {
+
+        // Make the canvas the same size
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+    }
+}
+
+graphics.setFullscreen = function() {
+    document.getElementById("glCanvas").requestFullscreen();
+}
+
+graphics.exitFullscreen = function() {
+    document.exitFullscreen();
+}
+
+document.onfullscreenchange = function (event) {
+    if (!document.fullscreenElement) {
+        let canvas = document.getElementById("glCanvas");
+        canvas.width = 640;
+        canvas.height = 480;
+    }
+    graphics.resize();
+    let canvas = document.getElementById("glCanvas");
+    var width = canvas.width;
+    var height = canvas.height;
+    var x_offset = 0;
+    var y_offset = 0;
+    // If the width is larger than it should be
+    if (width / height * (480.0 / 640.0) > 1.0) {
+        // Calculate the desired width
+        width = (640.0 / 480.0) * height;
+        x_offset = (canvas.width - width) / 2.0;
+    }
+    if (width / height * (480 / 640.0) < 1.0) {
+        // Calculate the desired height
+        height = width * (480.0 / 640.0);
+        y_offset = (canvas.height - height) / 2.0;
+    }
+    gl.viewport(x_offset, y_offset, width, height);
+}; 
+
 // Function to create and link shaders
 graphics.createShaderProgram = function(v_src, f_src) {
     const vertexShader = graphics.loadShader(gl.VERTEX_SHADER, v_src);
