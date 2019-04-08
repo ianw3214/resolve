@@ -115,8 +115,8 @@ var cameraSystem = {
         // TODO: Calculate target based on movement inputs
         // TODO: Use delta time for camera movement time
         // TODO: Actually center the camera
-        var target_x = player.position.x - 640 / 2;
-        var target_y = player.position.y - 480 / 2;
+        var target_x = player.position.x - graphics.width() / 2;
+        var target_y = player.position.y - graphics.height() / 2;
         if (cameraSystem.x < target_x) {
             cameraSystem.x += 3;
             if (cameraSystem.x > target_x) cameraSystem.x = target_x;
@@ -284,8 +284,8 @@ var game = {
             for (x = 0; x < 10; ++x) {
                 var target_x = x * 100 - cameraSystem.x;
                 var target_y = y * 100 - cameraSystem.y;
-                if (target_x < -100 || target_x > 640) continue;
-                if (target_y < -100 || target_y > 480) break;
+                if (target_x < -100 || target_x > graphics.width()) continue;
+                if (target_y < -100 || target_y > graphics.height()) break;
                 var tile = game.tile_map[y * 10 + x];
                 // TODO: Use a dictionary of sorts
                 if (tile === 0) {
@@ -329,7 +329,6 @@ var game = {
             }
         }
         game.draw_objects = [];
-        graphics.drawRect(0, 0, 100, 100);
     },
     drawImage: function (path, x = 0, y = 0, w = 0, h = 0, z = 0, source = null,) {
         game.draw_objects.push({

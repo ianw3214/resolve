@@ -76,7 +76,6 @@ graphics.init = function() {
     gl.useProgram(texture_shader);
     gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenWidth"), gl.canvas.clientWidth);
     gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenHeight"), gl.canvas.clientHeight);
-
 }
 
 graphics.resize = function() {
@@ -93,6 +92,12 @@ graphics.resize = function() {
         canvas.width = displayWidth;
         canvas.height = displayHeight;
     }
+    
+    // Also update shader uniforms
+    gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenWidth"), displayWidth);
+    gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenHeight"), displayHeight);
+    gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenWidth"), displayWidth);
+    gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenHeight"), displayHeight);
 }
 
 graphics.setFullscreen = function() {
