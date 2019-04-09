@@ -111,8 +111,6 @@ graphics.exitFullscreen = function() {
 document.onfullscreenchange = function (event) {
     if (!document.fullscreenElement) {
         let canvas = document.getElementById("glCanvas");
-        canvas.width = 640;
-        canvas.height = 480;
     }
     graphics.resize();
     let canvas = document.getElementById("glCanvas");
@@ -120,17 +118,6 @@ document.onfullscreenchange = function (event) {
     var height = canvas.height;
     var x_offset = 0;
     var y_offset = 0;
-    // If the width is larger than it should be
-    if (width / height * (480.0 / 640.0) > 1.0) {
-        // Calculate the desired width
-        width = (640.0 / 480.0) * height;
-        x_offset = (canvas.width - width) / 2.0;
-    }
-    if (width / height * (480 / 640.0) < 1.0) {
-        // Calculate the desired height
-        height = width * (480.0 / 640.0);
-        y_offset = (canvas.height - height) / 2.0;
-    }
     gl.viewport(x_offset, y_offset, width, height);
 }; 
 
