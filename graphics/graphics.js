@@ -94,8 +94,10 @@ graphics.resize = function() {
     }
     
     // Also update shader uniforms
+    gl.useProgram(shader_program);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenWidth"), displayWidth);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenHeight"), displayHeight);
+    gl.useProgram(texture_shader);
     gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenWidth"), displayWidth);
     gl.uniform1f(gl.getUniformLocation(texture_shader, "u_screenHeight"), displayHeight);
 }
