@@ -276,6 +276,7 @@ var game = {
             graphics.exitFullscreen();
         }
         ECS.update(delta);
+        let canvas = document.getElementById("glCanvas");
     },
     draw: function (delta) {
         // Draw the map first

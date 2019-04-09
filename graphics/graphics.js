@@ -85,9 +85,7 @@ graphics.resize = function() {
     var displayHeight = canvas.clientHeight;
 
     // Check if the canvas is not the same size.
-    if (canvas.width != displayWidth ||
-        canvas.height != displayHeight) {
-
+    if (canvas.width != displayWidth || canvas.height != displayHeight) {
         // Make the canvas the same size
         canvas.width = displayWidth;
         canvas.height = displayHeight;
@@ -107,7 +105,14 @@ graphics.setFullscreen = function() {
 }
 
 graphics.exitFullscreen = function() {
-    document.exitFullscreen();
+    if (document.fullscreen) {
+        // THIS IS A TEMPORARY HACK - THE CODE USED TO WORK WITHOUT IT
+        let canvas = document.getElementById("glCanvas");
+        canvas.width = 640;
+        canvas.height = 480;
+        // END HACK...
+        document.exitFullscreen();
+    }
 }
 
 document.onfullscreenchange = function (event) {
