@@ -3,3 +3,6 @@ libs/
 
 # UTILITY FILES
 *.bat
+
+# ASESPRITE FILES
+*.aseprite

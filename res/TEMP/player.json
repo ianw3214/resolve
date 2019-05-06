@@ -1,0 +1,100 @@
+{
+    "default": "IDLE_RIGHT",
+    "frame_width": 32,
+    "frame_height": 32,
+    "tilesheet": {
+        "width": 128,
+        "height": 256,
+        "columns": 4
+    },
+    "states": {
+        "IDLE_RIGHT": {
+            "start": 0,
+            "end": 0,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "IDLE_LEFT": {
+            "start": 4,
+            "end": 4,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "IDLE_UP": {
+            "start": 8,
+            "end": 8,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "IDLE_DOWN": {
+            "start": 12,
+            "end": 12,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "RUN_RIGHT": {
+            "start": 16,
+            "end": 19,
+            "transition": {
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_RIGHT"
+            },
+            "loop": true
+        },
+        "RUN_LEFT": {
+            "start": 20,
+            "end": 23,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_LEFT"
+            },
+            "loop": true
+        },
+        "RUN_UP": {
+            "start": 24,
+            "end": 27,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_UP"
+            },
+            "loop": true
+        },
+        "RUN_DOWN": {
+            "start": 28,
+            "end": 31,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "IDLE": "IDLE_DOWN"
+            },
+            "loop": true
+        }
+    }
+}

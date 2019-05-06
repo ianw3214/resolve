@@ -169,9 +169,19 @@ var animationSystem = {
                 const curr = entity.animation.state;
                 // If there is an animation hint, transition based on it
                 if (entity.animation.hint !== "") {
+                    // If the hint changes the state
                     if (data.states[curr].transition[entity.animation.hint] !== undefined) {
                         entity.animation.state = data.states[curr].transition[entity.animation.hint];
                         entity.animation.frame = data.states[entity.animation.state].start;
+                    // Otherwise, update as normal
+                    } else {
+                        // TODO: Merge with other else case to avoid redundancy
+                        // Update the frame and see if it needs to be reset
+                        entity.animation.frame += 1;
+                        // TODO: If the animation shouldn't loop, go to some other state
+                        if (entity.animation.frame > data.states[curr].end) {
+                            entity.animation.frame = data.states[curr].start;
+                        }
                     }
                     entity.animation.hint = "";
                 } else {
@@ -205,9 +215,9 @@ var animationSystem = {
 var player = {
     render: {
         type: "texture",
-        path: "res/player.png",
-        w: 50,
-        h: 50,
+        path: "res/TEMP/player.png",
+        w: 100,
+        h: 100,
         z: 100
     },
     position: {
@@ -232,7 +242,7 @@ var player = {
         source: {},
         // Loading the data in from another file
         data: {},
-        path: "res/player.json",
+        path: "res/TEMP/player.json",
         loaded: false,
         loading: false
     }
