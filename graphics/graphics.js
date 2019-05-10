@@ -106,26 +106,24 @@ graphics.setFullscreen = function() {
 
 graphics.exitFullscreen = function() {
     if (document.fullscreen) {
-        // THIS IS A TEMPORARY HACK - THE CODE USED TO WORK WITHOUT IT
-        let canvas = document.getElementById("glCanvas");
-        canvas.width = 640;
-        canvas.height = 480;
-        // END HACK...
         document.exitFullscreen();
     }
 }
 
 document.onfullscreenchange = function (event) {
+    let canvas = document.getElementById("glCanvas");
+    // IF THE DOCUMENT IS NO LONGER FULLSCREEN, THEN EXITING FULLSCREEN
     if (!document.fullscreenElement) {
-        let canvas = document.getElementById("glCanvas");
+        // FIXME: Maybe don't use hard coded values?
+        // THIS IS A TEMPORARY HACK - THE CODE USED TO WORK WITHOUT IT
+        canvas.width = 640;
+        canvas.height = 480;
+        // END HACK...
     }
     graphics.resize();
-    let canvas = document.getElementById("glCanvas");
     var width = canvas.width;
     var height = canvas.height;
-    var x_offset = 0;
-    var y_offset = 0;
-    gl.viewport(x_offset, y_offset, width, height);
+    gl.viewport(0, 0, width, height);
 }; 
 
 // Function to create and link shaders

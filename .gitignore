@@ -6,3 +6,6 @@ libs/
 
 # ASESPRITE FILES
 *.aseprite
+
+# REFERENCES FOR THE GAME
+references/
