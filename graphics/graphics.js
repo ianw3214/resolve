@@ -8,8 +8,6 @@ const vertex = `
     attribute vec2 a_pos;
     attribute vec2 a_tex;
     
-    uniform vec2 u_position;
-
     uniform float u_screenWidth;
     uniform float u_screenHeight;
 
