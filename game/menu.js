@@ -1,3 +1,5 @@
+"use strict";
+
 const STATE_CONTINUE = 0;
 const STATE_SETTINGS = 1;
 const STATE_CREDITS = 2;
@@ -7,7 +9,7 @@ var menu = {
     tex: null,
     state: 0,
     init: function() {
-        tex = graphics.loadImage("res/menu/background.png");
+        menu.tex = graphics.loadImage("res/menu/background.png");
     },
     close: function() {
         // Clean up any resources here...
@@ -38,6 +40,6 @@ var menu = {
     },
     draw: function() {
         // DRAW THE BACKGROUND
-        graphics.drawImage(tex, 0, 0, 640, 480);
+        graphics.drawImage(menu.tex, 0, 0, 640, 480);
     }
 }

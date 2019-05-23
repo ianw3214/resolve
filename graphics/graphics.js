@@ -1,3 +1,5 @@
+"use strict";
+
 var graphics = {};
 // TODO: Maybe cache vertex buffers and stuff for optimization
 

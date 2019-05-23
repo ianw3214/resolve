@@ -1,3 +1,6 @@
+"use strict";
+// TODO: DEFINES for key codes maybe?
+
 // REFERENCE TO THE CANVAS
 var canvas = document.getElementById("glCanvas");
 

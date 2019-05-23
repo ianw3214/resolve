@@ -1,3 +1,5 @@
+"use strict";
+
 var ECS = {
     // The systems stored in the ECS
     systems: [],
@@ -5,11 +7,11 @@ var ECS = {
     entities: [],
     // The tick function that updates all entities with systems
     update: function(delta) {
-        for (var i in systems) {
-            var system = systems[i];
+        for (var i in ECS.systems) {
+            var system = ECS.systems[i];
             if (system.hasOwnProperty("update")) {
                 if (typeof system.update === "function") {
-                    system.update(entities, delta);
+                    system.update(ECS.entities, delta);
                 }
             }
         }
@@ -20,15 +22,15 @@ var ECS = {
                 system.init();
             }
         }
-        systems.push(system);
+        ECS.systems.push(system);
     },
     addEntity: function(entity) {
         if (typeof entity === "object") {
-            entities.push(entity);
+            ECS.entities.push(entity);
         }
     },
     reset: function() {
-        systems = [];
-        entities = [];
+        ECS.systems = [];
+        ECS.entities = [];
     }
 }

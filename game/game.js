@@ -1,3 +1,5 @@
+"use strict";
+
 var renderSystem = {
     update: function (entities, delta) {
         for (var i in entities) {
@@ -253,7 +255,7 @@ var game = {
     draw_objects: [],
     init: function () {
         // Generate a map
-        for (i = 0; i < 10 * 10; ++i) {
+        for (var i = 0; i < 10 * 10; ++i) {
             game.tile_map.push(0);
         }
         // Reset the ECS in case it was in use previously
@@ -291,6 +293,7 @@ var game = {
     draw: function (delta) {
         // Draw the map first
         // TODO: Get map dimensions from somewhere
+        var x, y;
         for (y = 0; y < 10; ++y) {
             for (x = 0; x < 10; ++x) {
                 var target_x = x * 100 - cameraSystem.x;

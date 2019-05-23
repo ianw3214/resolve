@@ -1,3 +1,5 @@
+"use strict";
+
 var engine = {
     lastRender: 0,
     state: {}

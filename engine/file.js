@@ -1,3 +1,5 @@
+"use strict";
+
 var file = {};
 
 file.loadJSON = function(path, callback) {
