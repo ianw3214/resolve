@@ -8,6 +8,9 @@ var engine = {
 engine.init = function() {
     input.init();
     graphics.init();
+    // TODO: Maybe put this in graphics init?
+    console.log(graphics.text);
+    graphics.text.init();
 }
 
 engine.start = function(state = null) {
@@ -46,6 +49,8 @@ engine.draw = function(delta) {
             engine.state.draw(delta);
         }
     }
+    // TODO: TEMP CODE -> REMOVE
+    graphics.text.test();
 }
 
 engine.tick = function(timestamp) {
