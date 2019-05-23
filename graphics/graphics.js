@@ -5,7 +5,7 @@ var graphics = {};
 
 // Simple vertex shader for 2D drawing
 const vertex = `
-    attribute vec4 a_pos;
+    attribute vec2 a_pos;
     attribute vec2 a_tex;
     
     uniform vec2 u_position;
