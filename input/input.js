@@ -2,9 +2,9 @@
 // TODO: DEFINES for key codes maybe?
 
 // REFERENCE TO THE CANVAS
-var canvas = document.getElementById("glCanvas");
+let canvas = document.getElementById("glCanvas");
 
-var input = {
+let input = {
     keys: [],
     mouse: {
         x: 0,
@@ -38,7 +38,7 @@ input.keyPressed = function(key) {
 }
 
 input.updateMousePos = function(evt) {
-    var rect = canvas.getBoundingClientRect();
+    let rect = canvas.getBoundingClientRect();
     input.mouse.x = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     input.mouse.y = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
 }

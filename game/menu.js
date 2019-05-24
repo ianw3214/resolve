@@ -4,7 +4,7 @@ const STATE_CONTINUE = 0;
 const STATE_SETTINGS = 1;
 const STATE_CREDITS = 2;
 
-var menu = {
+let menu = {
     background: null,
     tex: null,
     state: 0,

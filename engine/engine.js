@@ -1,6 +1,6 @@
 "use strict";
 
-var engine = {
+let engine = {
     lastRender: 0,
     state: {}
 };
@@ -54,7 +54,7 @@ engine.draw = function(delta) {
 }
 
 engine.tick = function(timestamp) {
-    var delta = timestamp - engine.lastRender;
+    let delta = timestamp - engine.lastRender;
     document.getElementById("debug").innerHTML = "frame: " + delta + " ms";
 
     engine.update(delta);

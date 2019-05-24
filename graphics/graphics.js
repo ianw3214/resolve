@@ -1,6 +1,6 @@
 "use strict";
 
-var graphics = {};
+let graphics = {};
 // TODO: Maybe cache vertex buffers and stuff for optimization
 
 // Simple vertex shader for 2D drawing
@@ -37,12 +37,12 @@ const texture = `
     }`;
 
 // GLOBAL VARIABLES
-var gl;
-var texture_cache = {};
+let gl;
+let texture_cache = {};
 
 // SHADERS
-var shader_program;
-var texture_shader;
+let shader_program;
+let texture_shader;
 
 // CONSTANTS
 const full_rect = new Float32Array([
@@ -81,8 +81,8 @@ graphics.init = function() {
 graphics.resize = function() {
     // Lookup the size the browser is displaying the canvas.
     let canvas = document.getElementById("glCanvas");
-    var displayWidth = canvas.clientWidth;
-    var displayHeight = canvas.clientHeight;
+    let displayWidth = canvas.clientWidth;
+    let displayHeight = canvas.clientHeight;
 
     // Check if the canvas is not the same size.
     if (canvas.width != displayWidth || canvas.height != displayHeight) {
@@ -121,8 +121,8 @@ document.onfullscreenchange = function (event) {
         // END HACK...
     }
     graphics.resize();
-    var width = canvas.width;
-    var height = canvas.height;
+    let width = canvas.width;
+    let height = canvas.height;
     gl.viewport(0, 0, width, height);
 }; 
 
@@ -165,17 +165,17 @@ graphics.clearBuffer = function() {
 // Function to draw a rectangle
 graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = error_color) {
 
-    var positionBuffer = gl.createBuffer();
+    let positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // Add rectangle data to the buffer
     graphics.setBufferRectangle(x, y, w, h);
-    var positionLocation = gl.getAttribLocation(shader_program, "a_pos");
+    let positionLocation = gl.getAttribLocation(shader_program, "a_pos");
     gl.useProgram(shader_program);
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
     // Set the colour
-    var colourLocation = gl.getUniformLocation(shader_program, "u_colour");
+    let colourLocation = gl.getUniformLocation(shader_program, "u_colour");
     gl.uniform4fv(colourLocation, colour);
     // Draw the actual rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -188,13 +188,13 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
         gl.bindTexture(gl.TEXTURE_2D, tex.texture);
         gl.useProgram(texture_shader);
 
-        var positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
-        var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+        let positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
+        let texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
 
-        var positionBuffer = gl.createBuffer();
+        let positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         graphics.setBufferRectangle(x, y, w, h);
-        var texcoordBuffer = gl.createBuffer();
+        let texcoordBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, full_rect, gl.DYNAMIC_DRAW);
 
@@ -219,13 +219,13 @@ graphics.drawImageSource = function (tex, source = null, x = 0, y = 0, w = 30, h
         gl.bindTexture(gl.TEXTURE_2D, tex.texture);
         gl.useProgram(texture_shader);
 
-        var positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
-        var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+        let positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
+        let texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
 
-        var positionBuffer = gl.createBuffer();
+        let positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         graphics.setBufferRectangle(x, y, w, h);
-        var texcoordBuffer = gl.createBuffer();
+        let texcoordBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
         if (source === null) {
             gl.bufferData(gl.ARRAY_BUFFER, full_rect, gl.DYNAMIC_DRAW);
@@ -256,7 +256,7 @@ graphics.loadImage = function (path) {
     if (!!texture_cache[path]) {
         return texture_cache[path];
     }
-    var tex = gl.createTexture();
+    let tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
     // let's assume all images are not a power of 2
@@ -264,13 +264,13 @@ graphics.loadImage = function (path) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-    var textureInfo = {
+    let textureInfo = {
         width: 1,   // we don't know the size until it loads
         height: 1,
         loaded: false,
         texture: tex,
     };
-    var image = new Image();
+    let image = new Image();
     image.src = path;
     image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -296,10 +296,10 @@ graphics.loadImage = function (path) {
 // Helper function to fill buffer data with rectangle data
 graphics.setBufferRectangle = function(x, y, width, height) {
 
-    var x1 = x;
-    var x2 = x + width;
-    var y1 = y;
-    var y2 = y + height;
+    let x1 = x;
+    let x2 = x + width;
+    let y1 = y;
+    let y2 = y + height;
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
         x1, y1,
         x2, y1,

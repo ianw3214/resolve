@@ -1,6 +1,6 @@
 "use strict";
 
-var fontInfo = {
+let fontInfo = {
     letterHeight: 8,
     spaceWidth: 8,
     spacing: -1,
@@ -61,7 +61,7 @@ graphics.text.init = function() {
     gl.bindTexture(gl.TEXTURE_2D, graphics.text.glyphTex);
     
     // Asynchronously load an image
-    var image = new Image();
+    let image = new Image();
     image.src = "res/fonts/font.png";
     image.onload = function () {
         // Now that the image has loaded make copy it to the texture.
@@ -86,27 +86,27 @@ graphics.text.init = function() {
 }
 
 function makeVerticesForString(fontInfo, s) {
-    var len = s.length;
-    var numVertices = len * 6;
-    var positions = new Float32Array(numVertices * 2);
-    var texcoords = new Float32Array(numVertices * 2);
-    var offset = 0;
-    var x = 0;
-    var maxX = fontInfo.textureWidth;
-    var maxY = fontInfo.textureHeight;
+    let len = s.length;
+    let numVertices = len * 6;
+    let positions = new Float32Array(numVertices * 2);
+    let texcoords = new Float32Array(numVertices * 2);
+    let offset = 0;
+    let x = 0;
+    let maxX = fontInfo.textureWidth;
+    let maxY = fontInfo.textureHeight;
 
     // Loop through each letter of the string
-    for (var ii = 0; ii < len; ++ii) {
-        var letter = s[ii];
-        var glyphInfo = fontInfo.glyphInfos[letter];
+    for (let ii = 0; ii < len; ++ii) {
+        let letter = s[ii];
+        let glyphInfo = fontInfo.glyphInfos[letter];
 
         // Only generate the glyph if info for it exists
         if (glyphInfo) {
-            var x2 = x + glyphInfo.width;
-            var u1 = glyphInfo.x / maxX;
-            var v1 = (glyphInfo.y + fontInfo.letterHeight - 1) / maxY;
-            var u2 = (glyphInfo.x + glyphInfo.width - 1) / maxX;
-            var v2 = glyphInfo.y / maxY;
+            let x2 = x + glyphInfo.width;
+            let u1 = glyphInfo.x / maxX;
+            let v1 = (glyphInfo.y + fontInfo.letterHeight - 1) / maxY;
+            let u2 = (glyphInfo.x + glyphInfo.width - 1) / maxX;
+            let v2 = glyphInfo.y / maxY;
 
             // 6 vertices per letter
             positions[offset + 0] = x;
@@ -162,11 +162,11 @@ graphics.text.test = function() {
     gl.useProgram(texture_shader);
     gl.bindTexture(gl.TEXTURE_2D, graphics.text.glyphTex);
 
-    var s = "TESTSTRING";
-    var vertices = makeVerticesForString(fontInfo, s.toLowerCase());
+    let s = "TESTSTRING";
+    let vertices = makeVerticesForString(fontInfo, s.toLowerCase());
 
-    var positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
-    var texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+    let positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
+    let texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
 
     // update the buffers
     graphics.text.textBufferInfo.attribs.a_position.numComponents = 2;

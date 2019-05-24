@@ -1,14 +1,14 @@
 "use strict";
 
-var ECS = {
+let ECS = {
     // The systems stored in the ECS
     systems: [],
     // The entities stored in the ECS
     entities: [],
     // The tick function that updates all entities with systems
     update: function(delta) {
-        for (var i in ECS.systems) {
-            var system = ECS.systems[i];
+        for (let i in ECS.systems) {
+            let system = ECS.systems[i];
             if (system.hasOwnProperty("update")) {
                 if (typeof system.update === "function") {
                     system.update(ECS.entities, delta);

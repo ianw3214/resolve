@@ -1,12 +1,12 @@
 "use strict";
 
-var renderSystem = {
+let renderSystem = {
     update: function (entities, delta) {
-        for (var i in entities) {
-            var entity = entities[i];
+        for (let i in entities) {
+            let entity = entities[i];
             if (entity.hasOwnProperty("render")) {
-                var x = 0;
-                var y = 0;
+                let x = 0;
+                let y = 0;
                 if (entity.hasOwnProperty("position")) {
                     x = entity.position.x;
                     y = entity.position.y;
@@ -53,11 +53,11 @@ var renderSystem = {
     }
 }
 
-var moveSystem = {
+let moveSystem = {
     update: function(entities, delta) {
-        for (var i in entities) {
-            var entity = entities[i];
-            var moving = false;
+        for (let i in entities) {
+            let entity = entities[i];
+            let moving = false;
             if(entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
                 if (entity.move.up) {
                     moving = true;
@@ -105,7 +105,7 @@ var moveSystem = {
     }
 }
 
-var cameraSystem = {
+let cameraSystem = {
     x: 0,
     y: 0,
     init: function() {
@@ -117,8 +117,8 @@ var cameraSystem = {
         // TODO: Calculate target based on movement inputs
         // TODO: Use delta time for camera movement time
         // TODO: Actually center the camera
-        var target_x = player.position.x - graphics.width() / 2;
-        var target_y = player.position.y - graphics.height() / 2;
+        let target_x = player.position.x - graphics.width() / 2;
+        let target_y = player.position.y - graphics.height() / 2;
         if (cameraSystem.x < target_x) {
             cameraSystem.x += 3;
             if (cameraSystem.x > target_x) cameraSystem.x = target_x;
@@ -138,10 +138,10 @@ var cameraSystem = {
     }
 }
 
-var animationSystem = {
+let animationSystem = {
     update: function(entities, delta) {
-        for (var i in entities) {
-            var entity = entities[i];
+        for (let i in entities) {
+            let entity = entities[i];
             if (entity.hasOwnProperty("animation")) {
                 // Load the animation if it isn't loaded yet
                 if (!entity.animation.loaded) {
@@ -214,7 +214,7 @@ var animationSystem = {
     }
 }
 
-var player = {
+let player = {
     render: {
         type: "texture",
         path: "res/TEMP/player.png",
@@ -250,12 +250,12 @@ var player = {
     }
 }
 
-var game = {
+let game = {
     tile_map: [],
     draw_objects: [],
     init: function () {
         // Generate a map
-        for (var i = 0; i < 10 * 10; ++i) {
+        for (let i = 0; i < 10 * 10; ++i) {
             game.tile_map.push(0);
         }
         // Reset the ECS in case it was in use previously
@@ -293,14 +293,14 @@ var game = {
     draw: function (delta) {
         // Draw the map first
         // TODO: Get map dimensions from somewhere
-        var x, y;
+        let x, y;
         for (y = 0; y < 10; ++y) {
             for (x = 0; x < 10; ++x) {
-                var target_x = x * 100 - cameraSystem.x;
-                var target_y = y * 100 - cameraSystem.y;
+                let target_x = x * 100 - cameraSystem.x;
+                let target_y = y * 100 - cameraSystem.y;
                 if (target_x < -100 || target_x > graphics.width()) continue;
                 if (target_y < -100 || target_y > graphics.height()) break;
-                var tile = game.tile_map[y * 10 + x];
+                let tile = game.tile_map[y * 10 + x];
                 // TODO: Use a dictionary of sorts
                 if (tile === 0) {
                     graphics.drawImage(
@@ -315,8 +315,8 @@ var game = {
         }
         // Then draw any game objects
         game.draw_objects.sort(function(a, b) { return a.z - b.z });
-        for (var i in game.draw_objects) {
-            var obj = game.draw_objects[i];
+        for (let i in game.draw_objects) {
+            let obj = game.draw_objects[i];
             if (obj.type == "texture") {
                 if (obj.source !== null) {
                     graphics.drawImageSource(
