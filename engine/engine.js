@@ -9,7 +9,6 @@ engine.init = function() {
     input.init();
     graphics.init();
     // TODO: Maybe put this in graphics init?
-    console.log(graphics.text);
     graphics.text.init();
 }
 

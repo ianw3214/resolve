@@ -1,5 +1,33 @@
 "use strict";
 
+// Vertex and fragment shader for text rendering
+let text_shader;
+const text_vertex = `
+    attribute vec2 a_pos;
+    attribute vec2 a_tex;
+    
+    uniform float u_screenWidth;
+    uniform float u_screenHeight;
+
+    varying vec2 v_texCoord;
+
+    void main() {
+        float x = (a_pos.x / u_screenWidth) * 2.0 - 1.0;
+        float y = -((a_pos.y / u_screenHeight) * 2.0 - 1.0);
+        gl_Position = vec4(x, y, 0.0, 1.0);
+
+        v_texCoord = a_tex;
+    }`;
+const text_fragment = `
+    precision mediump float;
+    uniform sampler2D u_image;
+    varying vec2 v_texCoord;
+    void main() {
+        gl_FragColor = texture2D(u_image, v_texCoord);
+    }`;
+
+// TODO: Separate into JSON file
+// The default font info
 let fontInfo = {
     letterHeight: 8,
     spaceWidth: 8,
@@ -56,6 +84,12 @@ graphics.text = {
 };
 
 graphics.text.init = function() {
+    // Initialize text shader
+    text_shader = graphics.createShaderProgram(text_vertex, text_fragment);
+    gl.useProgram(text_shader);
+    gl.uniform1f(gl.getUniformLocation(text_shader, "u_screenWidth"), gl.canvas.clientWidth);
+    gl.uniform1f(gl.getUniformLocation(text_shader, "u_screenHeight"), gl.canvas.clientHeight);
+
     // Create a texture.
     graphics.text.glyphTex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, graphics.text.glyphTex);
@@ -110,32 +144,32 @@ function makeVerticesForString(fontInfo, s) {
 
             // 6 vertices per letter
             positions[offset + 0] = x;
-            positions[offset + 1] = 0;
+            positions[offset + 1] = fontInfo.letterHeight;
             texcoords[offset + 0] = u1;
             texcoords[offset + 1] = v1;
 
             positions[offset + 2] = x2;
-            positions[offset + 3] = 0;
+            positions[offset + 3] = fontInfo.letterHeight;
             texcoords[offset + 2] = u2;
             texcoords[offset + 3] = v1;
 
             positions[offset + 4] = x;
-            positions[offset + 5] = fontInfo.letterHeight;
+            positions[offset + 5] = 0;
             texcoords[offset + 4] = u1;
             texcoords[offset + 5] = v2;
 
             positions[offset + 6] = x;
-            positions[offset + 7] = fontInfo.letterHeight;
+            positions[offset + 7] = 0;
             texcoords[offset + 6] = u1;
             texcoords[offset + 7] = v2;
 
             positions[offset + 8] = x2;
-            positions[offset + 9] = 0;
+            positions[offset + 9] = fontInfo.letterHeight;
             texcoords[offset + 8] = u2;
             texcoords[offset + 9] = v1;
 
             positions[offset + 10] = x2;
-            positions[offset + 11] = fontInfo.letterHeight;
+            positions[offset + 11] = 0;
             texcoords[offset + 10] = u2;
             texcoords[offset + 11] = v2;
 
@@ -159,14 +193,14 @@ function makeVerticesForString(fontInfo, s) {
 }
 
 graphics.text.test = function() {
-    gl.useProgram(texture_shader);
+    gl.useProgram(text_shader);
     gl.bindTexture(gl.TEXTURE_2D, graphics.text.glyphTex);
 
     let s = "TESTSTRING";
     let vertices = makeVerticesForString(fontInfo, s.toLowerCase());
 
-    let positionLocation = gl.getAttribLocation(texture_shader, "a_pos");
-    let texCoordLocation = gl.getAttribLocation(texture_shader, "a_tex");
+    let positionLocation = gl.getAttribLocation(text_shader, "a_pos");
+    let texCoordLocation = gl.getAttribLocation(text_shader, "a_tex");
 
     // update the buffers
     graphics.text.textBufferInfo.attribs.a_position.numComponents = 2;
