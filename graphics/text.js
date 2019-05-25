@@ -119,19 +119,18 @@ graphics.text.init = function() {
     };
 }
 
-function makeVerticesForString(fontInfo, s) {
-    let len = s.length;
+function makeVerticesForString(fontInfo, str, x, y) {
+    let len = str.length;
     let numVertices = len * 6;
     let positions = new Float32Array(numVertices * 2);
     let texcoords = new Float32Array(numVertices * 2);
     let offset = 0;
-    let x = 0;
     let maxX = fontInfo.textureWidth;
     let maxY = fontInfo.textureHeight;
 
     // Loop through each letter of the string
-    for (let ii = 0; ii < len; ++ii) {
-        let letter = s[ii];
+    for (let i = 0; i < len; ++i) {
+        let letter = str[i];
         let glyphInfo = fontInfo.glyphInfos[letter];
 
         // Only generate the glyph if info for it exists
@@ -144,32 +143,32 @@ function makeVerticesForString(fontInfo, s) {
 
             // 6 vertices per letter
             positions[offset + 0] = x;
-            positions[offset + 1] = fontInfo.letterHeight;
+            positions[offset + 1] = y + fontInfo.letterHeight;
             texcoords[offset + 0] = u1;
             texcoords[offset + 1] = v1;
 
             positions[offset + 2] = x2;
-            positions[offset + 3] = fontInfo.letterHeight;
+            positions[offset + 3] = y + fontInfo.letterHeight;
             texcoords[offset + 2] = u2;
             texcoords[offset + 3] = v1;
 
             positions[offset + 4] = x;
-            positions[offset + 5] = 0;
+            positions[offset + 5] = y;
             texcoords[offset + 4] = u1;
             texcoords[offset + 5] = v2;
 
             positions[offset + 6] = x;
-            positions[offset + 7] = 0;
+            positions[offset + 7] = y;
             texcoords[offset + 6] = u1;
             texcoords[offset + 7] = v2;
 
             positions[offset + 8] = x2;
-            positions[offset + 9] = fontInfo.letterHeight;
+            positions[offset + 9] = y + fontInfo.letterHeight;
             texcoords[offset + 8] = u2;
             texcoords[offset + 9] = v1;
 
             positions[offset + 10] = x2;
-            positions[offset + 11] = 0;
+            positions[offset + 11] = y;
             texcoords[offset + 10] = u2;
             texcoords[offset + 11] = v2;
 
@@ -192,7 +191,7 @@ function makeVerticesForString(fontInfo, s) {
     };
 }
 
-graphics.text.drawText = function(text) {
+graphics.text.drawText = function(text, x = 0, y = 0) {
 
     if (typeof text !== "string") {
         // TODO: Better error handling, maybe output into log file?
@@ -203,7 +202,7 @@ graphics.text.drawText = function(text) {
     gl.bindTexture(gl.TEXTURE_2D, graphics.text.glyphTex);
 
     // TODO: Determine if toLowerCase is needed based on font info
-    let vertices = makeVerticesForString(fontInfo, text.toLowerCase());
+    let vertices = makeVerticesForString(fontInfo, text.toLowerCase(), x, y);
 
     let positionLocation = gl.getAttribLocation(text_shader, "a_pos");
     let texCoordLocation = gl.getAttribLocation(text_shader, "a_tex");
