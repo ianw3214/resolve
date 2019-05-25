@@ -8,7 +8,6 @@ let engine = {
 engine.init = function() {
     input.init();
     graphics.init();
-    // TODO: Maybe put this in graphics init?
     graphics.text.init();
 }
 
@@ -48,8 +47,6 @@ engine.draw = function(delta) {
             engine.state.draw(delta);
         }
     }
-    // TODO: TEMP CODE -> REMOVE
-    graphics.text.drawText("MORE TEXT YAY", 200, 200, 20);
 }
 
 engine.tick = function(timestamp) {

@@ -65,9 +65,6 @@ graphics.init = function() {
         return;
     }
 
-    // TODO: ??
-    // webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
     shader_program = graphics.createShaderProgram(vertex, fragment);
     gl.useProgram(shader_program);
     gl.uniform1f(gl.getUniformLocation(shader_program, "u_screenWidth"), gl.canvas.clientWidth);

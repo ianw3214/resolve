@@ -43,7 +43,16 @@ let renderSystem = {
                     }
                 }
                 if (entity.render.type === "square") {
-                    // TODO: Implement this
+                    game.draw_objects.push({
+                        type: "square",
+                        x: x,
+                        y: y,
+                        w: w,
+                        h: h,
+                        z: z,
+                        color: entity.render.color
+                    });
+                    
                 }
                 if (entity.render.type === "line") {
                     // TODO: Implement this
@@ -105,6 +114,7 @@ let moveSystem = {
     }
 }
 
+const base_camera_speed = 500;
 let cameraSystem = {
     x: 0,
     y: 0,
@@ -115,24 +125,22 @@ let cameraSystem = {
     update: function(entities, delta) {
         // Have the camera follow the player
         // TODO: Calculate target based on movement inputs
-        // TODO: Use delta time for camera movement time
-        // TODO: Actually center the camera
-        let target_x = player.position.x - graphics.width() / 2;
-        let target_y = player.position.y - graphics.height() / 2;
+        let target_x = player.position.x - graphics.width() / 2 + player.render.w / 2;
+        let target_y = player.position.y - graphics.height() / 2 + player.render.h / 2;
         if (cameraSystem.x < target_x) {
-            cameraSystem.x += 3;
+            cameraSystem.x += base_camera_speed * delta / 1000;
             if (cameraSystem.x > target_x) cameraSystem.x = target_x;
         }
         if (cameraSystem.x > target_x) {
-            cameraSystem.x -= 3;
+            cameraSystem.x -= base_camera_speed * delta / 1000;
             if (cameraSystem.x < target_x) cameraSystem.x = target_x;
         }
         if (cameraSystem.y < target_y) {
-            cameraSystem.y += 3;
+            cameraSystem.y += base_camera_speed * delta / 1000;
             if (cameraSystem.y > target_y) cameraSystem.y = target_y;
         }
         if (cameraSystem.y > target_y) {
-            cameraSystem.y -= 3;
+            cameraSystem.y -= base_camera_speed * delta / 1000;
             if (cameraSystem.y < target_y) cameraSystem.y = target_y;
         }
     }
@@ -170,30 +178,18 @@ let animationSystem = {
                 }
                 const curr = entity.animation.state;
                 // If there is an animation hint, transition based on it
-                if (entity.animation.hint !== "") {
-                    // If the hint changes the state
-                    if (data.states[curr].transition[entity.animation.hint] !== undefined) {
-                        entity.animation.state = data.states[curr].transition[entity.animation.hint];
-                        entity.animation.frame = data.states[entity.animation.state].start;
-                    // Otherwise, update as normal
-                    } else {
-                        // TODO: Merge with other else case to avoid redundancy
-                        // Update the frame and see if it needs to be reset
-                        entity.animation.frame += 1;
-                        // TODO: If the animation shouldn't loop, go to some other state
-                        if (entity.animation.frame > data.states[curr].end) {
-                            entity.animation.frame = data.states[curr].start;
-                        }
-                    }
-                    entity.animation.hint = "";
+                if (data.states[curr].transition[entity.animation.hint] !== undefined) {
+                    entity.animation.state = data.states[curr].transition[entity.animation.hint];
+                    entity.animation.frame = data.states[entity.animation.state].start;
                 } else {
                     // Update the frame and see if it needs to be reset
                     entity.animation.frame += 1;
-                    // TODO: If the animation shouldn't loop, go to some other state
+                    // TODO: If the animation shouldn't loop, go to some default state
                     if (entity.animation.frame > data.states[curr].end) {
                         entity.animation.frame = data.states[curr].start;
                     }
                 }
+                entity.animation.hint = "";
                 // Finally, update the source rect based on the frame
                 const tilesheet = data.tilesheet;
                 const frame = entity.animation.frame;
@@ -336,7 +332,9 @@ let game = {
                 }
             }
             if (obj.type === "square") {
-                // TODO: Implement this
+                let color = error_color;
+                if (obj.color !== null && obj.color !== undefined) color = obj.color;
+                graphics.drawRect(obj.x, obj.y, obj.w, obj.h, color);
             }
             if (obj.type === "line") {
                 // TODO: Implement this
