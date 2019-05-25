@@ -49,7 +49,7 @@ engine.draw = function(delta) {
         }
     }
     // TODO: TEMP CODE -> REMOVE
-    graphics.text.test();
+    graphics.text.drawText("MORE TEXT YAY");
 }
 
 engine.tick = function(timestamp) {

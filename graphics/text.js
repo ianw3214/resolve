@@ -1,6 +1,6 @@
 "use strict";
 
-// Vertex and fragment shader for text rendering
+// Separate shader from basic shaders in case different effects are needed for text
 let text_shader;
 const text_vertex = `
     attribute vec2 a_pos;
@@ -192,12 +192,18 @@ function makeVerticesForString(fontInfo, s) {
     };
 }
 
-graphics.text.test = function() {
+graphics.text.drawText = function(text) {
+
+    if (typeof text !== "string") {
+        // TODO: Better error handling, maybe output into log file?
+        return;
+    }
+
     gl.useProgram(text_shader);
     gl.bindTexture(gl.TEXTURE_2D, graphics.text.glyphTex);
 
-    let s = "TESTSTRING";
-    let vertices = makeVerticesForString(fontInfo, s.toLowerCase());
+    // TODO: Determine if toLowerCase is needed based on font info
+    let vertices = makeVerticesForString(fontInfo, text.toLowerCase());
 
     let positionLocation = gl.getAttribLocation(text_shader, "a_pos");
     let texCoordLocation = gl.getAttribLocation(text_shader, "a_tex");
