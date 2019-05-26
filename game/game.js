@@ -1,39 +1,14 @@
 "use strict";
 
 let player = {
-    render: {
-        type: "texture",
-        path: "res/player.png",
-        w: 100,
-        h: 100,
-        z: 100
-    },
+    render: renderSystem.generate("texture", "res/player.png", 100, 100, 100),
     position: {
         x: 50,
         y: 50
     },
-    move: {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-        was_moving: false
-    },
-    camera: {
-        affect: true
-    },
-    animation: {
-        state: "",
-        hint: "",
-        frame: 0,
-        time: 0,
-        source: {},
-        // Loading the data in from another file
-        data: {},
-        path: "res/player.json",
-        loaded: false,
-        loading: false
-    }
+    move: moveSystem.generate(),
+    camera: cameraSystem.generate(),
+    animation: animationSystem.generate("res/player.json")
 }
 
 let game = {

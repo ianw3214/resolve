@@ -4,6 +4,11 @@ const base_camera_speed = 500;
 let cameraSystem = {
     x: 0,
     y: 0,
+    generate: function(affect = true) {
+        return {
+            affect: affect
+        };
+    },
     init: function () {
         cameraSystem.x = -100;
         cameraSystem.y = -100;

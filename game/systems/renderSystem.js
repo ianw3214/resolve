@@ -1,6 +1,16 @@
 "use strict";
 
 let renderSystem = {
+    generate: function(type = "square", path = "", w = 10, h = 10, z = 0, color = error_color) {
+        return {
+            type: type,
+            path: path,
+            w: w,
+            h: h,
+            z: z,
+            color: color
+        }
+    },
     update: function (entities, delta) {
         for (let i in entities) {
             let entity = entities[i];

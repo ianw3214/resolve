@@ -1,6 +1,15 @@
 "use strict";
 
 let moveSystem = {
+    generate: function() {
+        return {
+            up: false,
+            down: false,
+            left: false,
+            right: false,
+            was_moving: false
+        }
+    },
     update: function (entities, delta) {
         for (let i in entities) {
             let entity = entities[i];

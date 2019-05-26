@@ -1,6 +1,20 @@
 "use strict";
 
 let animationSystem = {
+    generate: function(path = "") {
+        return {
+            state: "",
+            hint: "",
+            frame: 0,
+            time: 0,
+            source: {},
+            // Loading the data in from another file
+            data: {},
+            path: path,
+            loaded: false,
+            loading: false
+        }
+    },
     update: function (entities, delta) {
         for (let i in entities) {
             let entity = entities[i];
@@ -10,6 +24,7 @@ let animationSystem = {
                     if (!entity.animation.loading) {
                         file.loadJSON(entity.animation.path, function (response) {
                             // Parse JSON string into object
+                            // TODO: Error handling
                             entity.animation.data = JSON.parse(response);
                             entity.animation.loaded = true;
                         });
