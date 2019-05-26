@@ -178,7 +178,7 @@ let animationSystem = {
                 }
                 const curr = entity.animation.state;
                 // If there is an animation hint, transition based on it
-                if (data.states[curr].transition[entity.animation.hint] !== undefined) {
+                if (entity.animation.hint !== "" && data.states[curr].transition[entity.animation.hint] !== undefined) {
                     entity.animation.state = data.states[curr].transition[entity.animation.hint];
                     entity.animation.frame = data.states[entity.animation.state].start;
                 } else {
@@ -213,7 +213,7 @@ let animationSystem = {
 let player = {
     render: {
         type: "texture",
-        path: "res/TEMP/player.png",
+        path: "res/player.png",
         w: 100,
         h: 100,
         z: 100
@@ -240,7 +240,7 @@ let player = {
         source: {},
         // Loading the data in from another file
         data: {},
-        path: "res/TEMP/player.json",
+        path: "res/player.json",
         loaded: false,
         loading: false
     }
