@@ -1,12 +1,12 @@
 "use strict";
 
 let player = {
-    render: renderSystem.generate("texture", "res/player.png", 100, 100, 100),
+    render: renderSystem.generate("texture", "res/player.png", 64, 64, 100),
     position: {
         x: 50,
         y: 50
     },
-    move: moveSystem.generate(),
+    move: moveSystem.generate(200),
     camera: cameraSystem.generate(),
     animation: animationSystem.generate("res/player.json")
 }

@@ -19,7 +19,7 @@ let animationSystem = {
         for (let i in entities) {
             let entity = entities[i];
             if (entity.hasOwnProperty("animation")) {
-                // Load the animation if it isn't loaded yet
+                // Load the animation data if it isn't loaded yet
                 if (!entity.animation.loaded) {
                     if (!entity.animation.loading) {
                         file.loadJSON(entity.animation.path, function (response) {

@@ -1,13 +1,15 @@
 "use strict";
 
 let moveSystem = {
-    generate: function() {
+    generate: function(speed = 100) {
         return {
             up: false,
             down: false,
             left: false,
             right: false,
-            was_moving: false
+            was_moving: false,
+            // The data of the move component
+            speed: speed
         }
     },
     update: function (entities, delta) {
@@ -15,32 +17,35 @@ let moveSystem = {
             let entity = entities[i];
             let moving = false;
             if (entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
-                if (entity.move.up) {
-                    moving = true;
-                    entity.position.y -= 5;
-                    if (entity.hasOwnProperty("animation")) {
-                        entity.animation.hint = "RUN_UP";
+                if (entity.move.hasOwnProperty("speed")) {
+                    let distance = entity.move.speed * delta / 1000;
+                    if (entity.move.up) {
+                        moving = true;
+                        entity.position.y -= distance;
+                        if (entity.hasOwnProperty("animation")) {
+                            entity.animation.hint = "RUN_UP";
+                        }
                     }
-                }
-                if (entity.move.down) {
-                    moving = true;
-                    entity.position.y += 5;
-                    if (entity.hasOwnProperty("animation")) {
-                        entity.animation.hint = "RUN_DOWN";
+                    if (entity.move.down) {
+                        moving = true;
+                        entity.position.y += distance;
+                        if (entity.hasOwnProperty("animation")) {
+                            entity.animation.hint = "RUN_DOWN";
+                        }
                     }
-                }
-                if (entity.move.left) {
-                    moving = true;
-                    entity.position.x -= 5;
-                    if (entity.hasOwnProperty("animation")) {
-                        entity.animation.hint = "RUN_LEFT";
+                    if (entity.move.left) {
+                        moving = true;
+                        entity.position.x -= distance;
+                        if (entity.hasOwnProperty("animation")) {
+                            entity.animation.hint = "RUN_LEFT";
+                        }
                     }
-                }
-                if (entity.move.right) {
-                    moving = true;
-                    entity.position.x += 5;
-                    if (entity.hasOwnProperty("animation")) {
-                        entity.animation.hint = "RUN_RIGHT";
+                    if (entity.move.right) {
+                        moving = true;
+                        entity.position.x += distance;
+                        if (entity.hasOwnProperty("animation")) {
+                            entity.animation.hint = "RUN_RIGHT";
+                        }
                     }
                 }
             }
@@ -55,7 +60,9 @@ let moveSystem = {
                 down: false,
                 left: false,
                 right: false,
-                was_moving: moving
+                was_moving: moving,
+                // Other data to carry along
+                speed: entity.move.speed
             };
         }
     }
