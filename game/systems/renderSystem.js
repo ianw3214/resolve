@@ -1,7 +1,7 @@
 "use strict";
 
 let renderSystem = {
-    generate: function(type = "square", path = "", w = 10, h = 10, z = 0, color = error_color) {
+    generate: function(type = "square", path = "", w = 10, h = 10, z = 0, color = error_colour) {
         return {
             type: type,
             path: path,

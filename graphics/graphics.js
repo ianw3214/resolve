@@ -52,7 +52,7 @@ const full_rect = new Float32Array([
     0.0, 1.0,
     1.0, 0.0,
     1.0, 1.0,]);
-const error_color = [1.0, 0.0, 1.0, 1.0];
+const error_colour = [1.0, 0.0, 1.0, 1.0];
 
 // Initialize webGL
 graphics.init = function() {
@@ -159,8 +159,31 @@ graphics.clearBuffer = function() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
+// Function to draw a line
+graphics.drawLine = function(x1 = 0, y1 = 0, x2 = 0, y2 = 0, colour = error_colour) {
+    
+    let positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        x1, y1,
+        x2, y2
+    ]), gl.DYNAMIC_DRAW);
+    let positionLocation = gl.getAttribLocation(shader_program, "a_pos");
+    gl.useProgram(shader_program);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    // Set the colour
+    let colourLocation = gl.getUniformLocation(shader_program, "u_colour");
+    if (colour.length < 4) colour.push(1.0);
+    gl.uniform4fv(colourLocation, colour);
+    // Draw the actual rectangle
+    gl.drawArrays(gl.LINES, 0, 2);
+
+}
+
 // Function to draw a rectangle
-graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = error_color) {
+graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = error_colour) {
 
     let positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -173,6 +196,7 @@ graphics.drawRect = function(x = 0, y = 0, w = 30, h = 30, colour = error_color)
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
     // Set the colour
     let colourLocation = gl.getUniformLocation(shader_program, "u_colour");
+    if (colour.length < 4) colour.push(1.0);
     gl.uniform4fv(colourLocation, colour);
     // Draw the actual rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -205,7 +229,7 @@ graphics.drawImage = function (tex, x = 0, y = 0, w = 30, h = 30) {
         // Draw the actual rectangle
         gl.drawArrays(gl.TRIANGLES, 0, 6);
     } else {
-        graphics.drawRect(x, y, w, h, error_color);
+        graphics.drawRect(x, y, w, h, error_colour);
     }
 }
 
@@ -244,7 +268,7 @@ graphics.drawImageSource = function (tex, source = null, x = 0, y = 0, w = 30, h
         // Draw the actual rectangle
         gl.drawArrays(gl.TRIANGLES, 0, 6);
     } else {
-        graphics.drawRect(x, y, w, h, error_color);
+        graphics.drawRect(x, y, w, h, error_colour);
     }
 }
 
