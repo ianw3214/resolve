@@ -15,10 +15,8 @@ let game = {
     tile_map: [],
     draw_objects: [],
     init: function () {
-        // Generate a map
-        for (let i = 0; i < 10 * 10; ++i) {
-            game.tile_map.push(0);
-        }
+        // TODO: Add a file to load the map from
+        map.load();
         // Reset the ECS in case it was in use previously
         ECS.reset();
         ECS.addSystem(cameraSystem);
@@ -52,28 +50,7 @@ let game = {
         let canvas = document.getElementById("glCanvas");
     },
     draw: function (delta) {
-        // Draw the map first
-        // TODO: Get map dimensions from somewhere
-        let x, y;
-        for (y = 0; y < 10; ++y) {
-            for (x = 0; x < 10; ++x) {
-                let target_x = x * 100 - cameraSystem.x;
-                let target_y = y * 100 - cameraSystem.y;
-                if (target_x < -100 || target_x > graphics.width()) continue;
-                if (target_y < -100 || target_y > graphics.height()) break;
-                let tile = game.tile_map[y * 10 + x];
-                // TODO: Use a dictionary of sorts
-                if (tile === 0) {
-                    graphics.drawImage(
-                        graphics.loadImage("res/test.png"),
-                        target_x,
-                        target_y,
-                        100,
-                        100
-                    );
-                }
-            }
-        }
+        map.draw(cameraSystem.x, cameraSystem.y);
         // Then draw any game objects
         game.draw_objects.sort(function(a, b) { return a.z - b.z });
         for (let i in game.draw_objects) {

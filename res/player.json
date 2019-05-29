@@ -87,7 +87,7 @@
         },
         "RUN_DOWN": {
             "start": 70,
-            "end": 73,
+            "end": 75,
             "transition": {
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
