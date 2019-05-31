@@ -16,7 +16,7 @@ let game = {
     draw_objects: [],
     init: function () {
         // TODO: Add a file to load the map from
-        map.load();
+        map.load("res/maps/test.json");
         // Reset the ECS in case it was in use previously
         ECS.reset();
         ECS.addSystem(cameraSystem);
