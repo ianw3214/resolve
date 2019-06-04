@@ -1,0 +1,11 @@
+# UTILITY FILES
+*.bat
+
+# BUILD
+build/
+
+# IDE FILES
+.vscode/
+
+# VENDOR FILES
+vendor/

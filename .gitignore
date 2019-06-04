@@ -9,3 +9,6 @@ libs/
 
 # REFERENCES FOR THE GAME
 references/
+
+# IDE FILES
+.vscode/
