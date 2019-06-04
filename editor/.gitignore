@@ -1,5 +1,4 @@
-# UTILITY FILES
-*.bat
+QcEngine/
 
 # BUILD
 build/
