@@ -8,20 +8,24 @@
 "use strict";
 
 let logger = {
-    "logs": []
+    logs: []
 };
 
 logger.info = function(message) {
     message += "[INFO]";
     console.log(message);
+    logger.logs.push(message);
 };
 
 logger.warning = function(message) {
     message += "[WARNING]";
     console.log("%c" + message, "color:orange;");
+    logger.logs.push(message);
 };
 
 logger.error = function(message) {
     message += "[ERROR]";
     console.log("%c" + message, "color:red;");
+    alert(message);
+    logger.logs.push(message);
 }

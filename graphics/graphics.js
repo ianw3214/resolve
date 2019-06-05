@@ -61,7 +61,7 @@ graphics.init = function() {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     if (!gl) {
-        alert("Unable to initialize webGL");
+        logger.error("Unable to intiialize webGL");
         return;
     }
 
@@ -111,11 +111,8 @@ document.onfullscreenchange = function (event) {
     let canvas = document.getElementById("glCanvas");
     // IF THE DOCUMENT IS NO LONGER FULLSCREEN, THEN EXITING FULLSCREEN
     if (!document.fullscreenElement) {
-        // FIXME: Maybe don't use hard coded values?
-        // THIS IS A TEMPORARY HACK - THE CODE USED TO WORK WITHOUT IT
         canvas.width = 640;
         canvas.height = 480;
-        // END HACK...
     }
     graphics.resize();
     let width = canvas.width;
@@ -133,7 +130,7 @@ graphics.createShaderProgram = function(v_src, f_src) {
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgram));
+        logger.error("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgram));
         return null;
     }
     return shaderProgram;
@@ -146,7 +143,7 @@ graphics.loadShader = function(type, src) {
     gl.compileShader(shader);
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        alert("An error occurred compiling shader: " + gl.getShaderInfoLog(shader));
+        logger.error("An error occurred compiling shader: " + gl.getShaderInfoLog(shader));
         gl.deleteShader(shader);
         return null;
     }
