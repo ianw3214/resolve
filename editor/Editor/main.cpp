@@ -93,14 +93,25 @@ public:
     }
 
     void render() {
-        // Render normal textures
-        // Texture test("res/animate.png");
-        // test.render(100, 100);
         // // Render animated textures
         // test_animatedTexture->render(0, 0);
         // // Render text
         // Texture testText(getTextTexture("test", "test", {200, 100, 100, 255}));
         // testText.render(200, 200);
+        std::string texture_src(ROOT);
+        texture_src += m_tilesheet_src;
+
+        TileMap tiles(texture_src);
+        tiles.generateTiles(m_tile_size, m_tile_size);
+        tiles.render(100, 100);
+
+        for (int y = 0; y < m_map_height; ++y) {
+            for (int x = 0; x < m_map_width; ++x) {
+                // TODO: Better error handling
+                unsigned int index = m_tilemap[y * m_map_width + x];
+                tiles.render(x * m_tile_size, y * m_tile_size, index);
+            }
+        }
     }
 
 private:
