@@ -23,9 +23,6 @@ public:
         // test_animatedTexture->addAnimationState(0, 1);
         // test_animatedTexture->changeAnimation(0);
         // test_track = loadWAV("res/test.wav", false);
-        // if (!test_track) {
-        //     ERR("Something went wrong when trying to load WAV File");
-        // }
         // createFont("test", "res/Munro.ttf", 20);
         std::string path(ROOT);
         path += FILE;
@@ -84,12 +81,6 @@ public:
         if (keyPressed(SDL_SCANCODE_ESCAPE)) {
             exit();
         }
-        // if (keyPressed(SDL_SCANCODE_S)) {
-        //     playWAV(test_track);
-        // }
-        // if (keyPressed(SDL_SCANCODE_A)) {
-        //     pauseWAV(test_track);
-        // }
     }
 
     void render() {
