@@ -33,7 +33,7 @@ let animationSystem = {
                     continue;
                 }
                 // Skip all the calculating if the time is not up yet
-                if (entity.time < 41.0) {    // 24 FPS
+                if (entity.time < 42.0) {    // 24 FPS
                     entity.time += delta;
                     continue;
                 } else {
