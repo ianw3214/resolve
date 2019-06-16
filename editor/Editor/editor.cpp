@@ -1,5 +1,4 @@
 #pragma once
-
 #include "core/engine.hpp"
 
 #include <fstream>
@@ -15,19 +14,22 @@ using json = nlohmann::json;
 
 constexpr int base_tile_size = 64;
 
-#include <iostream>
+#include "logger.cpp"
 
 class Editor : public State {
+    Logger logger;
 public:
     
     Editor() 
         : m_tile_scale(1.f)
         , m_camera_x(0)
         , m_camera_y(0)
+        , logger()
     {}
     ~Editor() {}
 
     void init() {
+        logger.init();
         // test_animatedTexture = new AnimatedTexture("res/animate.png");
         // test_animatedTexture->generateAtlas(64, 80);
         // test_animatedTexture->addAnimationState(0, 1);
@@ -57,6 +59,7 @@ public:
         } else {
             // TODO: Error logging
         }
+        logger.log("TEST TEXT");
     }
 
     void cleanup() {
@@ -138,6 +141,7 @@ public:
                     index);
             }
         }
+        logger.render();
     }
 
 private:

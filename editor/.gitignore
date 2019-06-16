@@ -8,3 +8,6 @@ build/
 
 # VENDOR FILES
 vendor/
+
+# RESOURCE FILES
+resources/

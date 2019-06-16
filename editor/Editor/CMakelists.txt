@@ -1,3 +1,4 @@
 target_sources(Editor PRIVATE 
     main.cpp
-    editor.cpp)
+    editor.cpp
+    logger.cpp)
