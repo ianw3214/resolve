@@ -12,6 +12,7 @@ using json = nlohmann::json;
 #include <vector>
 #include <string>
 
+
 constexpr int base_tile_size = 64;
 
 #include "logger.cpp"
@@ -134,10 +135,10 @@ public:
                 // TODO: Better error handling
                 unsigned int index = m_tilemap[y * m_map_width + x];
                 tiles.render(
-                    static_cast<int>(x * base_tile_size * m_tile_scale) - m_camera_x,
-                    static_cast<int>(y * base_tile_size * m_tile_scale) - m_camera_y, 
-                    static_cast<int>(base_tile_size * m_tile_scale), 
-                    static_cast<int>(base_tile_size * m_tile_scale), 
+                    static_cast<int>(std::ceil(static_cast<float>(x) * base_tile_size * m_tile_scale) - m_camera_x),
+                    static_cast<int>(std::ceil(static_cast<float>(y) * base_tile_size * m_tile_scale) - m_camera_y), 
+                    static_cast<int>(std::ceil(base_tile_size * m_tile_scale)), 
+                    static_cast<int>(std::ceil(base_tile_size * m_tile_scale)), 
                     index);
             }
         }
