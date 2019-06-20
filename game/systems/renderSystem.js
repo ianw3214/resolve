@@ -17,6 +17,15 @@ let renderSystem = {
             if (entity.hasOwnProperty("render")) {
                 let x = 0;
                 let y = 0;
+                let scaled_w = entity.render.w;
+                let scaled_h = entity.render.h;
+                if (entity.hasOwnProperty("scaling")) {
+                    if (entity.scaling.scaling === true) {
+                        scaled_w *= scalingSystem.scale;
+                        scaled_h *= scalingSystem.scale;
+                        console.log(scalingSystem.scale);
+                    }
+                }
                 if (entity.hasOwnProperty("position")) {
                     x = entity.position.x;
                     y = entity.position.y;
@@ -35,8 +44,8 @@ let renderSystem = {
                                 entity.render.path,
                                 x,
                                 y,
-                                entity.render.w,
-                                entity.render.h,
+                                scaled_w,
+                                scaled_h,
                                 100,
                                 entity.animation.source
                             );
@@ -46,8 +55,8 @@ let renderSystem = {
                             entity.render.path,
                             x,
                             y,
-                            entity.render.w,
-                            entity.render.h,
+                            scaled_w,
+                            scaled_h,
                             100
                         );
                     }
@@ -57,9 +66,9 @@ let renderSystem = {
                         type: "square",
                         x: x,
                         y: y,
-                        w: w,
-                        h: h,
-                        z: z,
+                        w: scaled_w,
+                        h: scaled_h,
+                        z: entity.render.z,
                         color: entity.render.color
                     });
 

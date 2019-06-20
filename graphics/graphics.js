@@ -1,6 +1,8 @@
 "use strict";
 
-let graphics = {};
+let graphics = {
+    fullscreen_callbacks: []
+};
 // TODO: Maybe cache vertex buffers and stuff for optimization
 
 // Simple vertex shader for 2D drawing
@@ -107,6 +109,15 @@ graphics.exitFullscreen = function() {
     }
 }
 
+graphics.addFullscreenCallback = function(callback) {
+    if (typeof callback !== "function") {
+        logger.warning("Trying to push a fullscreen callback that isn't a function");
+    } else {
+        console.log("CALLBACK");
+        graphics.fullscreen_callbacks.push(callback);
+    }
+}
+
 document.onfullscreenchange = function (event) {
     let canvas = document.getElementById("glCanvas");
     // IF THE DOCUMENT IS NO LONGER FULLSCREEN, THEN EXITING FULLSCREEN
@@ -118,6 +129,11 @@ document.onfullscreenchange = function (event) {
     let width = canvas.width;
     let height = canvas.height;
     gl.viewport(0, 0, width, height);
+
+    // Call any fullscreen callbacks
+    for (let i in graphics.fullscreen_callbacks) {
+        graphics.fullscreen_callbacks[i](canvas.width, canvas.height);
+    }
 }; 
 
 // Function to create and link shaders

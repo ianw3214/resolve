@@ -35,6 +35,8 @@ map.load = function(path = null) {
 }
 
 map.draw = function (cam_x = 0, cam_y = 0, tile_size = 64) {
+    // Update tile size based on the scaling
+    tile_size *= scalingSystem.scale;
     // TODO: Get map dimensions from somewhere
     let x, y;
     for (y = 0; y < map.height; ++y) {

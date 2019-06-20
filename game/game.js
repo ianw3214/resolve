@@ -8,7 +8,8 @@ let player = {
     },
     move: moveSystem.generate(200),
     camera: cameraSystem.generate(),
-    animation: animationSystem.generate("res/player.json")
+    animation: animationSystem.generate("res/player.json"),
+    scaling: scalingSystem.generate()
 }
 
 let game = {
@@ -23,6 +24,7 @@ let game = {
         ECS.addSystem(animationSystem);
         ECS.addSystem(renderSystem);
         ECS.addSystem(moveSystem);
+        ECS.addSystem(scalingSystem);
         ECS.addEntity(player);
     },
     update: function (delta) {

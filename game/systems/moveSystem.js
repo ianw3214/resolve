@@ -19,6 +19,11 @@ let moveSystem = {
             if (entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
                 if (entity.move.hasOwnProperty("speed")) {
                     let distance = entity.move.speed * delta / 1000;
+                    if (entity.hasOwnProperty("scaling")) {
+                        if (entity.scaling.scaling === true) {
+                            distance *= scalingSystem.scale;
+                        }
+                    }
                     if (entity.move.up) {
                         moving = true;
                         entity.position.y -= distance;
