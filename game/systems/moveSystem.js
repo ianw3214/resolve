@@ -19,11 +19,6 @@ let moveSystem = {
             if (entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
                 if (entity.move.hasOwnProperty("speed")) {
                     let distance = entity.move.speed * delta / 1000;
-                    if (entity.hasOwnProperty("scaling")) {
-                        if (entity.scaling.scaling === true) {
-                            distance *= scalingSystem.scale;
-                        }
-                    }
                     if (entity.move.up) {
                         moving = true;
                         entity.position.y -= distance;
@@ -69,6 +64,15 @@ let moveSystem = {
                 // Other data to carry along
                 speed: entity.move.speed
             };
+            // Adjust screen x/y if scaling
+            entity.position.screen_x = entity.position.x;
+            entity.position.screen_y = entity.position.y;
+            if (entity.hasOwnProperty("scaling")) {
+                if (entity.scaling.scaling === true) {
+                    entity.position.screen_x = entity.position.x * scalingSystem.scale;
+                    entity.position.screen_y = entity.position.y * scalingSystem.scale;
+                }
+            }
         }
     }
 }

@@ -113,7 +113,6 @@ graphics.addFullscreenCallback = function(callback) {
     if (typeof callback !== "function") {
         logger.warning("Trying to push a fullscreen callback that isn't a function");
     } else {
-        console.log("CALLBACK");
         graphics.fullscreen_callbacks.push(callback);
     }
 }

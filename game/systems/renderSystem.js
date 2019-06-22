@@ -23,12 +23,11 @@ let renderSystem = {
                     if (entity.scaling.scaling === true) {
                         scaled_w *= scalingSystem.scale;
                         scaled_h *= scalingSystem.scale;
-                        console.log(scalingSystem.scale);
                     }
                 }
                 if (entity.hasOwnProperty("position")) {
-                    x = entity.position.x;
-                    y = entity.position.y;
+                    x = entity.position.screen_x;
+                    y = entity.position.screen_y;
                 }
                 if (entity.hasOwnProperty("camera")) {
                     if (entity.camera.affect) {
