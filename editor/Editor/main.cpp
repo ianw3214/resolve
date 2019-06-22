@@ -1,6 +1,6 @@
 #include "core/engine.hpp"
 
-#include "editor.cpp"
+#include "editor.hpp"
 
 int main(int argc, char* argv[]) {
 
