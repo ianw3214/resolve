@@ -87,6 +87,7 @@ let game = {
             }
         }
         game.draw_objects = [];
+        graphics.text.drawText("TEST\nHI\nUHM WTF\nTEST", defaultFont, 0, 0, 16, [1.0, 0.0, 0.0, 1.0]);
     },
     drawImage: function (path, x = 0, y = 0, w = 0, h = 0, z = 0, source = null,) {
         game.draw_objects.push({

@@ -21,9 +21,10 @@ const text_vertex = `
 const text_fragment = `
     precision mediump float;
     uniform sampler2D u_image;
+    uniform vec4 u_colour;
     varying vec2 v_texCoord;
     void main() {
-        gl_FragColor = texture2D(u_image, v_texCoord);
+        gl_FragColor = texture2D(u_image, v_texCoord) * u_colour;
     }`;
 
 // TODO: Separate into JSON file
@@ -33,6 +34,7 @@ let defaultFont = {
     glyphTex: null,
     textBufferInfo: {},
     // FONT METADATA
+    lowerCase: true,
     letterHeight: 8,
     spaceWidth: 8,
     spacing: -1,
@@ -119,9 +121,20 @@ graphics.text.init = function() {
         },
         numElements: 0,
     };
+    // Add callback to resize uniforms when fullscreen changes
+    graphics.addFullscreenCallback((w, h) => {
+        // Also update shader uniforms
+        gl.useProgram(text_shader);
+        gl.uniform1f(gl.getUniformLocation(text_shader, "u_screenWidth"), w);
+        gl.uniform1f(gl.getUniformLocation(text_shader, "u_screenHeight"), h);
+    });
 }
 
 function makeVerticesForString(font, str, x, y, size) {
+    let original_x = x;
+    if (font.lowerCase == true) {
+        str = str.toLowerCase();
+    }
     let len = str.length;
     let numVertices = len * 6;
     let positions = new Float32Array(numVertices * 2);
@@ -133,9 +146,17 @@ function makeVerticesForString(font, str, x, y, size) {
     // Loop through each letter of the string
     for (let i = 0; i < len; ++i) {
         let letter = str[i];
-        let glyphInfo = font.glyphInfos[letter];
+
+        // Newline for \n
+        if (letter === '\n') {
+            x = original_x;
+            y += size;
+            offset += 12;
+            continue;
+        }
 
         // Only generate the glyph if info for it exists
+        let glyphInfo = font.glyphInfos[letter];
         if (glyphInfo) {
             let x2 = x + glyphInfo.width * (size / font.letterHeight);
             let u1 = glyphInfo.x / maxX;
@@ -193,7 +214,7 @@ function makeVerticesForString(font, str, x, y, size) {
     };
 }
 
-graphics.text.drawText = function(text, font = defaultFont, x = 0, y = 0, size = 16) {
+graphics.text.drawText = function(text, font = defaultFont, x = 0, y = 0, size = 16, colour = [1.0, 1.0, 1.0, 1.0]) {
 
     if (typeof text !== "string") {
         logger.error("Unable to draw text: " + text);
@@ -203,8 +224,7 @@ graphics.text.drawText = function(text, font = defaultFont, x = 0, y = 0, size =
     gl.useProgram(text_shader);
     gl.bindTexture(gl.TEXTURE_2D, font.glyphTex);
 
-    // TODO: Determine if toLowerCase is needed based on font info
-    let vertices = makeVerticesForString(font, text.toLowerCase(), x, y, size);
+    let vertices = makeVerticesForString(font, text, x, y, size);
 
     let positionLocation = gl.getAttribLocation(text_shader, "a_pos");
     let texCoordLocation = gl.getAttribLocation(text_shader, "a_tex");
@@ -223,6 +243,9 @@ graphics.text.drawText = function(text, font = defaultFont, x = 0, y = 0, size =
     gl.bindBuffer(gl.ARRAY_BUFFER, font.textBufferInfo.attribs.a_texcoord.buffer);
     gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
+    let colourLocation = gl.getUniformLocation(text_shader, "u_colour");
+    if (colour.length < 4) colour.push(1.0);
+    gl.uniform4fv(colourLocation, colour);
 
     gl.drawArrays(gl.TRIANGLES, 0, vertices.numVertices);
 }
