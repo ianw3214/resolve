@@ -11,7 +11,8 @@ let player = {
     move: moveSystem.generate(200),
     camera: cameraSystem.generate(),
     animation: animationSystem.generate("res/player.json"),
-    scaling: scalingSystem.generate()
+    scaling: scalingSystem.generate(),
+    collision: collisionSystem.generateRect(64, 64)
 }
 
 let game = {
@@ -51,7 +52,9 @@ let game = {
             graphics.exitFullscreen();
         }
         ECS.update(delta);
-        let canvas = document.getElementById("glCanvas");
+        if (map.colliding(player.position.x, player.position.y, player.collision, 64)) {
+            console.log("TEST");
+        }
     },
     draw: function (delta) {
         map.draw(cameraSystem.x, cameraSystem.y);
@@ -87,7 +90,6 @@ let game = {
             }
         }
         game.draw_objects = [];
-        graphics.text.drawText("TEST\nHI\nUHM WTF\nTEST", defaultFont, 0, 0, 16, [1.0, 0.0, 0.0, 1.0]);
     },
     drawImage: function (path, x = 0, y = 0, w = 0, h = 0, z = 0, source = null,) {
         game.draw_objects.push({

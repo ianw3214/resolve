@@ -3,25 +3,35 @@
 let moveSystem = {
     generate: function(speed = 100) {
         return {
+            // Flags to determine what ways the entity is moving
             up: false,
             down: false,
             left: false,
             right: false,
             was_moving: false,
             // The data of the move component
-            speed: speed
+            speed: speed,
         }
     },
     update: function (entities, delta) {
         for (let i in entities) {
             let entity = entities[i];
             let moving = false;
+            let collision = null;
+            if (entity.hasOwnProperty("collision")) {
+                collision = entity.collision;
+            }
             if (entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
                 if (entity.move.hasOwnProperty("speed")) {
                     let distance = entity.move.speed * delta / 1000;
                     if (entity.move.up) {
                         moving = true;
                         entity.position.y -= distance;
+                        if (collision !== null) {
+                            while(map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                                entity.position.y++;
+                            }
+                        }
                         if (entity.hasOwnProperty("animation")) {
                             entity.animation.hint = "RUN_UP";
                         }
@@ -29,6 +39,11 @@ let moveSystem = {
                     if (entity.move.down) {
                         moving = true;
                         entity.position.y += distance;
+                        if (collision !== null) {
+                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                                entity.position.y--;
+                            }
+                        }
                         if (entity.hasOwnProperty("animation")) {
                             entity.animation.hint = "RUN_DOWN";
                         }
@@ -36,6 +51,11 @@ let moveSystem = {
                     if (entity.move.left) {
                         moving = true;
                         entity.position.x -= distance;
+                        if (collision !== null) {
+                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                                entity.position.x++;
+                            }
+                        }
                         if (entity.hasOwnProperty("animation")) {
                             entity.animation.hint = "RUN_LEFT";
                         }
@@ -43,6 +63,11 @@ let moveSystem = {
                     if (entity.move.right) {
                         moving = true;
                         entity.position.x += distance;
+                        if (collision !== null) {
+                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                                entity.position.x--;
+                            }
+                        }
                         if (entity.hasOwnProperty("animation")) {
                             entity.animation.hint = "RUN_RIGHT";
                         }

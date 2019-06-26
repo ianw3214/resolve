@@ -4,6 +4,7 @@ let map = {
     width: 0,
     height: 0,
     tile_map: [],
+    collision_map: [],
     tilesheet: {
         source: "",
         tile_size: 32,
@@ -20,6 +21,7 @@ map.load = function(path = null) {
             map.width = res.width;
             map.height = res.height;
             map.tile_map = res.data;
+            map.collision_map = res.collision;
             map.tilesheet = res.tilesheet;
             map.loaded = true;
         })
@@ -66,6 +68,38 @@ map.draw = function (cam_x = 0, cam_y = 0, tile_size = 64) {
                 tile_size,
                 tile_size
             );
+        }
+    }
+}
+
+map.colliding = function(x, y, shape, tile_size) {
+    // Update tile size based on the scaling
+    tile_size *= scalingSystem.scale;
+    if (shape.hasOwnProperty("shape") && shape.shape.hasOwnProperty("type")) {
+        if (shape.shape.type === "rect") {
+            if (x < 0) return false;
+            if (y < 0) return false;
+            let round_x = Math.floor(x / tile_size);
+            let round_y = Math.floor(y / tile_size);
+            let h_num_check = Math.floor(shape.shape.width / tile_size);
+            let v_num_check = Math.floor(shape.shape.height / tile_size);
+            for (let i = round_y; i <= v_num_check + round_y; i++) {
+                for (let j = round_x; j <= h_num_check + round_x; j++) {
+                    let index = i * map.width + j;
+                    if (index > map.collision_map.length) {
+                        continue;
+                    }
+                    if (map.collision_map[index] === 0) {
+                        continue;
+                    }
+                    // Check the collision box
+                    if (x < (j + 1) * tile_size && x + tile_size > j * tile_size) {
+                        if (y < (i + 1) * tile_size && y + tile_size > i * tile_size) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
     }
 }
