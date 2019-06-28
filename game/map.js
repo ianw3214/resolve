@@ -74,7 +74,7 @@ map.draw = function (cam_x = 0, cam_y = 0, tile_size = 64) {
 
 map.colliding = function(x, y, shape, tile_size) {
     // Update tile size based on the scaling
-    tile_size *= scalingSystem.scale;
+    // tile_size *= scalingSystem.scale;
     if (shape.hasOwnProperty("shape") && shape.shape.hasOwnProperty("type")) {
         if (shape.shape.type === "rect") {
             if (x < 0) return false;
