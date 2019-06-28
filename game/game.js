@@ -19,15 +19,14 @@ let game = {
     tile_map: [],
     draw_objects: [],
     init: function () {
-        // TODO: Add a file to load the map from
         map.load("res/maps/test.json");
         // Reset the ECS in case it was in use previously
         ECS.reset();
+        ECS.addSystem(scalingSystem);
         ECS.addSystem(cameraSystem);
         ECS.addSystem(animationSystem);
         ECS.addSystem(renderSystem);
         ECS.addSystem(moveSystem);
-        ECS.addSystem(scalingSystem);
         ECS.addEntity(player);
     },
     update: function (delta) {
