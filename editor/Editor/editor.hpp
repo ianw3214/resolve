@@ -22,6 +22,8 @@ public:
     void update() override;
     void render() override;
 
+    void swap_tile(int x, int y, int tile_index);
+
 private:
     // TILESHEET METADATA
     std::string m_tilesheet_src;

@@ -107,6 +107,14 @@ void Editor::update() {
     // Calculate the mouse tile positions
     m_mouse_tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_tile_scale));
     m_mouse_tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_tile_scale));
+
+    // Handle mouse press events
+    if (leftMousePressed()) {
+        // EDIT IF NOT PANNING
+        if (!m_panning) {
+            swap_tile(m_mouse_tile_x, m_mouse_tile_y, 0);
+        }
+    }
 }
 
 void Editor::render() {
@@ -149,4 +157,13 @@ void Editor::render() {
     }
 
     logger.render();
+}
+
+void Editor::swap_tile(int x, int y, int tile_index) {
+    // TODO: Make this an assert?
+    if (tile_index > m_tilesheet_width * m_tilesheet_height) return;
+    unsigned int index = y * m_map_width + x;
+    if (index < m_tilemap.size()) {
+        m_tilemap[index] = tile_index;
+    }
 }
