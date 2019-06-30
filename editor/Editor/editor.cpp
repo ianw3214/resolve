@@ -85,11 +85,9 @@ void Editor::update() {
         exit();
     }
     if (getMouseScrollUp() > 0) {
-        logger.log("test");
         m_tile_scale += 0.1f * getMouseScrollUp();
     }
     if (getMouseScrollDown() > 0) {
-        std::cout << "SCROLL DOWN" << std::endl;
         m_tile_scale -= 0.1f * getMouseScrollDown();
     }
     if (keyPressed(SDL_SCANCODE_SPACE)) {
@@ -129,8 +127,22 @@ void Editor::render() {
                 static_cast<int>(std::ceil(static_cast<float>(y) * base_tile_size * m_tile_scale) - m_camera_y), 
                 static_cast<int>(std::ceil(base_tile_size * m_tile_scale)), 
                 static_cast<int>(std::ceil(base_tile_size * m_tile_scale)), 
-                index);
+                index
+            );
         }
     }
+
+    {   // Render the tile outline for the currently hovered over tile
+        static Texture outline("resources/outline.png");
+        int tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_tile_scale));
+        int tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_tile_scale));
+        outline.render(
+            static_cast<int>(tile_x * base_tile_size * m_tile_scale - m_camera_x),
+            static_cast<int>(tile_y * base_tile_size * m_tile_scale - m_camera_y),
+            static_cast<int>(base_tile_size * m_tile_scale),
+            static_cast<int>(base_tile_size * m_tile_scale)
+        );
+    }
+
     logger.render();
 }
