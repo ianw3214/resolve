@@ -38,6 +38,8 @@ private:
     float m_tile_scale;
     int m_camera_x;
     int m_camera_y;
+    int m_mouse_tile_x;
+    int m_mouse_tile_y;
 
     bool m_panning;
     int m_pan_start_mouse_x;

@@ -103,9 +103,15 @@ void Editor::update() {
     } else {
         m_panning = false;
     }
+
+    // Calculate the mouse tile positions
+    m_mouse_tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_tile_scale));
+    m_mouse_tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_tile_scale));
 }
 
 void Editor::render() {
+    // Calculate tile size initially to avoid redundant calculations
+    int tile_size = static_cast<int>(std::ceil(static_cast<float>(base_tile_size) * m_tile_scale));
     // // Render animated textures
     // test_animatedTexture->render(0, 0);
     // // Render text
@@ -123,10 +129,10 @@ void Editor::render() {
             // TODO: Better error handling
             unsigned int index = m_tilemap[y * m_map_width + x];
             tiles.render(
-                static_cast<int>(std::ceil(static_cast<float>(x) * base_tile_size * m_tile_scale) - m_camera_x),
-                static_cast<int>(std::ceil(static_cast<float>(y) * base_tile_size * m_tile_scale) - m_camera_y), 
-                static_cast<int>(std::ceil(base_tile_size * m_tile_scale)), 
-                static_cast<int>(std::ceil(base_tile_size * m_tile_scale)), 
+                x * tile_size - m_camera_x,
+                y * tile_size - m_camera_y, 
+                tile_size, 
+                tile_size, 
                 index
             );
         }
@@ -134,13 +140,11 @@ void Editor::render() {
 
     {   // Render the tile outline for the currently hovered over tile
         static Texture outline("resources/outline.png");
-        int tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_tile_scale));
-        int tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_tile_scale));
         outline.render(
-            static_cast<int>(tile_x * base_tile_size * m_tile_scale - m_camera_x),
-            static_cast<int>(tile_y * base_tile_size * m_tile_scale - m_camera_y),
-            static_cast<int>(base_tile_size * m_tile_scale),
-            static_cast<int>(base_tile_size * m_tile_scale)
+            static_cast<int>(m_mouse_tile_x * tile_size - m_camera_x),
+            static_cast<int>(m_mouse_tile_y * tile_size - m_camera_y),
+            tile_size,
+            tile_size
         );
     }
 
