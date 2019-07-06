@@ -10,16 +10,20 @@ using json = nlohmann::json;
 #include <vector>
 #include <string>
 
+#include "ui/widgets/tilePaletteWidget.hpp"
+
 Editor::Editor() 
     : m_tile_scale(1.f)
     , m_camera_x(0)
-    , m_camera_y(0)
-    , logger() {}
+    , m_camera_y(0) 
+    , m_brush_tile(0)
+{}
 
 Editor::~Editor() {}
 
 void Editor::init() {
     logger.init();
+    widgetManager.init();
     // test_animatedTexture = new AnimatedTexture("res/animate.png");
     // test_animatedTexture->generateAtlas(64, 80);
     // test_animatedTexture->addAnimationState(0, 1);
@@ -49,6 +53,9 @@ void Editor::init() {
     } else {
         // TODO: Error logging
     }
+
+    // Initialize widgets widgets
+    widgetManager.addWidget(new TilePaletteWidget(this, path));
 }
 
 void Editor::cleanup() {
@@ -110,9 +117,11 @@ void Editor::update() {
 
     // Handle mouse press events
     if (leftMousePressed()) {
-        // EDIT IF NOT PANNING
-        if (!m_panning) {
-            swap_tile(m_mouse_tile_x, m_mouse_tile_y, 0);
+        if (!widgetManager.click(getMouseX(), getMouseY())) {
+            // EDIT IF NOT PANNING
+            if (!m_panning) {
+                swap_tile(m_mouse_tile_x, m_mouse_tile_y, m_brush_tile);
+            }
         }
     }
 }
@@ -157,6 +166,11 @@ void Editor::render() {
     }
 
     logger.render();
+    widgetManager.render();
+}
+
+void Editor::set_brush_tile(int tile) {
+    m_brush_tile = tile;
 }
 
 void Editor::swap_tile(int x, int y, int tile_index) {

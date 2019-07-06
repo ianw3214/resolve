@@ -1,0 +1,5 @@
+target_sources(Editor PRIVATE widget.hpp widget.cpp)
+
+target_sources(Editor PRIVATE widgetManager.hpp widgetManager.cpp)
+
+target_sources(Editor PRIVATE tilePaletteWidget.hpp tilePaletteWidget.cpp)

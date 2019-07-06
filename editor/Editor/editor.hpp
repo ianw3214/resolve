@@ -2,6 +2,8 @@
 #include "core/engine.hpp"
 
 #include "logger.hpp"
+#include "ui/widgets/widgetManager.hpp"
+
 constexpr int base_tile_size = 64;
 
 // TODO: Somehow input file paths or something
@@ -9,6 +11,7 @@ constexpr int base_tile_size = 64;
 class Editor : public State {
 
     Logger logger;
+    WidgetManager widgetManager;
 
 public:
 
@@ -22,6 +25,7 @@ public:
     void update() override;
     void render() override;
 
+    void set_brush_tile(int tile);
     void swap_tile(int x, int y, int tile_index);
 
 private:
@@ -42,6 +46,8 @@ private:
     int m_camera_y;
     int m_mouse_tile_x;
     int m_mouse_tile_y;
+
+    int m_brush_tile;
 
     bool m_panning;
     int m_pan_start_mouse_x;
