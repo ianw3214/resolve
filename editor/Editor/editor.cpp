@@ -114,6 +114,8 @@ void Editor::update() {
     // Calculate the mouse tile positions
     m_mouse_tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_tile_scale));
     m_mouse_tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_tile_scale));
+    if (getMouseX() + m_camera_x < 0) m_mouse_tile_x -= 1;
+    if (getMouseY() + m_camera_y < 0) m_mouse_tile_y -= 1;
 
     // Handle mouse press events
     if (leftMousePressed()) {
