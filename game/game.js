@@ -28,6 +28,9 @@ let game = {
         ECS.addSystem(renderSystem);
         ECS.addSystem(moveSystem);
         ECS.addEntity(player);
+
+        // TODO: Uncomment this for background music
+        // audio.playTrack("res/sound/track.wav");
     },
     update: function (delta) {
         if (input.keyPressed(68)) {
