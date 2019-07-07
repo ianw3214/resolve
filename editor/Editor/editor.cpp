@@ -23,6 +23,7 @@ Editor::Editor()
 Editor::~Editor() {}
 
 void Editor::init() {
+    SDL_ShowCursor(SDL_DISABLE);
     logger.init();
     widgetManager.init();
     // test_animatedTexture = new AnimatedTexture("res/animate.png");
@@ -49,8 +50,11 @@ void Editor::init() {
         m_map_height = data["height"];
 
         // Can't directly copy to member for some reason?
-        std::vector<int> temp = data["data"];
-        m_tilemap = std::move(temp);
+        std::vector<int> temp1 = data["data"];
+        m_tilemap = std::move(temp1);
+
+        std::vector<int> temp2 = data["collision"];
+        m_collision_map = std::move(temp2);
     } else {
         // TODO: Error logging
     }
@@ -80,6 +84,7 @@ void Editor::cleanup() {
         data["height"] = m_map_height;
 
         data["data"] = m_tilemap;
+        data["collision"] = m_collision_map;
         file << data;
     } else {
         // TODO: Error logging
@@ -171,6 +176,15 @@ void Editor::render() {
 
     logger.render();
     widgetManager.render();
+
+    // Render the cursor in front of everything
+    if (leftMouseHeld()) {
+        Texture * cursor = QcE::get_instance()->loadTexture("mouse_clicked", "resources/cursor_press.png");
+        cursor->render(getMouseX(), getMouseY(), 32, 32);
+    } else {
+        Texture * cursor = QcE::get_instance()->loadTexture("mouse", "resources/cursor.png");
+        cursor->render(getMouseX(), getMouseY(), 32, 32);
+    }
 }
 
 void Editor::set_brush_tile(int tile) {
@@ -188,6 +202,7 @@ void Editor::swap_tile(int x, int y, int tile_index) {
 
 void Editor::increase_map_width() {
     std::vector<int> newmap;
+    std::vector<int> newmap_collision;
     int original_width = m_map_width++;
     for (int y = 0; y < m_map_height; ++y) {
         for (int x = 0; x < m_map_width; ++x) {
@@ -195,35 +210,45 @@ void Editor::increase_map_width() {
             // These are the added tiles
             if ((index + 1) % m_map_width == 0) {
                 newmap.push_back(0);
+                newmap_collision.push_back(0);
             }
             // These are original tiles
             else {
                 newmap.push_back(m_tilemap[y * original_width + x]);
+                newmap_collision.push_back(m_collision_map[y * original_width + x]);
             }
         }
     }
     m_tilemap.swap(newmap);
+    m_collision_map.swap(newmap_collision);
 }
 
 void Editor::increase_map_height() {
     m_map_height++;
-    for (int i = 0; i < m_map_width; ++i) m_tilemap.push_back(0);
+    for (int i = 0; i < m_map_width; ++i) {
+        m_tilemap.push_back(0);
+        m_collision_map.push_back(0);
+    }
 }
 
 void Editor::decrease_map_width() {
     std::vector<int> newmap;
+    std::vector<int> newmap_collision;
     if (m_map_width <= 0) return;
     int original_width = m_map_width--;
     for (int y = 0; y < m_map_height; ++y) {
         for (int x = 0; x < m_map_width; ++x) {
             newmap.push_back(m_tilemap[y * original_width + x]);
+            newmap_collision.push_back(m_tilemap[y *  original_width + x]);
         }
     }
     m_tilemap.swap(newmap);
+    m_collision_map.swap(newmap_collision);
 }
 
 void Editor::decrease_map_height() {
     if(m_map_height <= 0) return;
     m_map_height--;
     m_tilemap.resize(m_map_width * m_map_height);
+    m_collision_map.resize(m_map_width * m_map_height);
 }

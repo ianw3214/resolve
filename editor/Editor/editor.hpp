@@ -47,6 +47,7 @@ private:
     int m_map_height;
 
     std::vector<int> m_tilemap;
+    std::vector<int> m_collision_map;
 
     // Editor state
     float m_tile_scale;

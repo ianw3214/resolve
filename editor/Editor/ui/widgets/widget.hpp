@@ -42,6 +42,10 @@ protected:
         Component(ComponentType type) : type(type) {}
         virtual ~Component() {}
         ComponentType type;
+
+        // The offsets that determine where to
+        int offset_x;
+        int offset_y;
     };
 
     struct TextComponent : public Component {
