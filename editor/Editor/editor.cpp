@@ -12,6 +12,7 @@ using json = nlohmann::json;
 
 #include "ui/widgets/tilePaletteWidget.hpp"
 #include "ui/widgets/mapPropertyWidget.hpp"
+#include "ui/widgets/mapUtilWidget.hpp"
 
 Editor::Editor() 
     : m_tile_scale(1.f)
@@ -62,33 +63,11 @@ void Editor::init() {
     // Initialize widgets widgets
     widgetManager.addWidget(new TilePaletteWidget(this, path));
     widgetManager.addWidget(new MapPropertyWidget(this));
+    widgetManager.addWidget(new MapUtilWidget(this));
 }
 
 void Editor::cleanup() {
-    // TODO: Move deserialization to a 'save' button
-    std::string path(ROOT);
-    path += FILE;
-
-    std::ofstream file(path);
-    if (file.is_open()) {
-        json data;
-        
-        json tilesheet;
-        tilesheet["source"] = m_tilesheet_src;
-        tilesheet["tile_size"] = m_tile_size;
-        tilesheet["width"] = m_tilesheet_width;
-        tilesheet["height"] = m_tilesheet_height;
-        data["tilesheet"] = std::move(tilesheet);
-
-        data["width"] = m_map_width;
-        data["height"] = m_map_height;
-
-        data["data"] = m_tilemap;
-        data["collision"] = m_collision_map;
-        file << data;
-    } else {
-        // TODO: Error logging
-    }
+    save_map();
 }
 
 void Editor::pause() {}
@@ -184,6 +163,35 @@ void Editor::render() {
     } else {
         Texture * cursor = QcE::get_instance()->loadTexture("mouse", "resources/cursor.png");
         cursor->render(getMouseX(), getMouseY(), 32, 32);
+    }
+}
+
+void Editor::save_map() {
+    // TODO: Move deserialization to a 'save' button
+    std::string path(ROOT);
+    path += FILE;
+
+    std::ofstream file(path);
+    if (file.is_open()) {
+        json data;
+        
+        json tilesheet;
+        tilesheet["source"] = m_tilesheet_src;
+        tilesheet["tile_size"] = m_tile_size;
+        tilesheet["width"] = m_tilesheet_width;
+        tilesheet["height"] = m_tilesheet_height;
+        data["tilesheet"] = std::move(tilesheet);
+
+        data["width"] = m_map_width;
+        data["height"] = m_map_height;
+
+        data["data"] = m_tilemap;
+        data["collision"] = m_collision_map;
+        file << data;
+
+        logger.log("MAP SUCCESSFULLY SAVED");
+    } else {
+        logger.log("MAP SAVE FAILED");
     }
 }
 

@@ -25,6 +25,8 @@ public:
     void update() override;
     void render() override;
 
+    void save_map();
+
     void set_brush_tile(int tile);
     void swap_tile(int x, int y, int tile_index);
 

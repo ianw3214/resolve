@@ -8,7 +8,7 @@ using json = nlohmann::json;
 TilePaletteWidget::TilePaletteWidget(Editor * editor, const std::string& map_src) 
     : editorRef(editor)
     , map_src(map_src)
-    , Widget("Tile Palette", 0, 0) 
+    , Widget("Tile Palette", 0, 32) 
 {
     // TODO: Make this more elegant somehow?
     std::ifstream file(map_src);

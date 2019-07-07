@@ -5,9 +5,9 @@
 
 void WidgetManager::init() {
     // TOOD: No magic numbers
-    QcE::get_instance()->getTextEngine()->createFont("widget_small", "resources/SairaSemiCondensed-Regular.ttf", 16);
-    QcE::get_instance()->getTextEngine()->createFont("widget_medium", "resources/SairaSemiCondensed-Regular.ttf", 32);
-    QcE::get_instance()->getTextEngine()->createFont("widget_large", "resources/SairaSemiCondensed-Regular.ttf", 64);
+    QcE::get_instance()->getTextEngine()->createFont("widget_small", "resources/Courier.ttf", 16);
+    QcE::get_instance()->getTextEngine()->createFont("widget_medium", "resources/Courier.ttf", 32);
+    QcE::get_instance()->getTextEngine()->createFont("widget_large", "resources/Courier.ttf", 64);
 }
 
 Widget * WidgetManager::addWidget(Widget * widget) {

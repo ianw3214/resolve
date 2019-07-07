@@ -26,8 +26,21 @@ void Widget::new_line() {
 
 
 // TODO: Custom colours
+// TODO: Custom text size
+// TODO: Handle new line
 void Widget::draw_text(const std::string& text, bool newline) {
     render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y));
+    if (newline) new_line();
+    else add_h_padding(text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
+}
+
+// TODO: Custom colours
+// TODO: Custom text size
+// TODO: Handle new line
+void Widget::draw_text(const std::string& text, std::function<void()> f, bool newline) {
+    render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y));
+    // TODO: Depend on size
+    click_parts.push_back({{draw_x, draw_y, static_cast<int>(text.size()) * 20, 32}, f});
     if (newline) new_line();
     else add_h_padding(text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
 }
@@ -80,7 +93,7 @@ void Widget::render() {
             TextComponent text = *(dynamic_cast<const TextComponent*>(component));
             // TODO: Cache this maybe
             // TODO: No magic numbers
-            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, "widgets", {255, 255, 255, 255}));
+            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, "widget_medium", {255, 255, 255, 255}));
             tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
             if (text.newline) new_line();
             else add_h_padding(text.text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS

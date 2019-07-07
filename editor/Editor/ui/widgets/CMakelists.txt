@@ -4,3 +4,4 @@ target_sources(Editor PRIVATE widgetManager.hpp widgetManager.cpp)
 
 target_sources(Editor PRIVATE tilePaletteWidget.hpp tilePaletteWidget.cpp)
 target_sources(Editor PRIVATE mapPropertyWidget.hpp mapPropertyWidget.cpp)
+target_sources(Editor PRIVATE mapUtilWidget.hpp mapUtilWidget.cpp)

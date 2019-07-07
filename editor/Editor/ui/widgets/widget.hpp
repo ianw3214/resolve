@@ -26,6 +26,7 @@ protected:
     void new_line();
     // TODO: Specify text draw size
     void draw_text(const std::string& text, bool newline = true);
+    void draw_text(const std::string& text, std::function<void()> f, bool newline = true);
     void draw_text_ref(std::string * ref, bool newline = true);
     void draw_image(const std::string& tex, int w, int h);
     void draw_image(const std::string& tex, int w, int h, std::function<void()> f);
