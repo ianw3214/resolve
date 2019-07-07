@@ -27,35 +27,35 @@ void Widget::new_line() {
 
 // TODO: Custom colours
 void Widget::draw_text(const std::string& text, bool newline) {
-    render_parts.push_back(new TextComponent(text, newline));
+    render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y));
     if (newline) new_line();
     else add_h_padding(text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
 }
 
 void Widget::draw_text_ref(std::string * ref, bool newline) {
-    render_parts.push_back(new TextReferenceComponent(ref, newline));
+    render_parts.push_back(new TextReferenceComponent(ref, newline, draw_x, draw_y));
     if (newline) new_line();
     else add_h_padding((*ref).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
 }
 
 void Widget::draw_image(const std::string& tex, int w, int h) {
-    render_parts.push_back(new ImageComponent(tex, w, h));
+    render_parts.push_back(new ImageComponent(tex, w, h, draw_x, draw_y));
     add_h_padding(w);
 }
 
 void Widget::draw_image(const std::string& tex, int w, int h, std::function<void()> f) {
-    render_parts.push_back(new ImageComponent(tex, w, h));
+    render_parts.push_back(new ImageComponent(tex, w, h, draw_x, draw_y));
     click_parts.push_back({{draw_x, draw_y, w, h}, f});
     add_h_padding(w);
 }
 
 void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src) {
-    render_parts.push_back(new ImageComponent(tex, w, h, src));
+    render_parts.push_back(new ImageComponent(tex, w, h, src, draw_x, draw_y));
     add_h_padding(w);
 }
 
 void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src, std::function<void()> f) {
-    render_parts.push_back(new ImageComponent(tex, w, h, src));
+    render_parts.push_back(new ImageComponent(tex, w, h, src, draw_x, draw_y));
     click_parts.push_back({{draw_x, draw_y, w, h}, f});
     add_h_padding(w);
 }
@@ -63,8 +63,10 @@ void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src, s
 bool Widget::click(int mouse_x, int mouse_y) {
     // See if anything that should have been clicked on was clicked
     for (const ClickData& data : click_parts) {
-        if (mouse_x > data.area.x && mouse_x < data.area.x + data.area.w 
-            && mouse_y > data.area.y && mouse_y < data.area.y + data.area.h) 
+        int x = this->x + data.area.x;
+        int y = this->y + data.area.y;
+        if (mouse_x > x && mouse_x < x + data.area.w 
+            && mouse_y > y && mouse_y < y + data.area.h) 
         {
             data.callback();
         }
@@ -79,7 +81,7 @@ void Widget::render() {
             // TODO: Cache this maybe
             // TODO: No magic numbers
             Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, "widgets", {255, 255, 255, 255}));
-            tex.render(draw_x, draw_y - 4); // NOT SURE WHY THIS IS NEEDED
+            tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
             if (text.newline) new_line();
             else add_h_padding(text.text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
         }
@@ -88,7 +90,7 @@ void Widget::render() {
             // TODO: Cache this maybe
             // TODO: No magic numbers
             Texture tex(QcE::get_instance()->getTextEngine()->getTexture(*(text.reference), "widget_medium", {255, 255, 255, 255}));
-            tex.render(draw_x, draw_y - 4); // NOT SURE WHY THIS IS NEEDED
+            tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
             if (text.newline) new_line();
             else add_h_padding((*(text.reference)).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
         }
@@ -97,18 +99,12 @@ void Widget::render() {
             Texture * tex = QcE::get_instance()->loadTexture(img.texture, img.texture);
             if (img.use_full_image) {
                 tex->setSource(0, 0, tex->getWidth(), tex->getHeight());
-                tex->render(draw_x, draw_y, img.w, img.h);
+                tex->render(x + img.x_offset, y + img.y_offset, img.w, img.h);
             } else {
                 tex->setSource(img.source.x, img.source.y, img.source.w, img.source.h);
-                tex->render(draw_x, draw_y, img.w, img.h);
+                tex->render(x + img.x_offset, y + img.y_offset, img.w, img.h);
             }
             add_h_padding(img.w);
         }
     }
-    resetDrawPos();
-}
-
-void Widget::resetDrawPos() {
-    draw_x = x;
-    draw_y = y;
 }

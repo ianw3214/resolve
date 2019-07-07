@@ -13,7 +13,6 @@ void WidgetManager::init() {
 Widget * WidgetManager::addWidget(Widget * widget) {
     widgets.push_back(widget);
     widget->define();
-    widget->resetDrawPos();
     return widget;
 }
 

@@ -19,6 +19,9 @@ void MapPropertyWidget::define() {
         m_map_width = std::to_string(editorRef->get_map_width());
     });
 
+    new_line();
+    new_line();
+
     draw_image("resources/left.png", 32, 32, [&]() {
         editorRef->decrease_map_height();
         m_map_height = std::to_string(editorRef->get_map_height());
