@@ -28,6 +28,14 @@ public:
     void set_brush_tile(int tile);
     void swap_tile(int x, int y, int tile_index);
 
+    int get_map_width() const { return m_map_width; }
+    int get_map_height() const { return m_map_height; }
+
+    void increase_map_width();
+    void increase_map_height();
+    void decrease_map_width();
+    void decrease_map_height();
+
 private:
     // TILESHEET METADATA
     std::string m_tilesheet_src;

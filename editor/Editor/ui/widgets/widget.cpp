@@ -26,17 +26,35 @@ void Widget::new_line() {
 
 
 // TODO: Custom colours
-void Widget::draw_text(const std::string& text) {
-    render_parts.push_back(new TextComponent(text));
-    new_line();
+void Widget::draw_text(const std::string& text, bool newline) {
+    render_parts.push_back(new TextComponent(text, newline));
+    if (newline) new_line();
+    else add_h_padding(text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
 }
 
-void Widget::draw_image(std::string& tex, int w, int h, const Rect& src) {
+void Widget::draw_text_ref(std::string * ref, bool newline) {
+    render_parts.push_back(new TextReferenceComponent(ref, newline));
+    if (newline) new_line();
+    else add_h_padding((*ref).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
+}
+
+void Widget::draw_image(const std::string& tex, int w, int h) {
+    render_parts.push_back(new ImageComponent(tex, w, h));
+    add_h_padding(w);
+}
+
+void Widget::draw_image(const std::string& tex, int w, int h, std::function<void()> f) {
+    render_parts.push_back(new ImageComponent(tex, w, h));
+    click_parts.push_back({{draw_x, draw_y, w, h}, f});
+    add_h_padding(w);
+}
+
+void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src) {
     render_parts.push_back(new ImageComponent(tex, w, h, src));
     add_h_padding(w);
 }
 
-void Widget::draw_image(std::string& tex, int w, int h, const Rect& src, std::function<void()> f) {
+void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src, std::function<void()> f) {
     render_parts.push_back(new ImageComponent(tex, w, h, src));
     click_parts.push_back({{draw_x, draw_y, w, h}, f});
     add_h_padding(w);
@@ -62,13 +80,28 @@ void Widget::render() {
             // TODO: No magic numbers
             Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, "widgets", {255, 255, 255, 255}));
             tex.render(draw_x, draw_y - 4); // NOT SURE WHY THIS IS NEEDED
-            new_line();
+            if (text.newline) new_line();
+            else add_h_padding(text.text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
+        }
+        if (component->type == ComponentType::TEXT_REFERENCE) {
+            TextReferenceComponent text = *(dynamic_cast<const TextReferenceComponent*>(component));
+            // TODO: Cache this maybe
+            // TODO: No magic numbers
+            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(*(text.reference), "widget_medium", {255, 255, 255, 255}));
+            tex.render(draw_x, draw_y - 4); // NOT SURE WHY THIS IS NEEDED
+            if (text.newline) new_line();
+            else add_h_padding((*(text.reference)).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
         }
         if (component->type == ComponentType::IMAGE) {
             ImageComponent img = *(dynamic_cast<const ImageComponent*>(component));
             Texture * tex = QcE::get_instance()->loadTexture(img.texture, img.texture);
-            tex->setSource(img.source.x, img.source.y, img.source.w, img.source.h);
-            tex->render(draw_x, draw_y, img.w, img.h);
+            if (img.use_full_image) {
+                tex->setSource(0, 0, tex->getWidth(), tex->getHeight());
+                tex->render(draw_x, draw_y, img.w, img.h);
+            } else {
+                tex->setSource(img.source.x, img.source.y, img.source.w, img.source.h);
+                tex->render(draw_x, draw_y, img.w, img.h);
+            }
             add_h_padding(img.w);
         }
     }

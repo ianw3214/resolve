@@ -24,12 +24,17 @@ protected:
     void add_h_padding(int padding);
     void add_v_padding(int padding);
     void new_line();
-    void draw_text(const std::string& text);
-    void draw_image(std::string& tex, int w, int h, const Rect& src);
-    void draw_image(std::string& tex, int w, int h, const Rect& src, std::function<void()> f);
+    // TODO: Specify text draw size
+    void draw_text(const std::string& text, bool newline = true);
+    void draw_text_ref(std::string * ref, bool newline = true);
+    void draw_image(const std::string& tex, int w, int h);
+    void draw_image(const std::string& tex, int w, int h, std::function<void()> f);
+    void draw_image(const std::string& tex, int w, int h, const Rect& src);
+    void draw_image(const std::string& tex, int w, int h, const Rect& src, std::function<void()> f);
 
     enum class ComponentType {
         TEXT,
+        TEXT_REFERENCE,
         IMAGE
     };
 
@@ -40,16 +45,28 @@ protected:
     };
 
     struct TextComponent : public Component {
-        TextComponent(const std::string& text) : text(text), Component(ComponentType::TEXT) {}
+        TextComponent(const std::string& text, bool newline) 
+            : text(text), newline(newline), Component(ComponentType::TEXT) {}
         std::string text;
+        bool newline;
+    };
+
+    struct TextReferenceComponent : public Component {
+        TextReferenceComponent(std::string * ref, bool newline) 
+            : reference(ref), newline(newline), Component(ComponentType::TEXT_REFERENCE) {}
+        std::string * reference;
+        bool newline;
     };
 
     struct ImageComponent : public Component {
+        ImageComponent(const std::string& tex, int w, int h)
+            : texture(tex), w(w), h(h), use_full_image(true), Component(ComponentType::IMAGE) {} 
         ImageComponent(const std::string& tex, int w, int h, const Rect& src) 
-            : texture(tex), w(w), h(h), source(src), Component(ComponentType::IMAGE) {}
+            : texture(tex), w(w), h(h), use_full_image(false), source(src), Component(ComponentType::IMAGE) {}
         std::string texture;
         int w;
         int h;
+        bool use_full_image;
         Rect source;
     };
 

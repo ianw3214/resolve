@@ -11,6 +11,7 @@ using json = nlohmann::json;
 #include <string>
 
 #include "ui/widgets/tilePaletteWidget.hpp"
+#include "ui/widgets/mapPropertyWidget.hpp"
 
 Editor::Editor() 
     : m_tile_scale(1.f)
@@ -56,6 +57,7 @@ void Editor::init() {
 
     // Initialize widgets widgets
     widgetManager.addWidget(new TilePaletteWidget(this, path));
+    widgetManager.addWidget(new MapPropertyWidget(this));
 }
 
 void Editor::cleanup() {
@@ -182,4 +184,46 @@ void Editor::swap_tile(int x, int y, int tile_index) {
     if (index < m_tilemap.size()) {
         m_tilemap[index] = tile_index;
     }
+}
+
+void Editor::increase_map_width() {
+    std::vector<int> newmap;
+    int original_width = m_map_width++;
+    for (int y = 0; y < m_map_height; ++y) {
+        for (int x = 0; x < m_map_width; ++x) {
+            int index = y * m_map_width + x;
+            // These are the added tiles
+            if ((index + 1) % m_map_width == 0) {
+                newmap.push_back(0);
+            }
+            // These are original tiles
+            else {
+                newmap.push_back(m_tilemap[y * original_width + x]);
+            }
+        }
+    }
+    m_tilemap.swap(newmap);
+}
+
+void Editor::increase_map_height() {
+    m_map_height++;
+    for (int i = 0; i < m_map_width; ++i) m_tilemap.push_back(0);
+}
+
+void Editor::decrease_map_width() {
+    std::vector<int> newmap;
+    if (m_map_width <= 0) return;
+    int original_width = m_map_width--;
+    for (int y = 0; y < m_map_height; ++y) {
+        for (int x = 0; x < m_map_width; ++x) {
+            newmap.push_back(m_tilemap[y * original_width + x]);
+        }
+    }
+    m_tilemap.swap(newmap);
+}
+
+void Editor::decrease_map_height() {
+    if(m_map_height <= 0) return;
+    m_map_height--;
+    m_tilemap.resize(m_map_width * m_map_height);
 }
