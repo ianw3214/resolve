@@ -79,10 +79,15 @@ map.colliding = function(x, y, shape, tile_size) {
         if (shape.shape.type === "rect") {
             if (x < 0) return false;
             if (y < 0) return false;
+            // Update the position with the offsets
+            x += shape.offset_x;
+            y += shape.offset_y;
+            // Only check with tiles that are relevant
+            // TODO: This may become trickier for different shape types
             let round_x = Math.floor(x / tile_size);
             let round_y = Math.floor(y / tile_size);
-            let h_num_check = Math.floor(shape.shape.width / tile_size);
-            let v_num_check = Math.floor(shape.shape.height / tile_size);
+            let h_num_check = Math.ceil(shape.shape.width / tile_size);
+            let v_num_check = Math.ceil(shape.shape.height / tile_size);
             for (let i = round_y; i <= v_num_check + round_y; i++) {
                 for (let j = round_x; j <= h_num_check + round_x; j++) {
                     let index = i * map.width + j;
@@ -93,8 +98,8 @@ map.colliding = function(x, y, shape, tile_size) {
                         continue;
                     }
                     // Check the collision box
-                    if (x < (j + 1) * tile_size && x + tile_size > j * tile_size) {
-                        if (y < (i + 1) * tile_size && y + tile_size > i * tile_size) {
+                    if (x < (j + 1) * tile_size && x + shape.shape.width > j * tile_size) {
+                        if (y < (i + 1) * tile_size && y + shape.shape.height > i * tile_size) {
                             return true;
                         }
                     }

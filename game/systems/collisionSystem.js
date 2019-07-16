@@ -1,9 +1,11 @@
 "use strict";
 
 let collisionSystem = {
-    generate: function(shape) {
+    generate: function (shape, offset_x = 0, offset_y = 0) {
         return {
-            shape: shape
+            shape: shape,
+            offset_x: offset_x,
+            offset_y: offset_y
         };
     },
     update: function(entities, delta) {
@@ -13,10 +15,8 @@ let collisionSystem = {
 
 collisionSystem.generateRect = function(width, height) {
     return {
-        shape: {
-            type: "rect",
-            width: width,
-            height: height
-        }
+        type: "rect",
+        width: width,
+        height: height
     };
 }

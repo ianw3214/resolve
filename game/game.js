@@ -12,7 +12,7 @@ let player = {
     camera: cameraSystem.generate(),
     animation: animationSystem.generate("res/player.json"),
     scaling: scalingSystem.generate(),
-    collision: collisionSystem.generateRect(64, 64)
+    collision: collisionSystem.generate(collisionSystem.generateRect(32, 64), 16, 0)
 }
 
 let game = {
@@ -54,9 +54,6 @@ let game = {
             graphics.exitFullscreen();
         }
         ECS.update(delta);
-        if (map.colliding(player.position.x, player.position.y, player.collision, 64)) {
-            console.log("TEST");
-        }
     },
     draw: function (delta) {
         map.draw(cameraSystem.x, cameraSystem.y);
