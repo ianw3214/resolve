@@ -21,7 +21,7 @@ void Widget::add_v_padding(int padding) {
 void Widget::new_line() {
     draw_x = x;
     // TODO: No magic numbers
-    draw_y += 16;
+    draw_y += 20;
 }
 
 

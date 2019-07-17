@@ -19,6 +19,7 @@ Editor::Editor()
     , m_camera_x(0)
     , m_camera_y(0) 
     , m_brush_tile(0)
+    , m_edit_state(EditState::TILE)
 {}
 
 Editor::~Editor() {}
@@ -108,7 +109,12 @@ void Editor::update() {
         if (!widgetManager.click(getMouseX(), getMouseY())) {
             // EDIT IF NOT PANNING
             if (!m_panning) {
-                swap_tile(m_mouse_tile_x, m_mouse_tile_y, m_brush_tile);
+                if (m_edit_state == EditState::TILE) {
+                    swap_tile(m_mouse_tile_x, m_mouse_tile_y, m_brush_tile);
+                }
+                if (m_edit_state == EditState::COLLISION) {
+                    toggle_collision(m_mouse_tile_x, m_mouse_tile_y);
+                }
             }
         }
     }
@@ -140,6 +146,19 @@ void Editor::render() {
                 tile_size, 
                 index
             );
+        }
+    }
+    
+    // Render the collision tiles if in collision edit mode
+    if (m_edit_state == EditState::COLLISION) {   
+        static Texture tile("resources/collision_outline.png");
+        for (int y = 0; y < m_map_height; ++y) {
+            for (int x = 0; x < m_map_width; ++x) {
+                // TODO: Better error handling
+                if (m_collision_map[y * m_map_width + x] != 0) {
+                    tile.render(x * tile_size - m_camera_x, y * tile_size - m_camera_y, tile_size, tile_size);
+                }
+            }
         }
     }
 
@@ -205,6 +224,13 @@ void Editor::swap_tile(int x, int y, int tile_index) {
     unsigned int index = y * m_map_width + x;
     if (index < m_tilemap.size()) {
         m_tilemap[index] = tile_index;
+    }
+}
+
+void Editor::toggle_collision(int x, int y) {
+    unsigned int index = y * m_map_width + x;
+    if (index < m_tilemap.size()) {
+        m_collision_map[index] = m_collision_map[index] == 0 ? 1 : 0;
     }
 }
 

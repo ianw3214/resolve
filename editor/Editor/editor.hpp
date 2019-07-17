@@ -15,6 +15,12 @@ class Editor : public State {
 
 public:
 
+    enum class EditState {
+        TILE,
+        COLLISION
+    };
+    void changeState(EditState new_state) { m_edit_state = new_state; }
+
     Editor();
     ~Editor();
 
@@ -29,6 +35,7 @@ public:
 
     void set_brush_tile(int tile);
     void swap_tile(int x, int y, int tile_index);
+    void toggle_collision(int x, int y);
 
     int get_map_width() const { return m_map_width; }
     int get_map_height() const { return m_map_height; }
@@ -59,6 +66,8 @@ private:
     int m_mouse_tile_y;
 
     int m_brush_tile;
+
+    EditState m_edit_state;
 
     bool m_panning;
     int m_pan_start_mouse_x;
