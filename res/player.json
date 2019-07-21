@@ -15,7 +15,8 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
@@ -26,7 +27,8 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_LEFT"
             },
             "loop": true
         },
@@ -37,7 +39,8 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
@@ -48,7 +51,8 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
@@ -59,7 +63,8 @@
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN",
-                "IDLE": "IDLE_RIGHT"
+                "IDLE": "IDLE_RIGHT",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
@@ -70,7 +75,8 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN",
-                "IDLE": "IDLE_LEFT"
+                "IDLE": "IDLE_LEFT",
+                "BASIC_ATTACK": "BASIC_ATTACK_LEFT"
             },
             "loop": true
         },
@@ -81,7 +87,8 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_DOWN": "RUN_DOWN",
-                "IDLE": "IDLE_UP"
+                "IDLE": "IDLE_UP",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
@@ -92,9 +99,34 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "IDLE": "IDLE_DOWN"
+                "IDLE": "IDLE_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
+        },
+        "BASIC_ATTACK_RIGHT": {
+            "start": 80,
+            "end": 84,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_RIGHT"
+            },
+            "loop": false
+        },
+        "BASIC_ATTACK_LEFT": {
+            "start": 90,
+            "end": 94,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_LEFT"
+            },
+            "loop": false
         }
     }
 }

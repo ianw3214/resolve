@@ -16,6 +16,12 @@ let moveSystem = {
     update: function (entities, delta) {
         for (let i in entities) {
             let entity = entities[i];
+            // If an entity is attacking, don't let it move
+            if (entity.hasOwnProperty("attack")) {
+                if (entity.attack.attacking === true) {
+                    continue;
+                }
+            }
             let moving = false;
             let collision = null;
             if (entity.hasOwnProperty("collision")) {
@@ -74,7 +80,7 @@ let moveSystem = {
                     }
                 }
             }
-            if (entity.move.was_moving && moving == false) {
+            if (/*entity.move.was_moving &&*/ moving === false) {
                 if (entity.hasOwnProperty("animation")) {
                     entity.animation.hint = "IDLE";
                 }
