@@ -109,11 +109,13 @@ void Editor::update() {
         if (!widgetManager.click(getMouseX(), getMouseY())) {
             // EDIT IF NOT PANNING
             if (!m_panning) {
-                if (m_edit_state == EditState::TILE) {
-                    swap_tile(m_mouse_tile_x, m_mouse_tile_y, m_brush_tile);
-                }
-                if (m_edit_state == EditState::COLLISION) {
-                    toggle_collision(m_mouse_tile_x, m_mouse_tile_y);
+                if (m_mouse_tile_x >= 0 && m_mouse_tile_x < m_map_width && m_mouse_tile_y >= 0 && m_mouse_tile_y < m_map_height) {
+                    if (m_edit_state == EditState::TILE) {
+                        swap_tile(m_mouse_tile_x, m_mouse_tile_y, m_brush_tile);
+                    }
+                    if (m_edit_state == EditState::COLLISION) {
+                        toggle_collision(m_mouse_tile_x, m_mouse_tile_y);
+                    }
                 }
             }
         }
