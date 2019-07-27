@@ -14,4 +14,14 @@ public:
 
 private:
     std::vector<Widget*> widgets;
+
+    // Keeps track of where the 4 anchors are to add widgets at the correct position
+    int top_left_anchor_x;
+    int top_left_anchor_y;
+    int top_right_anchor_x;
+    int top_right_anchor_y;
+    int bottom_left_anchor_x;
+    int bottom_left_anchor_y;
+    int bottom_right_anchor_x;
+    int bottom_right_anchor_y;
 };

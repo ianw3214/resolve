@@ -9,8 +9,19 @@ public:
     // This is where other widgets will specify how they work
     // TODO: Probably want a better name for this
     virtual void define() {}
+    // Calculates dimensions of the widget based on the definition
+    void calculate_dim();
+
+    // Enumeration for where to anchor the widget
+    enum class Anchor {
+        TOP_LEFT,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_RIGHT
+    };
+    Anchor get_anchor_type() const { return anchor; }
 protected:
-    Widget(const std::string& name, int x, int y);
+    Widget(const std::string& name, Anchor anchor = Anchor::TOP_LEFT);
     virtual ~Widget();
     
     struct Rect {
@@ -87,10 +98,17 @@ protected:
 public:
     bool click(int mouse_x, int mouse_y);   // Returns true if the widget was clicked
     void render();
+
+    void set_pos(int x, int y) { this->x = x; this->y = y; }
+    int get_width() const { return width; }
+    int get_height() const { return height; }
 private:
     std::string name;
 
     // The position of the widget
+    Anchor anchor;
+    int width;
+    int height;
     int x;
     int y;
 

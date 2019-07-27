@@ -2,7 +2,43 @@
 
 #include "core/engine.hpp"
 
-Widget::Widget(const std::string& name, int x, int y) : name(name), x(x), y(y), draw_x(x), draw_y(y) {}
+void Widget::calculate_dim() {
+    // Calculate the dimensions by looking for the highest offset
+    int max_width = 0;
+    int max_height = 0;
+    for (const Component * const comp : render_parts) {
+        int w = comp->x_offset;
+        int h = comp->y_offset;
+        switch(comp->type) {
+            // TODO: No hard coded size for text
+            case ComponentType::TEXT: {
+                // TODO: Calculate width somehow
+                h += 16;
+            } break;
+            case ComponentType::TEXT_REFERENCE: {
+                // TODO: Calculate width somehow
+                h += 16;
+            } break;
+            case ComponentType::IMAGE: {
+                const ImageComponent * const img = dynamic_cast<const ImageComponent* const>(comp);
+                w += img->w;
+                h += img->h;
+            } break;
+        }
+        if (w > max_width) max_width = w;
+        if (h > max_height) max_height = h;
+    }
+    width = max_width;
+    height = max_height;
+}
+
+Widget::Widget(const std::string& name, Anchor anchor) 
+    : name(name)
+    , anchor(anchor)
+    , draw_x(0)
+    , draw_y(0) 
+{}
+
 Widget::~Widget() {
     for (Component * component : render_parts) {
         delete component;
@@ -19,7 +55,7 @@ void Widget::add_v_padding(int padding) {
 }
 
 void Widget::new_line() {
-    draw_x = x;
+    draw_x = 0;
     // TODO: No magic numbers
     draw_y += 20;
 }
@@ -82,11 +118,13 @@ bool Widget::click(int mouse_x, int mouse_y) {
             && mouse_y > y && mouse_y < y + data.area.h) 
         {
             data.callback();
+            return true;
         }
     }
     return false;
 }
 
+#include <iostream>
 void Widget::render() {
     for (const Component* component : render_parts) {
         if (component->type == ComponentType::TEXT) {

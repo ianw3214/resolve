@@ -1,7 +1,7 @@
 #include "mapUtilWidget.hpp"
 #include "../../editor.hpp"
 
-MapUtilWidget::MapUtilWidget(Editor * editor) : editorRef(editor), Widget("Map Utils", 0, 0) {}
+MapUtilWidget::MapUtilWidget(Editor * editor) : editorRef(editor), Widget("Map Utils") {}
 
 #include <iostream>
 void MapUtilWidget::define() {

@@ -62,9 +62,9 @@ void Editor::init() {
     }
 
     // Initialize widgets widgets
-    widgetManager.addWidget(new TilePaletteWidget(this, path));
-    widgetManager.addWidget(new MapPropertyWidget(this));
     widgetManager.addWidget(new MapUtilWidget(this));
+    widgetManager.addWidget(new MapPropertyWidget(this));
+    widgetManager.addWidget(new TilePaletteWidget(this, path));
 }
 
 void Editor::cleanup() {

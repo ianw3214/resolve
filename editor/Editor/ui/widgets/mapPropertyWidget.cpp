@@ -2,7 +2,7 @@
 #include "../../editor.hpp"
 
 MapPropertyWidget::MapPropertyWidget(Editor * editor) 
-    : editorRef(editor), Widget("Map Properties", 0, 100) 
+    : editorRef(editor), Widget("Map Properties") 
 {
     m_map_width = std::to_string(editor->get_map_width());
     m_map_height = std::to_string(editor->get_map_height());
