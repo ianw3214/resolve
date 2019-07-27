@@ -29,7 +29,7 @@ let moveSystem = {
             }
             if (entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
                 if (entity.move.hasOwnProperty("speed")) {
-                    let distance = entity.move.speed * delta / 1000;
+                    let distance = Math.round(entity.move.speed * delta / 1000);
                     if (entity.move.up) {
                         moving = true;
                         entity.position.y -= distance;
@@ -85,6 +85,9 @@ let moveSystem = {
                     entity.animation.hint = "IDLE";
                 }
             }
+            // Always round movement positions, otherwise it would look bad
+            entity.position.x = Math.round(entity.position.x);
+            entity.position.y = Math.round(entity.position.y);
             // RESET MOVEMENT AFTER HANDLING
             entity.move = {
                 up: false,

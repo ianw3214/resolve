@@ -3,8 +3,8 @@
 let player = {
     render: renderSystem.generate("texture", "res/player.png", 64, 64, 100),
     position: {
-        x: 0,
-        y: 0,
+        x: 200,
+        y: 200,
         screen_x: 0,
         screen_y: 0
     },
