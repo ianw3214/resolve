@@ -29,7 +29,7 @@ Widget * WidgetManager::addWidget(Widget * widget) {
         case Widget::Anchor::TOP_LEFT: {
             widget->set_pos(top_left_anchor_x, top_left_anchor_y);
             // Do nothing with the x position
-            top_left_anchor_y += widget->get_height();
+            top_left_anchor_y += widget->get_height() + padding;
         } break;
         case Widget::Anchor::TOP_RIGHT: {
             // TODO: Implement
@@ -37,7 +37,7 @@ Widget * WidgetManager::addWidget(Widget * widget) {
         case Widget::Anchor::BOTTOM_LEFT: {
             widget->set_pos(bottom_left_anchor_x, bottom_left_anchor_y - widget->get_height());
             // Do nothing with the x position
-            bottom_left_anchor_y -= widget->get_height();
+            bottom_left_anchor_y -= widget->get_height() + padding;
         } break;
         case Widget::Anchor::BOTTOM_RIGHT: {
             // TODO: Implement

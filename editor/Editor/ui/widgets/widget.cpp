@@ -13,11 +13,15 @@ void Widget::calculate_dim() {
             // TODO: No hard coded size for text
             case ComponentType::TEXT: {
                 // TODO: Calculate width somehow
-                h += 16;
+                const TextComponent * const tex = dynamic_cast<const TextComponent* const>(comp);
+                w += tex->text.size() * 20;
+                h += 32;
             } break;
             case ComponentType::TEXT_REFERENCE: {
                 // TODO: Calculate width somehow
-                h += 16;
+                const TextReferenceComponent * const tex = dynamic_cast<const TextReferenceComponent* const>(comp);
+                w += tex->reference->size() * 20;
+                h += 32;
             } break;
             case ComponentType::IMAGE: {
                 const ImageComponent * const img = dynamic_cast<const ImageComponent* const>(comp);
@@ -124,8 +128,10 @@ bool Widget::click(int mouse_x, int mouse_y) {
     return false;
 }
 
-#include <iostream>
 void Widget::render() {
+    // Render a background first
+    static Texture background("resources/black.png");
+    background.render(x, y, width, height);
     for (const Component* component : render_parts) {
         if (component->type == ComponentType::TEXT) {
             TextComponent text = *(dynamic_cast<const TextComponent*>(component));

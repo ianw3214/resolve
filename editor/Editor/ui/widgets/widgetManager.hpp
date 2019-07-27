@@ -6,6 +6,8 @@ class Widget;
 class WidgetManager {
     
 public:
+    static const int padding = 10;
+
     void init();
     Widget * addWidget(Widget * widget);
 
