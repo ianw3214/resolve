@@ -20,6 +20,19 @@ public:
         BOTTOM_RIGHT
     };
     Anchor get_anchor_type() const { return anchor; }
+
+    static const int text_padding = 4;
+    enum class TextSize {
+        SMALL = 16,
+        MEDIUM = 32,
+        LARGE = 64
+    };
+    int get_text_width(TextSize size) {
+        if (size == TextSize::SMALL) return 10;
+        if (size == TextSize::MEDIUM) return 20;
+        if (size == TextSize::LARGE) return 36;
+        return 0;
+    }
 protected:
     Widget(const std::string& name, Anchor anchor = Anchor::TOP_LEFT);
     virtual ~Widget();
@@ -34,11 +47,10 @@ protected:
     // Functions that help define the widget
     void add_h_padding(int padding);
     void add_v_padding(int padding);
-    void new_line();
-    // TODO: Specify text draw size
-    void draw_text(const std::string& text, bool newline = true);
-    void draw_text(const std::string& text, std::function<void()> f, bool newline = true);
-    void draw_text_ref(std::string * ref, bool newline = true);
+    void new_line(TextSize size = TextSize::MEDIUM);
+    void draw_text(const std::string& text, TextSize size = TextSize::MEDIUM, bool newline = true);
+    void draw_text(const std::string& text, std::function<void()> f, TextSize size = TextSize::MEDIUM, bool newline = true);
+    void draw_text_ref(std::string * ref, TextSize size = TextSize::MEDIUM, bool newline = true);
     void draw_image(const std::string& tex, int w, int h);
     void draw_image(const std::string& tex, int w, int h, std::function<void()> f);
     void draw_image(const std::string& tex, int w, int h, const Rect& src);
@@ -61,16 +73,18 @@ protected:
     };
 
     struct TextComponent : public Component {
-        TextComponent(const std::string& text, bool newline, int x, int y) 
-            : text(text), newline(newline), Component(ComponentType::TEXT, x, y) {}
+        TextComponent(const std::string& text, bool newline, int x, int y, TextSize size) 
+            : text(text), size(size), newline(newline), Component(ComponentType::TEXT, x, y) {}
         std::string text;
+        TextSize size;
         bool newline;
     };
 
     struct TextReferenceComponent : public Component {
-        TextReferenceComponent(std::string * ref, bool newline, int x, int y) 
-            : reference(ref), newline(newline), Component(ComponentType::TEXT_REFERENCE, x, y) {}
+        TextReferenceComponent(std::string * ref, bool newline, int x, int y, TextSize size) 
+            : reference(ref), size(size), newline(newline), Component(ComponentType::TEXT_REFERENCE, x, y) {}
         std::string * reference;
+        TextSize size;
         bool newline;
     };
 

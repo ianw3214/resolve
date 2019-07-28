@@ -13,7 +13,7 @@ void MapPropertyWidget::define() {
         editorRef->decrease_map_width();
         m_map_width = std::to_string(editorRef->get_map_width());
     });
-    draw_text_ref(&m_map_width, false);
+    draw_text_ref(&m_map_width, TextSize::MEDIUM, false);
     draw_image("resources/right.png", 32, 32, [&]() {
         editorRef->increase_map_width();
         m_map_width = std::to_string(editorRef->get_map_width());
@@ -26,7 +26,7 @@ void MapPropertyWidget::define() {
         editorRef->decrease_map_height();
         m_map_height = std::to_string(editorRef->get_map_height());
     });
-    draw_text_ref(&m_map_height, false);
+    draw_text_ref(&m_map_height, TextSize::MEDIUM, false);
     draw_image("resources/right.png", 32, 32, [&]() {
         editorRef->increase_map_height();
         m_map_height = std::to_string(editorRef->get_map_height());

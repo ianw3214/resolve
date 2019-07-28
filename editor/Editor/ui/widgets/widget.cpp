@@ -15,13 +15,13 @@ void Widget::calculate_dim() {
                 // TODO: Calculate width somehow
                 const TextComponent * const tex = dynamic_cast<const TextComponent* const>(comp);
                 w += tex->text.size() * 20;
-                h += 32;
+                h += static_cast<int>(tex->size);
             } break;
             case ComponentType::TEXT_REFERENCE: {
                 // TODO: Calculate width somehow
                 const TextReferenceComponent * const tex = dynamic_cast<const TextReferenceComponent* const>(comp);
                 w += tex->reference->size() * 20;
-                h += 32;
+                h += static_cast<int>(tex->size);
             } break;
             case ComponentType::IMAGE: {
                 const ImageComponent * const img = dynamic_cast<const ImageComponent* const>(comp);
@@ -58,37 +58,34 @@ void Widget::add_v_padding(int padding) {
     draw_y += padding;
 }
 
-void Widget::new_line() {
+void Widget::new_line(TextSize size) {
     draw_x = 0;
-    // TODO: No magic numbers
-    draw_y += 20;
+    draw_y += static_cast<int>(size) + text_padding;
 }
 
 
 // TODO: Custom colours
-// TODO: Custom text size
 // TODO: Handle new line
-void Widget::draw_text(const std::string& text, bool newline) {
-    render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y));
-    if (newline) new_line();
-    else add_h_padding(text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
+void Widget::draw_text(const std::string& text, TextSize size, bool newline) {
+    render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y, size));
+    if (newline) new_line(size);
+    else add_h_padding(text.size() * get_text_width(size) + text_padding);
 }
 
 // TODO: Custom colours
-// TODO: Custom text size
 // TODO: Handle new line
-void Widget::draw_text(const std::string& text, std::function<void()> f, bool newline) {
-    render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y));
+void Widget::draw_text(const std::string& text, std::function<void()> f, TextSize size, bool newline) {
+    render_parts.push_back(new TextComponent(text, newline, draw_x, draw_y, size));
     // TODO: Depend on size
     click_parts.push_back({{draw_x, draw_y, static_cast<int>(text.size()) * 20, 32}, f});
-    if (newline) new_line();
-    else add_h_padding(text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
+    if (newline) new_line(size);
+    else add_h_padding(text.size() * get_text_width(size) + text_padding);
 }
 
-void Widget::draw_text_ref(std::string * ref, bool newline) {
-    render_parts.push_back(new TextReferenceComponent(ref, newline, draw_x, draw_y));
-    if (newline) new_line();
-    else add_h_padding((*ref).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
+void Widget::draw_text_ref(std::string * ref, TextSize size, bool newline) {
+    render_parts.push_back(new TextReferenceComponent(ref, newline, draw_x, draw_y, size));
+    if (newline) new_line(size);
+    else add_h_padding((*ref).size() * get_text_width(size) + text_padding);
 }
 
 void Widget::draw_image(const std::string& tex, int w, int h) {
@@ -151,7 +148,11 @@ void Widget::render() {
             TextComponent text = *(dynamic_cast<const TextComponent*>(component));
             // TODO: Cache this maybe
             // TODO: No magic numbers
-            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, "widget_medium", {255, 255, 255, 255}));
+            std::string font;
+            if (text.size == TextSize::SMALL) font = "widget_small";
+            if (text.size == TextSize::MEDIUM) font = "widget_medium";
+            if (text.size == TextSize::LARGE) font = "widget_large";
+            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, font, {255, 255, 255, 255}));
             tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
             if (text.newline) new_line();
             else add_h_padding(text.text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
@@ -160,7 +161,11 @@ void Widget::render() {
             TextReferenceComponent text = *(dynamic_cast<const TextReferenceComponent*>(component));
             // TODO: Cache this maybe
             // TODO: No magic numbers
-            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(*(text.reference), "widget_medium", {255, 255, 255, 255}));
+            std::string font;
+            if (text.size == TextSize::SMALL) font = "widget_small";
+            if (text.size == TextSize::MEDIUM) font = "widget_medium";
+            if (text.size == TextSize::LARGE) font = "widget_large";
+            Texture tex(QcE::get_instance()->getTextEngine()->getTexture(*(text.reference), font, {255, 255, 255, 255}));
             tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
             if (text.newline) new_line();
             else add_h_padding((*(text.reference)).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS

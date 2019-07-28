@@ -7,12 +7,12 @@ MapUtilWidget::MapUtilWidget(Editor * editor) : editorRef(editor), Widget("Map U
 void MapUtilWidget::define() {
     draw_text("SAVE", [&]() {
         editorRef->save_map();
-    });
-    new_line();
+    }, TextSize::SMALL);
+    add_v_padding(20);
     draw_text("TILE", [&]() {
         editorRef->changeState(Editor::EditState::TILE);
-    }, false);
-    add_h_padding(30);
+    }, TextSize::MEDIUM, false);
+    add_h_padding(0);
     draw_text("COLLISION", [&]() {
         editorRef->changeState(Editor::EditState::COLLISION);
     });
