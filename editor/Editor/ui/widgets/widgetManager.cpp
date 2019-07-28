@@ -55,6 +55,15 @@ bool WidgetManager::click(int mouse_x, int mouse_y) {
     return false;
 }
 
+bool WidgetManager::is_mouse_over(int mouse_x, int mouse_y) const {
+    for (Widget * widget : widgets) {
+        if (widget->is_mouse_over(mouse_x, mouse_y)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void WidgetManager::render() {
     for (Widget * widget : widgets) {
         widget->render();

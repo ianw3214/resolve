@@ -11,6 +11,7 @@ public:
     void init();
     Widget * addWidget(Widget * widget);
 
+    bool is_mouse_over(int mouse_x, int mouse_y) const;
     bool click(int mouse_x, int mouse_y);
     void render();
 

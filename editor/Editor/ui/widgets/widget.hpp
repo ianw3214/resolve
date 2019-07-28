@@ -96,6 +96,7 @@ protected:
     std::vector<ClickData> click_parts;
 
 public:
+    bool is_mouse_over(int mouse_x, int mouse_y) const;
     bool click(int mouse_x, int mouse_y);   // Returns true if the widget was clicked
     void render();
 

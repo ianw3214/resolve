@@ -113,6 +113,20 @@ void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src, s
     add_h_padding(w);
 }
 
+bool Widget::is_mouse_over(int mouse_x, int mouse_y) const {
+    // See if anything that should have been clicked on was clicked
+    for (const ClickData& data : click_parts) {
+        int x = this->x + data.area.x;
+        int y = this->y + data.area.y;
+        if (mouse_x > x && mouse_x < x + data.area.w 
+            && mouse_y > y && mouse_y < y + data.area.h) 
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Widget::click(int mouse_x, int mouse_y) {
     // See if anything that should have been clicked on was clicked
     for (const ClickData& data : click_parts) {

@@ -164,7 +164,8 @@ void Editor::render() {
         }
     }
 
-    {   // Render the tile outline for the currently hovered over tile
+    // Render the tile outline for the currently hovered over tile
+    if (!widgetManager.is_mouse_over(getMouseX(), getMouseY())) {   
         static Texture outline("resources/outline.png");
         outline.render(
             static_cast<int>(m_mouse_tile_x * tile_size - m_camera_x),
