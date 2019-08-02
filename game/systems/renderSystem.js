@@ -28,6 +28,15 @@ let renderSystem = {
                 if (entity.hasOwnProperty("position")) {
                     x = entity.position.screen_x;
                     y = entity.position.screen_y;
+                    // Adjust screen x/y if scaling
+                    entity.position.screen_x = entity.position.x;
+                    entity.position.screen_y = entity.position.y;
+                    if (entity.hasOwnProperty("scaling")) {
+                        if (entity.scaling.scaling === true) {
+                            entity.position.screen_x = entity.position.x * scalingSystem.scale;
+                            entity.position.screen_y = entity.position.y * scalingSystem.scale;
+                        }
+                    }
                 }
                 if (entity.hasOwnProperty("camera")) {
                     if (entity.camera.affect) {

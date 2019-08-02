@@ -16,6 +16,9 @@ let moveSystem = {
     update: function (entities, delta) {
         for (let i in entities) {
             let entity = entities[i];
+            if (entity.hasOwnProperty("move") !== true) {
+                continue;
+            }
             // If an entity is attacking, don't let it move
             if (entity.hasOwnProperty("attack")) {
                 if (entity.attack.attacking === true) {
@@ -27,14 +30,15 @@ let moveSystem = {
             if (entity.hasOwnProperty("collision")) {
                 collision = entity.collision;
             }
-            if (entity.hasOwnProperty("position") && entity.hasOwnProperty("move")) {
+            if (entity.hasOwnProperty("position")) {
                 if (entity.move.hasOwnProperty("speed")) {
                     let distance = Math.round(entity.move.speed * delta / 1000);
                     if (entity.move.up) {
                         moving = true;
                         entity.position.y -= distance;
                         if (collision !== null) {
-                            while(map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                            while(map.colliding(entity.position.x, entity.position.y, collision, 64)
+                                || game.colliding(entity)) {
                                 entity.position.y++;
                             }
                         }
@@ -46,7 +50,8 @@ let moveSystem = {
                         moving = true;
                         entity.position.y += distance;
                         if (collision !== null) {
-                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)
+                                || game.colliding(entity)) {
                                 entity.position.y--;
                             }
                         }
@@ -58,7 +63,8 @@ let moveSystem = {
                         moving = true;
                         entity.position.x -= distance;
                         if (collision !== null) {
-                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)
+                                || game.colliding(entity)) {
                                 entity.position.x++;
                             }
                         }
@@ -70,7 +76,8 @@ let moveSystem = {
                         moving = true;
                         entity.position.x += distance;
                         if (collision !== null) {
-                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)) {
+                            while (map.colliding(entity.position.x, entity.position.y, collision, 64)
+                                || game.colliding(entity)) {
                                 entity.position.x--;
                             }
                         }
@@ -98,15 +105,6 @@ let moveSystem = {
                 // Other data to carry along
                 speed: entity.move.speed
             };
-            // Adjust screen x/y if scaling
-            entity.position.screen_x = entity.position.x;
-            entity.position.screen_y = entity.position.y;
-            if (entity.hasOwnProperty("scaling")) {
-                if (entity.scaling.scaling === true) {
-                    entity.position.screen_x = entity.position.x * scalingSystem.scale;
-                    entity.position.screen_y = entity.position.y * scalingSystem.scale;
-                }
-            }
         }
     }
 }

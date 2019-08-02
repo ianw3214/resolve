@@ -17,6 +17,19 @@ let player = {
     health: healthSystem.generate()
 }
 
+let tree = {
+    render: renderSystem.generate("texture", "res/tree.png", 64, 128, 100),
+    position: {
+        x: 300,
+        y: 300,
+        screen_x: 0,
+        screen_y: 0
+    },
+    camera: cameraSystem.generate(),
+    scaling: scalingSystem.generate(),
+    collision: collisionSystem.generate(collisionSystem.generateRect(64, 128), 0, 0)
+}
+
 let game = {
     tile_map: [],
     draw_objects: [],
@@ -33,6 +46,7 @@ let game = {
         ECS.addSystem(healthSystem);
         
         ECS.addEntity(player);
+        ECS.addEntity(tree);
 
         // TODO: Uncomment this for background music
         // audio.playTrack("res/sound/track.wav");
@@ -111,4 +125,34 @@ let game = {
             z: z
         });
     },
+}
+
+// TODO: This should probably somehow go into the collision system
+// Keep here for now until figure out how to access the entities without update
+game.colliding = function(entity) {
+    for (let i in ECS.entities) {
+        let target = ECS.entities[i];
+        if (entity === target) continue;
+        if (entity.hasOwnProperty("position") === false) continue;
+        if (target.hasOwnProperty("position") === false) continue;
+        if (entity.hasOwnProperty("collision") === false) continue;
+        if (target.hasOwnProperty("collision") === false) continue;
+        // TODO: Optimize?
+        if (entity.collision.shape.type === "rect" && target.collision.shape.type === "rect") {
+            let x = entity.position.x + entity.collision.offset_x;
+            let y = entity.position.y + entity.collision.offset_y;
+            let w = entity.collision.shape.width;
+            let h = entity.collision.shape.height;
+            let x2 = target.position.x + target.collision.offset_x;
+            let y2 = target.position.y + target.collision.offset_y;
+            let w2 = target.collision.shape.width;
+            let h2 = target.collision.shape.height;
+            if (x < x2 + w2 && x + w > x2) {
+                if (y < y2 + h2 && y + h > y2) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
