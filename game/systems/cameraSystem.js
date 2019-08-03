@@ -7,6 +7,8 @@ let cameraSystem = {
     // Cache these because needed for fullscreen callback
     player_x: 0,
     player_y: 0,
+    player_w: 0,
+    player_h: 0,
     generate: function(affect = true) {
         return {
             affect: affect
@@ -21,8 +23,8 @@ let cameraSystem = {
         // If more systems need this kind of feature, something more elegant may be needed
         graphics.addFullscreenCallback((w, h) => {
             // TODO: This doesn't work anymore for some reason
-            cameraSystem.x = cameraSystem.player_x * scalingSystem.scale - w / 2 + cameraSystem.player_x * scalingSystem.scale / 2;
-            cameraSystem.y = cameraSystem.player_y * scalingSystem.scale - h / 2 + cameraSystem.player_y * scalingSystem.scale / 2;
+            cameraSystem.x = cameraSystem.player_x * scalingSystem.scale - w / 2 + cameraSystem.player_w * scalingSystem.scale / 2;
+            cameraSystem.y = cameraSystem.player_y * scalingSystem.scale - h / 2 + cameraSystem.player_h * scalingSystem.scale / 2;
         });
     },
     update: function (entities, delta) {
@@ -30,8 +32,11 @@ let cameraSystem = {
         let player = undefined;
         for (let entity of entities) {
             if (entity.hasOwnProperty("player_input") === true) {
+                // Cache these things so fullscreen callback can use
                 cameraSystem.player_x = entity.position.x;
                 cameraSystem.player_y = entity.position.y;
+                cameraSystem.player_w = entity.render.w;
+                cameraSystem.player_h = entity.render.h;
                 player = entity;
                 continue;
             }
