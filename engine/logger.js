@@ -12,19 +12,19 @@ let logger = {
 };
 
 logger.info = function(message) {
-    message += "[INFO]";
+    message = "[INFO] " + message;
     console.log(message);
     logger.logs.push(message);
 };
 
 logger.warning = function(message) {
-    message += "[WARNING]";
+    message = "[WARNING] " + message;
     console.log("%c" + message, "color:orange;");
     logger.logs.push(message);
 };
 
 logger.error = function(message) {
-    message += "[ERROR]";
+    message = "[ERROR] " + message;
     console.log("%c" + message, "color:red;");
     alert(message);
     logger.logs.push(message);

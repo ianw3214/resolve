@@ -41,40 +41,25 @@ let game = {
         ECS.addSystem(cameraSystem);
         ECS.addSystem(animationSystem);
         ECS.addSystem(renderSystem);
+        ECS.addSystem(playerInputSystem);
         ECS.addSystem(moveSystem);
         ECS.addSystem(attackSystem);
         ECS.addSystem(healthSystem);
         
+        /*
         ECS.addEntity(player);
         ECS.addEntity(tree);
+        */
 
         // TODO: Uncomment this for background music
         // audio.playTrack("res/sound/track.wav");
     },
     update: function (delta) {
-        if (input.keyPressed(68) || input.keyPressed(39)) {
-            // game.x += 5;
-            player.move.right = true;
-        }
-        if (input.keyPressed(65) || input.keyPressed(37)) {
-            // game.x -= 5;
-            player.move.left = true;
-        }
-        if (input.keyPressed(87) || input.keyPressed(38)) {
-            player.move.up = true;
-        }
-        if (input.keyPressed(83) || input.keyPressed(40)) {
-            player.move.down = true;
-        }
         if (input.keyPressed(81)) {
             graphics.setFullscreen();
         }
         if (input.keyPressed(69)) {
             graphics.exitFullscreen();
-        }
-        if (input.keyPressed(49)) {
-            // BASIC ATTACK
-            player.attack.attacks.push("basic");
         }
         ECS.update(delta);
     },

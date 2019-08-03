@@ -1,0 +1,70 @@
+{
+    "position": {
+        "x": 0,
+        "y": 0,
+        "screen_x": 0,
+        "screen_y": 0
+    },
+    "render": {
+        "type": "texture",
+        "path": "res/player.png",
+        "w": 64,
+        "h": 64,
+        "z": 100,
+        "color": [
+            1.0,
+            0.0,
+            1.0,
+            1.0
+        ]
+    },
+    "animation": {
+        "state": "",
+        "hint": "",
+        "frame": 0,
+        "time": 0,
+        "source": {},
+        "data": {},
+        "path": "res/player.json",
+        "loaded": false,
+        "loading": false
+    },
+    "move": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "was_moving": false,
+        "speed": 250
+    },
+    "camera": {
+        "affect": true
+    },
+    "scaling": {
+        "scaling": true
+    },
+    "attack": {
+        "attacks": [],
+        "attacking": false,
+        "basic": {
+            "anim_key": "BASIC_ATTACK",
+            "cooldown": 150,
+            "curr_cooldown": 0
+        }
+    },
+    "collision": {
+        "shape": {
+            "type": "rect",
+            "width": 32,
+            "height": 64
+        },
+        "offset_x": 16,
+        "offset_y": 0
+    },
+    "health": {
+        "health": 3
+    },
+    "player_input": {
+        "affect": true
+    }
+}

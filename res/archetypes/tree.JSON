@@ -1,0 +1,36 @@
+{
+    "render": {
+        "type": "texture",
+        "path": "res/tree.png",
+        "w": 64,
+        "h": 128,
+        "z": 100,
+        "color": [
+            1.0,
+            0.0,
+            1.0,
+            1.0
+        ]
+    },
+    "position": {
+        "x": 0,
+        "y": 0,
+        "screen_x": 0,
+        "screen_y": 0
+    },
+    "camera": {
+        "affect": true
+    },
+    "scaling": {
+        "scaling": true
+    },
+    "collision": {
+        "shape": {
+            "type": "rect",
+            "width": 64,
+            "height": 128
+        },
+        "offset_x": 0,
+        "offset_y": 0
+    }
+}

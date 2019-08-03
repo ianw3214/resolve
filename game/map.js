@@ -11,8 +11,23 @@ let map = {
         width: 2,
         height: 1
     },
+    // Some metadata
+    num_entities: 0,
+    loaded_entities: 0,
     loaded: false
 };
+
+// Replaces the overriden properties in the archetype from the entity
+function override_properties(archetype, entity) {
+    const keys = Object.keys(entity);
+    for (let key of keys) {
+        if (typeof key === "object") {
+            override_properties(archetype[key], entity[key]);
+        } else {
+            archetype[key] = entity[key];
+        }
+    }
+}
 
 map.load = function(path = null) {
     if (path !== null && typeof path === "string") {
@@ -23,9 +38,33 @@ map.load = function(path = null) {
             map.tile_map = res.data;
             map.collision_map = res.collision;
             map.tilesheet = res.tilesheet;
-            map.loaded = true;
-        })
+
+            // Load the entities
+            map.num_entities = res.entities.length;
+            map.loaded_entities = 0;
+            for (let i in res.entities) {
+                let entity = res.entities[i];
+                let archetype_path = "res/archetypes/" + entity["archetype"] + ".JSON"
+                file.loadJSON(archetype_path, function(res) {
+                    let ent = JSON.parse(res);
+                    override_properties(ent, entity)
+                    ECS.addEntity(ent);
+                    // Finish loading the map once all the entities are loaded
+                    map.loaded_entities++;
+                    if (map.loaded_entities == map.num_entities) {
+                        map.loaded = true;
+                    }
+                }, function() {
+                    // The error callback
+                    // TODO: Make something really bad happen here (or not)
+                });
+            }
+
+            // ALSO HAVE TO WAIT FOR ENTITIES TO LOAD
+            // map.loaded = true;
+        });
     } else {
+        // TODO: Make this an error somehow
         // Initialize default map
         map.width = 10;
         map.height = 10;
@@ -93,7 +132,6 @@ map.colliding = function(x, y, shape, tile_size) {
                 for (let j = round_x; j <= h_num_check + round_x; j++) {
                     let index = i * map.width + j;
                     if (index > map.collision_map.length) {
-                        console.log("FLAG 1");
                         continue;
                     }
                     if (map.collision_map[index] === 0) {

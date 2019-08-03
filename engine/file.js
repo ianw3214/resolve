@@ -2,7 +2,7 @@
 
 var file = {};
 
-file.loadJSON = function(path, callback) {
+file.loadJSON = function(path, callback, error_callback = undefined) {
 
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
@@ -14,6 +14,9 @@ file.loadJSON = function(path, callback) {
                 callback(xobj.responseText);
             } else {
                 logger.error("File failed to load: " + path);
+                if (error_callback !== undefined) {
+                    error_callback();
+                }
             }
         }
     };

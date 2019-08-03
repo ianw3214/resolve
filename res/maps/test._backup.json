@@ -1,21 +1,6 @@
 {
     "entities": [
-        {
-            "name": "player",
-            "archetype": "player",
-            "position": {
-                "x": 200,
-                "y": 200
-            }
-        },
-        {
-            "name": "",
-            "archetype": "tree",
-            "position": {
-                "x": 300,
-                "y": 300
-            }
-        }
+
     ],
     "collision": [
         1,
