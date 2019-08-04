@@ -12,6 +12,9 @@ public:
     // Calculates dimensions of the widget based on the definition
     void calculate_dim();
 
+    // Some widgets will be updated every frame, others will not
+    void set_update(bool update) { m_update = update; }
+
     // Enumeration for where to anchor the widget
     enum class Anchor {
         TOP_LEFT,
@@ -112,6 +115,7 @@ protected:
 public:
     bool is_mouse_over(int mouse_x, int mouse_y) const;
     bool click(int mouse_x, int mouse_y);   // Returns true if the widget was clicked
+    void update();
     void render();
 
     void set_pos(int x, int y) { this->x = x; this->y = y; }
@@ -119,6 +123,7 @@ public:
     int get_height() const { return height; }
 private:
     std::string name;
+    bool m_update;
 
     // The position of the widget
     Anchor anchor;

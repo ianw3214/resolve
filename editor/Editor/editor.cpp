@@ -13,6 +13,7 @@ using json = nlohmann::json;
 #include "ui/widgets/tilePaletteWidget.hpp"
 #include "ui/widgets/mapPropertyWidget.hpp"
 #include "ui/widgets/mapUtilWidget.hpp"
+#include "ui/widgets/entityEditWidget.hpp"
 
 Editor::Editor() 
     : m_tile_scale(1.f)
@@ -65,6 +66,7 @@ void Editor::init() {
     widgetManager.addWidget(new MapUtilWidget(this));
     widgetManager.addWidget(new MapPropertyWidget(this));
     widgetManager.addWidget(new TilePaletteWidget(this, path));
+    widgetManager.addWidget(new EntityEditWidget());
 }
 
 void Editor::cleanup() {

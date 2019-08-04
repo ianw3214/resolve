@@ -41,6 +41,7 @@ Widget::Widget(const std::string& name, Anchor anchor)
     , anchor(anchor)
     , draw_x(0)
     , draw_y(0) 
+    , m_update(false)
 {}
 
 Widget::~Widget() {
@@ -137,6 +138,18 @@ bool Widget::click(int mouse_x, int mouse_y) {
         }
     }
     return false;
+}
+
+void Widget::update() {
+    if (m_update) {
+        for (Component * comp : render_parts) delete comp;
+        render_parts.clear();
+        click_parts.clear();
+        draw_x = 0;
+        draw_y = 0;
+        define();
+        calculate_dim();
+    }
 }
 
 void Widget::render() {
