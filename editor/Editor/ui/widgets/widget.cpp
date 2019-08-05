@@ -19,13 +19,13 @@ void Widget::calculate_dim() {
             case ComponentType::TEXT: {
                 // TODO: Calculate width somehow
                 const TextComponent * const tex = dynamic_cast<const TextComponent* const>(comp);
-                w += tex->text.size() * 20;
+                w += tex->text.size() * get_text_width(tex->size);
                 h += static_cast<int>(tex->size);
             } break;
             case ComponentType::TEXT_REFERENCE: {
                 // TODO: Calculate width somehow
                 const TextReferenceComponent * const tex = dynamic_cast<const TextReferenceComponent* const>(comp);
-                w += tex->reference->size() * 20;
+                w += tex->reference->size() * get_text_width(tex->size);
                 h += static_cast<int>(tex->size);
             } break;
             case ComponentType::IMAGE: {
@@ -118,6 +118,7 @@ void Widget::draw_image(const std::string& tex, int w, int h, const Rect& src, s
 }
 
 bool Widget::is_mouse_over(int mouse_x, int mouse_y) const {
+    /*
     // See if anything that should have been clicked on was clicked
     for (const ClickData& data : click_parts) {
         int x = this->x + data.area.x;
@@ -127,6 +128,12 @@ bool Widget::is_mouse_over(int mouse_x, int mouse_y) const {
         {
             return true;
         }
+    }
+    */
+    if (mouse_x > x && mouse_x < x + m_width
+        && mouse_y > y && mouse_y < y + m_height) 
+    {
+        return true;
     }
     return false;
 }

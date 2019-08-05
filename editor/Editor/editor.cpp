@@ -116,7 +116,10 @@ void Editor::update() {
 
     // Handle mouse press events
     if (leftMousePressed()) {
-        if (!widgetManager.click(getMouseX(), getMouseY())) {
+        if (widgetManager.is_mouse_over(getMouseX(), getMouseY())) {
+            // NOTE: Can do something with result in the future if desired
+            bool result = widgetManager.click(getMouseX(), getMouseY());
+        } else {
             // EDIT IF NOT PANNING
             if (!m_panning) {
                 if (m_mouse_tile_x >= 0 && m_mouse_tile_x < m_map_width && m_mouse_tile_y >= 0 && m_mouse_tile_y < m_map_height) {
@@ -125,6 +128,9 @@ void Editor::update() {
                     }
                     if (m_edit_state == EditState::COLLISION) {
                         toggle_collision(m_mouse_tile_x, m_mouse_tile_y);
+                    }
+                    if (m_edit_state == EditState::ENTITY) {
+                        select_entity(getMouseX(), getMouseY());
                     }
                 }
             }
@@ -175,14 +181,16 @@ void Editor::render() {
     }
 
     // Render the tile outline for the currently hovered over tile
-    if (!widgetManager.is_mouse_over(getMouseX(), getMouseY())) {   
-        static Texture outline("resources/outline.png");
-        outline.render(
-            static_cast<int>(m_mouse_tile_x * tile_size - m_camera_x),
-            static_cast<int>(m_mouse_tile_y * tile_size - m_camera_y),
-            tile_size,
-            tile_size
-        );
+    if (m_edit_state == EditState::TILE) {
+        if (!widgetManager.is_mouse_over(getMouseX(), getMouseY())) {   
+            static Texture outline("resources/outline.png");
+            outline.render(
+                static_cast<int>(m_mouse_tile_x * tile_size - m_camera_x),
+                static_cast<int>(m_mouse_tile_y * tile_size - m_camera_y),
+                tile_size,
+                tile_size
+            );
+        }
     }
 
     // Render entities
@@ -310,4 +318,19 @@ void Editor::decrease_map_height() {
     m_map_height--;
     m_tilemap.resize(m_map_width * m_map_height);
     m_collision_map.resize(m_map_width * m_map_height);
+}
+
+void Editor::select_entity(int mouse_x, int mouse_y) {
+    mouse_x += m_camera_x;
+    mouse_y += m_camera_y;
+    for (Entity& entity : m_entities) {
+        if (mouse_x > entity.get_x() && mouse_x < entity.get_x() + entity.get_w()
+            && mouse_y > entity.get_y() && mouse_y < entity.get_y() + entity.get_h())
+        {
+            m_selected_entity = &entity;
+            return;
+        }
+    }
+    // If nothing was selected, deselect entity
+    m_selected_entity = nullptr;
 }

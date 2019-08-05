@@ -2,6 +2,7 @@
 #include "widget.hpp"
 
 class Editor;
+class Entity;
 class EntityEditWidget : public Widget {
     
 public:

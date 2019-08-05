@@ -51,6 +51,9 @@ public:
     void decrease_map_width();
     void decrease_map_height();
 
+    void select_entity(int mouse_x, int mouse_y);
+    Entity * get_selected_entity() const { return m_selected_entity; }
+
 private:
     /// --------------------------
     /// MAP METADATA

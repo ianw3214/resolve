@@ -17,6 +17,10 @@ public:
 
     std::string get_name() const;
     std::string get_archetype() const;
+    int get_x() const { return m_x; }
+    int get_y() const { return m_y; }
+    int get_w() const { return m_w; }
+    int get_h() const { return m_h; }
 
     // Use this function for serizliating
     nlohmann::json get_entity_json() const;
