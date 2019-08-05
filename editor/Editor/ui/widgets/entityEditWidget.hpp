@@ -5,8 +5,8 @@ class Editor;
 class EntityEditWidget : public Widget {
     
 public:
-    EntityEditWidget();
+    EntityEditWidget(Editor * editor);
     virtual void define() override;
 private:
-    
+    Editor * editorRef;
 };

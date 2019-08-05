@@ -4,6 +4,7 @@ QcEngine/
 build/
 
 # IDE FILES
+.vs/
 .vscode/
 
 # VENDOR FILES

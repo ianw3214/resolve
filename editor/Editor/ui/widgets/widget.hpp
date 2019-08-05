@@ -14,6 +14,7 @@ public:
 
     // Some widgets will be updated every frame, others will not
     void set_update(bool update) { m_update = update; }
+    void set_show(bool show) { m_show = show; }
 
     // Enumeration for where to anchor the widget
     enum class Anchor {
@@ -119,16 +120,17 @@ public:
     void render();
 
     void set_pos(int x, int y) { this->x = x; this->y = y; }
-    int get_width() const { return width; }
-    int get_height() const { return height; }
+    int get_width() const { return m_width; }
+    int get_height() const { return m_height; }
 private:
     std::string name;
     bool m_update;
+    bool m_show;
 
     // The position of the widget
     Anchor anchor;
-    int width;
-    int height;
+    int m_width;
+    int m_height;
     int x;
     int y;
 

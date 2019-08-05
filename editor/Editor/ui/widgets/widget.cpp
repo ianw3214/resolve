@@ -3,6 +3,11 @@
 #include "core/engine.hpp"
 
 void Widget::calculate_dim() {
+    if (!m_show) {
+        m_width = 0;
+        m_height = 0;
+        return;
+    }
     // Calculate the dimensions by looking for the highest offset
     int max_width = 0;
     int max_height = 0;
@@ -32,8 +37,8 @@ void Widget::calculate_dim() {
         if (w > max_width) max_width = w;
         if (h > max_height) max_height = h;
     }
-    width = max_width;
-    height = max_height;
+    m_width = max_width;
+    m_height = max_height;
 }
 
 Widget::Widget(const std::string& name, Anchor anchor) 
@@ -42,6 +47,7 @@ Widget::Widget(const std::string& name, Anchor anchor)
     , draw_x(0)
     , draw_y(0) 
     , m_update(false)
+    , m_show(true)
 {}
 
 Widget::~Widget() {
@@ -153,9 +159,10 @@ void Widget::update() {
 }
 
 void Widget::render() {
+    if (!m_show) return;
     // Render a background first
     static Texture background("resources/black.png");
-    background.render(x, y, width, height);
+    background.render(x, y, m_width, m_height);
     for (const Component* component : render_parts) {
         if (component->type == ComponentType::TEXT) {
             TextComponent text = *(dynamic_cast<const TextComponent*>(component));

@@ -21,12 +21,14 @@ Editor::Editor()
     , m_camera_y(0) 
     , m_brush_tile(0)
     , m_edit_state(EditState::TILE)
+    , m_selected_entity(nullptr)
 {}
 
 Editor::~Editor() {}
 
 void Editor::init() {
     SDL_ShowCursor(SDL_DISABLE);
+    archetypeManager.init();
     logger.init();
     widgetManager.init();
     // test_animatedTexture = new AnimatedTexture("res/animate.png");
@@ -56,6 +58,12 @@ void Editor::init() {
         std::vector<int> temp1 = data["data"];
         m_tilemap = std::move(temp1);
 
+        // NEED TO LOAD ENTITIES
+        std::vector<json> entities = data["entities"];
+        for (json& entity : entities) {
+            m_entities.emplace_back(&archetypeManager, entity);
+        }
+
         std::vector<int> temp2 = data["collision"];
         m_collision_map = std::move(temp2);
     } else {
@@ -66,7 +74,7 @@ void Editor::init() {
     widgetManager.addWidget(new MapUtilWidget(this));
     widgetManager.addWidget(new MapPropertyWidget(this));
     widgetManager.addWidget(new TilePaletteWidget(this, path));
-    widgetManager.addWidget(new EntityEditWidget());
+    widgetManager.addWidget(new EntityEditWidget(this));
 }
 
 void Editor::cleanup() {
@@ -177,6 +185,11 @@ void Editor::render() {
         );
     }
 
+    // Render entities
+    for (Entity& e : m_entities) {
+        e.render(m_camera_x, m_camera_y);
+    }
+
     logger.render();
     widgetManager.render();
 
@@ -191,7 +204,6 @@ void Editor::render() {
 }
 
 void Editor::save_map() {
-    // TODO: Move deserialization to a 'save' button
     std::string path(ROOT);
     path += FILE;
 
@@ -211,6 +223,14 @@ void Editor::save_map() {
 
         data["data"] = m_tilemap;
         data["collision"] = m_collision_map;
+
+        // SAVE ENTITIES
+        json entities;
+        for (Entity& entity : m_entities) {
+            entities.push_back(entity.get_entity_json());
+        }
+        data["entities"] = entities;
+
         file << data;
 
         logger.log("MAP SUCCESSFULLY SAVED");

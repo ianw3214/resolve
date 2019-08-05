@@ -1,10 +1,14 @@
 target_sources(Editor PRIVATE
     editor.hpp
-    logger.hpp)
+    logger.hpp
+    archetypeManager.hpp
+    entity.hpp)
 
 target_sources(Editor PRIVATE 
     main.cpp
     editor.cpp
-    logger.cpp)
+    logger.cpp
+    archetypeManager.cpp
+    entity.cpp)
 
 add_subdirectory(ui)

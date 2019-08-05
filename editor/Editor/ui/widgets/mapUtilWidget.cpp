@@ -12,8 +12,12 @@ void MapUtilWidget::define() {
     draw_text("TILE", [&]() {
         editorRef->changeState(Editor::EditState::TILE);
     }, TextSize::MEDIUM, false);
-    add_h_padding(0);
+    add_h_padding(10);
     draw_text("COLLISION", [&]() {
         editorRef->changeState(Editor::EditState::COLLISION);
+    }, TextSize::MEDIUM, false);
+    add_h_padding(10);
+    draw_text("ENTITY", [&]() {
+        editorRef->changeState(Editor::EditState::ENTITY);
     });
 }

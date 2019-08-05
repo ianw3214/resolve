@@ -1,8 +1,11 @@
 #pragma once
 #include "core/engine.hpp"
 
+#include "archetypeManager.hpp"
 #include "logger.hpp"
 #include "ui/widgets/widgetManager.hpp"
+
+#include "entity.hpp"
 
 constexpr int base_tile_size = 64;
 
@@ -10,6 +13,7 @@ constexpr int base_tile_size = 64;
 
 class Editor : public State {
 
+    ArchetypeManager archetypeManager;
     Logger logger;
     WidgetManager widgetManager;
 
@@ -17,9 +21,11 @@ public:
 
     enum class EditState {
         TILE,
-        COLLISION
+        COLLISION,
+        ENTITY
     };
     void changeState(EditState new_state) { m_edit_state = new_state; }
+    EditState getState() const { return m_edit_state; }
 
     Editor();
     ~Editor();
@@ -46,7 +52,9 @@ public:
     void decrease_map_height();
 
 private:
-    // TILESHEET METADATA
+    /// --------------------------
+    /// MAP METADATA
+    /// --------------------------
     std::string m_tilesheet_src;
     int m_tile_size;
     int m_tilesheet_width;
@@ -58,7 +66,11 @@ private:
     std::vector<int> m_tilemap;
     std::vector<int> m_collision_map;
 
-    // Editor state
+    std::vector<Entity> m_entities;
+
+    /// --------------------------
+    /// Editor state
+    /// --------------------------
     float m_tile_scale;
     int m_camera_x;
     int m_camera_y;
@@ -69,6 +81,9 @@ private:
 
     EditState m_edit_state;
 
+    Entity * m_selected_entity;
+
+    // Panning data
     bool m_panning;
     int m_pan_start_mouse_x;
     int m_pan_start_mouse_y;
