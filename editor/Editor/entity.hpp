@@ -13,7 +13,7 @@ public:
     Entity(Entity && rhs) noexcept;
     ~Entity();
 
-    void render(int camera_x, int camera_y, bool outline = false);
+    void render(int camera_x, int camera_y, float scale, bool outline = false);
 
     std::string get_name() const;
     std::string get_archetype() const;

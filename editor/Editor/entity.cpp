@@ -66,15 +66,15 @@ Entity::Entity(ArchetypeManager * archetypeManager, json data)
     }
 }
 
-#include <iostream>
 Entity::Entity(Entity && rhs) noexcept {
-    std::cout << "MOVE CONSTRUCTOR" << std::endl;
     m_data = rhs.m_data;
     m_x = rhs.m_x;
     m_y = rhs.m_y;
     archetypeManager = rhs.archetypeManager;
     m_has_texture = rhs.m_has_texture;
     m_texture = rhs.m_texture;
+    // Make sure the texture isn't deleted
+    rhs.m_texture = nullptr;
     m_w = rhs.m_w;
     m_h = rhs.m_h;
     m_animated = rhs.m_animated;
@@ -85,21 +85,22 @@ Entity::Entity(Entity && rhs) noexcept {
 }
 
 Entity::~Entity() {
-    // TODO: Fix whatever is making this not work
-    // delete m_texture;
+    delete m_texture;
 }
 
-void Entity::render(int camera_x, int camera_y, bool outline) {
+void Entity::render(int camera_x, int camera_y, float scale, bool outline) {
     if (m_has_texture && m_texture != nullptr) {
-        int x = m_x - camera_x;
-        int y = m_y - camera_y;
-        m_texture->render(x, y, m_w, m_h);
+        int x = static_cast<int>(m_x  * scale - camera_x);
+        int y = static_cast<int>(m_y  * scale - camera_y);
+        int w = static_cast<int>(m_w * scale);
+        int h = static_cast<int>(m_h * scale);
+        m_texture->render(x, y, w, h);
         // Render the outline if specified
         if (outline) {
-            QcE::get_instance()->drawLine(x, y, x + m_w, y);
-            QcE::get_instance()->drawLine(x, y, x, y + m_h);
-            QcE::get_instance()->drawLine(x + m_w, y, x + m_w, y + m_h);
-            QcE::get_instance()->drawLine(x + m_w, y + m_h, x, y + m_h);
+            QcE::get_instance()->drawLine(x, y, x + w, y);
+            QcE::get_instance()->drawLine(x, y, x, y + h);
+            QcE::get_instance()->drawLine(x + w, y, x + w, y + h);
+            QcE::get_instance()->drawLine(x + w, y + h, x, y + h);
         }
     }
 }

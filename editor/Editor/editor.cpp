@@ -16,7 +16,7 @@ using json = nlohmann::json;
 #include "ui/widgets/entityEditWidget.hpp"
 
 Editor::Editor() 
-    : m_tile_scale(1.f)
+    : m_scale(1.f)
     , m_camera_x(0)
     , m_camera_y(0) 
     , m_brush_tile(0)
@@ -89,10 +89,10 @@ void Editor::update() {
         exit();
     }
     if (getMouseScrollUp() > 0) {
-        m_tile_scale += 0.1f * getMouseScrollUp();
+        m_scale += 0.1f * getMouseScrollUp();
     }
     if (getMouseScrollDown() > 0) {
-        m_tile_scale -= 0.1f * getMouseScrollDown();
+        m_scale -= 0.1f * getMouseScrollDown();
     }
     if (keyPressed(SDL_SCANCODE_SPACE)) {
         if (!m_panning) {
@@ -109,8 +109,8 @@ void Editor::update() {
     }
 
     // Calculate the mouse tile positions
-    m_mouse_tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_tile_scale));
-    m_mouse_tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_tile_scale));
+    m_mouse_tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_scale));
+    m_mouse_tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_scale));
     if (getMouseX() + m_camera_x < 0) m_mouse_tile_x -= 1;
     if (getMouseY() + m_camera_y < 0) m_mouse_tile_y -= 1;
 
@@ -140,7 +140,7 @@ void Editor::update() {
 
 void Editor::render() {
     // Calculate tile size initially to avoid redundant calculations
-    int tile_size = static_cast<int>(std::ceil(static_cast<float>(base_tile_size) * m_tile_scale));
+    int tile_size = static_cast<int>(std::ceil(static_cast<float>(base_tile_size) * m_scale));
     // // Render animated textures
     // test_animatedTexture->render(0, 0);
     // // Render text
@@ -195,7 +195,7 @@ void Editor::render() {
 
     // Render entities
     for (Entity& e : m_entities) {
-        e.render(m_camera_x, m_camera_y, m_selected_entity == &e);
+        e.render(m_camera_x, m_camera_y, m_scale, m_selected_entity == &e);
     }
 
     logger.render();
@@ -324,9 +324,11 @@ void Editor::select_entity(int mouse_x, int mouse_y) {
     mouse_x += m_camera_x;
     mouse_y += m_camera_y;
     for (Entity& entity : m_entities) {
-        if (mouse_x > entity.get_x() && mouse_x < entity.get_x() + entity.get_w()
-            && mouse_y > entity.get_y() && mouse_y < entity.get_y() + entity.get_h())
-        {
+        int x = static_cast<int>(entity.get_x() * m_scale);
+        int y = static_cast<int>(entity.get_y() * m_scale);
+        int w = static_cast<int>(entity.get_w() * m_scale);
+        int h = static_cast<int>(entity.get_h() * m_scale);
+        if (mouse_x > x && mouse_x < x + w && mouse_y > y && mouse_y < y + h) {
             m_selected_entity = &entity;
             return;
         }
