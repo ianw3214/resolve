@@ -195,7 +195,7 @@ void Editor::render() {
 
     // Render entities
     for (Entity& e : m_entities) {
-        e.render(m_camera_x, m_camera_y);
+        e.render(m_camera_x, m_camera_y, m_selected_entity == &e);
     }
 
     logger.render();

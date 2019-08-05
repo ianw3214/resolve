@@ -66,7 +66,9 @@ Entity::Entity(ArchetypeManager * archetypeManager, json data)
     }
 }
 
+#include <iostream>
 Entity::Entity(Entity && rhs) noexcept {
+    std::cout << "MOVE CONSTRUCTOR" << std::endl;
     m_data = rhs.m_data;
     m_x = rhs.m_x;
     m_y = rhs.m_y;
@@ -83,12 +85,22 @@ Entity::Entity(Entity && rhs) noexcept {
 }
 
 Entity::~Entity() {
+    // TODO: Fix whatever is making this not work
     // delete m_texture;
 }
 
-void Entity::render(int camera_x, int camera_y) {
+void Entity::render(int camera_x, int camera_y, bool outline) {
     if (m_has_texture && m_texture != nullptr) {
-        m_texture->render(m_x - camera_x, m_y - camera_y, m_w, m_h);
+        int x = m_x - camera_x;
+        int y = m_y - camera_y;
+        m_texture->render(x, y, m_w, m_h);
+        // Render the outline if specified
+        if (outline) {
+            QcE::get_instance()->drawLine(x, y, x + m_w, y);
+            QcE::get_instance()->drawLine(x, y, x, y + m_h);
+            QcE::get_instance()->drawLine(x + m_w, y, x + m_w, y + m_h);
+            QcE::get_instance()->drawLine(x + m_w, y + m_h, x, y + m_h);
+        }
     }
 }
 
