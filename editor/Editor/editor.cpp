@@ -22,6 +22,7 @@ Editor::Editor()
     , m_brush_tile(0)
     , m_edit_state(EditState::TILE)
     , m_selected_entity(nullptr)
+    , m_moving_entity(false)
 {}
 
 Editor::~Editor() {}
@@ -108,6 +109,16 @@ void Editor::update() {
         m_panning = false;
     }
 
+    if (keyPressed(SDL_SCANCODE_Q)) {
+        changeState(EditState::TILE);
+    }
+    if (keyPressed(SDL_SCANCODE_W)) {
+        changeState(EditState::COLLISION);
+    }
+    if (keyPressed(SDL_SCANCODE_E)) {
+        changeState(EditState::ENTITY);
+    }
+
     // Calculate the mouse tile positions
     m_mouse_tile_x = static_cast<int>((m_camera_x + getMouseX()) / (base_tile_size * m_scale));
     m_mouse_tile_y = static_cast<int>((m_camera_y + getMouseY()) / (base_tile_size * m_scale));
@@ -135,6 +146,18 @@ void Editor::update() {
                 }
             }
         }
+    }
+
+    // Move entities?
+    if (leftMouseHeld() && m_edit_state == EditState::ENTITY) {
+        if (m_selected_entity != nullptr && m_moving_entity) {
+            m_selected_entity->set_pos(
+                static_cast<int>((getMouseX() + m_camera_x) / m_scale) - m_entity_move_offset_x,
+                static_cast<int>((getMouseY() + m_camera_y) / m_scale) - m_entity_move_offset_y
+            );
+        }
+    } else {
+        m_moving_entity = false;
     }
 }
 
@@ -329,7 +352,15 @@ void Editor::select_entity(int mouse_x, int mouse_y) {
         int w = static_cast<int>(entity.get_w() * m_scale);
         int h = static_cast<int>(entity.get_h() * m_scale);
         if (mouse_x > x && mouse_x < x + w && mouse_y > y && mouse_y < y + h) {
-            m_selected_entity = &entity;
+            if (m_selected_entity != &entity) {
+                m_moving_entity = false;
+                m_selected_entity = &entity;
+            } else {
+                // If the same entity is selected, start moving it
+                m_moving_entity = true;
+            }
+            m_entity_move_offset_x = mouse_x - x;
+            m_entity_move_offset_y = mouse_y - y;
             return;
         }
     }

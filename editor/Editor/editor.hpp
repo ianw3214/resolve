@@ -86,6 +86,9 @@ private:
     EditState m_edit_state;
 
     Entity * m_selected_entity;
+    bool m_moving_entity;
+    int m_entity_move_offset_x;
+    int m_entity_move_offset_y;
 
     // Panning data
     bool m_panning;

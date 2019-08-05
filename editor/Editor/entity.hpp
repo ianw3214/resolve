@@ -21,6 +21,7 @@ public:
     int get_y() const { return m_y; }
     int get_w() const { return m_w; }
     int get_h() const { return m_h; }
+    void set_pos(int x, int y) { m_x = x; m_y = y; }
 
     // Use this function for serizliating
     nlohmann::json get_entity_json() const;
