@@ -30,6 +30,8 @@ public:
     Editor();
     ~Editor();
 
+    ArchetypeManager& get_archetype_manager() { return archetypeManager; };
+
     void init() override;
     void cleanup() override;
     void pause() override;
@@ -54,6 +56,8 @@ public:
 
     void select_entity(int mouse_x, int mouse_y);
     Entity * get_selected_entity() const { return m_selected_entity; }
+    void trigger_add_new_entity();
+    void add_new_entity(const std::string& name, const std::string& archetype);
 
 private:
     /// --------------------------

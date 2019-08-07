@@ -23,6 +23,21 @@ nlohmann::json ArchetypeManager::get_data(std::string archetype) const {
     return json();
 }
 
+std::vector<std::string> ArchetypeManager::get_archetypes() {
+    std::vector<std::string> result;
+    result.reserve(10);
+    for (const auto & it : fs::directory_iterator(FOLDER)) {
+        fs::path path = it.path();
+        std::string name = path.stem().string();
+
+        // Ignore the file if it is not a JSON file
+        if (path.extension() != ".JSON") continue;
+
+        result.push_back(name);
+    }
+    return result;
+}
+
 void ArchetypeManager::init() {
     // Load the archetypesss
     for (const auto & it : fs::directory_iterator(FOLDER)) {

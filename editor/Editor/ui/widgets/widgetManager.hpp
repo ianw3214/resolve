@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 class Widget;
@@ -10,6 +11,7 @@ public:
 
     void init();
     Widget * addWidget(Widget * widget);
+    Widget * get_widget(const std::string& name);
 
     bool is_mouse_over(int mouse_x, int mouse_y) const;
     bool click(int mouse_x, int mouse_y);

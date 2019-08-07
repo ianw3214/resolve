@@ -14,6 +14,7 @@ using json = nlohmann::json;
 #include "ui/widgets/mapPropertyWidget.hpp"
 #include "ui/widgets/mapUtilWidget.hpp"
 #include "ui/widgets/entityEditWidget.hpp"
+#include "ui/widgets/newEntityWidget.hpp"
 
 Editor::Editor() 
     : m_scale(1.f)
@@ -76,6 +77,7 @@ void Editor::init() {
     widgetManager.addWidget(new MapPropertyWidget(this));
     widgetManager.addWidget(new TilePaletteWidget(this, path));
     widgetManager.addWidget(new EntityEditWidget(this));
+    widgetManager.addWidget(new NewEntityWidget(this));
 }
 
 void Editor::cleanup() {
@@ -86,7 +88,7 @@ void Editor::pause() {}
 void Editor::resume() {}
 
 void Editor::update() {
-    if (keyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (managerRef->SDL_keyPressed(SDL_SCANCODE_ESCAPE)) {
         exit();
     }
     if (getMouseScrollUp() > 0) {
@@ -109,13 +111,13 @@ void Editor::update() {
         m_panning = false;
     }
 
-    if (keyPressed(SDL_SCANCODE_Q)) {
+    if (keyDown(SDL_SCANCODE_Q)) {
         changeState(EditState::TILE);
     }
-    if (keyPressed(SDL_SCANCODE_W)) {
+    if (keyDown(SDL_SCANCODE_W)) {
         changeState(EditState::COLLISION);
     }
-    if (keyPressed(SDL_SCANCODE_E)) {
+    if (keyDown(SDL_SCANCODE_E)) {
         changeState(EditState::ENTITY);
     }
 
@@ -366,4 +368,13 @@ void Editor::select_entity(int mouse_x, int mouse_y) {
     }
     // If nothing was selected, deselect entity
     m_selected_entity = nullptr;
+}
+
+void Editor::trigger_add_new_entity() {
+    Widget * widget = widgetManager.get_widget(NewEntityWidget::widgetName);
+    widget->set_show(true);
+}
+
+void Editor::add_new_entity(const std::string& name, const std::string& archetype) {
+    m_entities.emplace_back(&archetypeManager, name, archetype);
 }

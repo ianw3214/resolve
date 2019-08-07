@@ -6,7 +6,7 @@
 void WidgetManager::reset_anchor_positions() {
     top_left_anchor_x = 0;
     top_left_anchor_y = 0;
-    top_right_anchor_x = 0;
+    top_right_anchor_x = 920;
     top_right_anchor_y = 0;
     bottom_left_anchor_x = 0;
     // TODO: Not hard code this
@@ -24,32 +24,20 @@ void WidgetManager::init() {
     reset_anchor_positions();
 }
 
-#include <iostream>
 Widget * WidgetManager::addWidget(Widget * widget) {
     widgets.push_back(widget);
     widget->define();
     widget->calculate_dim();
-    /*
-    switch(widget->get_anchor_type()) {
-        case Widget::Anchor::TOP_LEFT: {
-            widget->set_pos(top_left_anchor_x, top_left_anchor_y);
-            // Do nothing with the x position
-            top_left_anchor_y += widget->get_height() + padding;
-        } break;
-        case Widget::Anchor::TOP_RIGHT: {
-            // TODO: Implement
-        } break;
-        case Widget::Anchor::BOTTOM_LEFT: {
-            widget->set_pos(bottom_left_anchor_x, bottom_left_anchor_y - widget->get_height());
-            // Do nothing with the x position
-            bottom_left_anchor_y -= widget->get_height() + padding;
-        } break;
-        case Widget::Anchor::BOTTOM_RIGHT: {
-            // TODO: Implement
-        } break;
-    }
-    */
     return widget;
+}
+
+Widget * WidgetManager::get_widget(const std::string& name) {
+    for (Widget * widget : widgets) {
+        if (widget->get_name() == name) {
+            return widget;
+        }
+    }
+    return nullptr;
 }
 
 bool WidgetManager::click(int mouse_x, int mouse_y) {
@@ -80,7 +68,9 @@ void WidgetManager::render() {
                 top_left_anchor_y += widget->get_height() + padding;
             } break;
             case Widget::Anchor::TOP_RIGHT: {
-                // TODO: Implement
+                widget->set_pos(top_right_anchor_x - widget->get_width(), top_right_anchor_y);
+                // Do nothing with the x position
+                top_right_anchor_y += widget->get_height() + padding;
             } break;
             case Widget::Anchor::BOTTOM_LEFT: {
                 widget->set_pos(bottom_left_anchor_x, bottom_left_anchor_y - widget->get_height());

@@ -9,6 +9,7 @@ class Entity {
 
 public:
     Entity(ArchetypeManager * archetypeManager);
+    Entity(ArchetypeManager * archetypeManager, const std::string& name, const std::string& archetype);
     Entity(ArchetypeManager * archetypeManager, nlohmann::json data);
     Entity(Entity && rhs) noexcept;
     ~Entity();
@@ -27,6 +28,7 @@ public:
     nlohmann::json get_entity_json() const;
 
     // Other utility functions
+    void load_texture();
     bool has_texture() const { return m_has_texture; }
     Texture * get_texture() const { return m_texture; }
 private:

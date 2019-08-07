@@ -119,6 +119,9 @@ public:
     void update();
     void render();
 
+    const std::string& get_name() const { return name; }
+    bool is_shown() const { return m_show; }
+
     void set_pos(int x, int y) { this->x = x; this->y = y; }
     int get_width() const { return m_width; }
     int get_height() const { return m_height; }
