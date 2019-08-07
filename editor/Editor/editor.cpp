@@ -150,16 +150,24 @@ void Editor::update() {
         }
     }
 
-    // Move entities?
-    if (leftMouseHeld() && m_edit_state == EditState::ENTITY) {
-        if (m_selected_entity != nullptr && m_moving_entity) {
-            m_selected_entity->set_pos(
-                static_cast<int>((getMouseX() + m_camera_x) / m_scale) - m_entity_move_offset_x,
-                static_cast<int>((getMouseY() + m_camera_y) / m_scale) - m_entity_move_offset_y
-            );
+    // Entity mode things
+    if (m_edit_state == EditState::ENTITY) {
+        // Moving entities?
+        if (leftMouseHeld()) {
+            if (m_selected_entity != nullptr && m_moving_entity) {
+                m_selected_entity->set_pos(
+                    static_cast<int>((getMouseX() + m_camera_x) / m_scale) - m_entity_move_offset_x,
+                    static_cast<int>((getMouseY() + m_camera_y) / m_scale) - m_entity_move_offset_y
+                );
+            }
+        } else {
+            // TODO: This flag might have to be reset upon switching into entity mode too
+            m_moving_entity = false;
         }
-    } else {
-        m_moving_entity = false;
+        // Delete entity?
+        if (keyDown(SDL_SCANCODE_DELETE)) {
+            delete_selected_entity();
+        }
     }
 }
 
@@ -377,4 +385,15 @@ void Editor::trigger_add_new_entity() {
 
 void Editor::add_new_entity(const std::string& name, const std::string& archetype) {
     m_entities.emplace_back(&archetypeManager, name, archetype);
+}
+
+void Editor::delete_selected_entity() {
+    if (!m_selected_entity) return;
+    for (auto it = m_entities.begin(); it != m_entities.end(); ++it) {
+        if (&(*it) == m_selected_entity) {
+            m_entities.erase(it);
+            break;
+        }
+    }
+    m_selected_entity = nullptr;
 }

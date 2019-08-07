@@ -12,6 +12,7 @@ public:
     Entity(ArchetypeManager * archetypeManager, const std::string& name, const std::string& archetype);
     Entity(ArchetypeManager * archetypeManager, nlohmann::json data);
     Entity(Entity && rhs) noexcept;
+    Entity& operator=(Entity& rhs);
     ~Entity();
 
     void render(int camera_x, int camera_y, float scale, bool outline = false);
@@ -25,7 +26,7 @@ public:
     void set_pos(int x, int y) { m_x = x; m_y = y; }
 
     // Use this function for serizliating
-    nlohmann::json get_entity_json() const;
+    nlohmann::json get_entity_json();
 
     // Other utility functions
     void load_texture();

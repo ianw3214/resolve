@@ -58,6 +58,7 @@ public:
     Entity * get_selected_entity() const { return m_selected_entity; }
     void trigger_add_new_entity();
     void add_new_entity(const std::string& name, const std::string& archetype);
+    void delete_selected_entity();
 
 private:
     /// --------------------------

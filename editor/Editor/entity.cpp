@@ -67,6 +67,27 @@ Entity::Entity(Entity && rhs) noexcept {
     m_target_h = rhs.m_target_h;
 }
 
+Entity& Entity::operator=(Entity& rhs) {
+    m_data = rhs.m_data;
+    m_x = rhs.m_x;
+    m_y = rhs.m_y;
+    archetypeManager = rhs.archetypeManager;
+    m_has_texture = rhs.m_has_texture;
+    m_texture = rhs.m_texture;
+    // Make sure the texture isn't deleted
+    // TODO: This is probably not right in the copy constructor
+    // Need to maybe build a cache of textures so not owned by entity
+    rhs.m_texture = nullptr;
+    m_w = rhs.m_w;
+    m_h = rhs.m_h;
+    m_animated = rhs.m_animated;
+    m_target_x = rhs.m_target_x;
+    m_target_y = rhs.m_target_y;
+    m_target_w = rhs.m_target_w;
+    m_target_h = rhs.m_target_h;
+    return *this;
+}
+
 Entity::~Entity() {
     delete m_texture;
 }
@@ -103,7 +124,21 @@ std::string Entity::get_archetype() const {
 }
 
 
-json Entity::get_entity_json() const {
+json Entity::get_entity_json() {
+    // Check if the position is different from archetype
+    // If it is, reflect upon the change in the data
+    // Might have to do this for other properties in the future
+    json archetype = archetypeManager->get_data(m_data["archetype"]);
+    if (archetype.find("position") != archetype.end()) {
+        int x = archetype["position"]["x"];
+        int y = archetype["position"]["y"];
+        if (x != m_x || y != m_y) {
+            json position;
+            position["x"] = m_x;
+            position["y"] = m_y;
+            m_data["position"] = position;
+        }
+    }
     return m_data;
 }
 
