@@ -176,26 +176,24 @@ void Widget::render() {
             // TODO: Cache this maybe
             // TODO: No magic numbers
             std::string font;
+            if (text.size == TextSize::TINY) font = "widget_tiny";
             if (text.size == TextSize::SMALL) font = "widget_small";
             if (text.size == TextSize::MEDIUM) font = "widget_medium";
             if (text.size == TextSize::LARGE) font = "widget_large";
             Texture tex(QcE::get_instance()->getTextEngine()->getTexture(text.text, font, {255, 255, 255, 255}));
             tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
-            if (text.newline) new_line();
-            else add_h_padding(text.text.size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
         }
         if (component->type == ComponentType::TEXT_REFERENCE) {
             TextReferenceComponent text = *(dynamic_cast<const TextReferenceComponent*>(component));
             // TODO: Cache this maybe
             // TODO: No magic numbers
             std::string font;
+            if (text.size == TextSize::TINY) font = "widget_tiny";
             if (text.size == TextSize::SMALL) font = "widget_small";
             if (text.size == TextSize::MEDIUM) font = "widget_medium";
             if (text.size == TextSize::LARGE) font = "widget_large";
             Texture tex(QcE::get_instance()->getTextEngine()->getTexture(*(text.reference), font, {255, 255, 255, 255}));
             tex.render(x + text.x_offset, y + text.y_offset - 4); // NOT SURE WHY THIS IS NEEDED
-            if (text.newline) new_line();
-            else add_h_padding((*(text.reference)).size() * 10 + 6);   // TODO: CHANGE MAGIC NUMBERS
         }
         if (component->type == ComponentType::IMAGE) {
             ImageComponent img = *(dynamic_cast<const ImageComponent*>(component));

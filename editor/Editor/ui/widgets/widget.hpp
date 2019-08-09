@@ -27,11 +27,13 @@ public:
 
     static const int text_padding = 4;
     enum class TextSize {
+        TINY = 12,
         SMALL = 16,
         MEDIUM = 32,
         LARGE = 64
     };
     int get_text_width(TextSize size) {
+        if (size == TextSize::TINY) return 7;
         if (size == TextSize::SMALL) return 10;
         if (size == TextSize::MEDIUM) return 20;
         if (size == TextSize::LARGE) return 36;

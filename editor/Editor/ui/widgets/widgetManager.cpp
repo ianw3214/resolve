@@ -17,6 +17,7 @@ void WidgetManager::reset_anchor_positions() {
 
 void WidgetManager::init() {
     // TOOD: No magic numbers
+    QcE::get_instance()->getTextEngine()->createFont("widget_tiny", "resources/Courier.ttf", 12);
     QcE::get_instance()->getTextEngine()->createFont("widget_small", "resources/Courier.ttf", 16);
     QcE::get_instance()->getTextEngine()->createFont("widget_medium", "resources/Courier.ttf", 32);
     QcE::get_instance()->getTextEngine()->createFont("widget_large", "resources/Courier.ttf", 64);
