@@ -70,7 +70,11 @@ void EntityEditWidget::define() {
         // Draw the entity info if it exists
         Entity * entity = editorRef->get_selected_entity();
         if (entity) {
-            draw_text(entity->get_name(), TextSize::SMALL);
+            if (entity->get_name().size() > 0) {
+                draw_text(entity->get_name(), TextSize::SMALL);
+            } else {
+                draw_text("- no name -", TextSize::SMALL);
+            }
             add_v_padding(20);
             // Show detailed attributes of the entity
             const std::string& archetype = entity->get_archetype();

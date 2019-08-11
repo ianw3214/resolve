@@ -91,6 +91,7 @@ private:
     EditState m_edit_state;
 
     Entity * m_selected_entity;
+    bool m_setting_pos;     // <-- This flag is used when first creating the entity and setting pos
     bool m_moving_entity;
     int m_entity_move_offset_x;
     int m_entity_move_offset_y;

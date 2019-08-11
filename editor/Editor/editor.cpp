@@ -23,6 +23,7 @@ Editor::Editor()
     , m_brush_tile(0)
     , m_edit_state(EditState::TILE)
     , m_selected_entity(nullptr)
+    , m_setting_pos(false)
     , m_moving_entity(false)
 {}
 
@@ -143,7 +144,11 @@ void Editor::update() {
                         toggle_collision(m_mouse_tile_x, m_mouse_tile_y);
                     }
                     if (m_edit_state == EditState::ENTITY) {
-                        select_entity(getMouseX(), getMouseY());
+                        if (m_setting_pos) {
+                            m_setting_pos = false;
+                        } else {
+                            select_entity(getMouseX(), getMouseY());
+                        }
                     }
                 }
             }
@@ -152,21 +157,30 @@ void Editor::update() {
 
     // Entity mode things
     if (m_edit_state == EditState::ENTITY) {
-        // Moving entities?
-        if (leftMouseHeld()) {
-            if (m_selected_entity != nullptr && m_moving_entity) {
-                m_selected_entity->set_pos(
-                    static_cast<int>((getMouseX() + m_camera_x) / m_scale) - m_entity_move_offset_x,
-                    static_cast<int>((getMouseY() + m_camera_y) / m_scale) - m_entity_move_offset_y
-                );
-            }
+        // The initial setting of entity position
+        if (m_setting_pos) {
+            m_selected_entity->set_pos(getMouseX(), getMouseY());
         } else {
-            // TODO: This flag might have to be reset upon switching into entity mode too
-            m_moving_entity = false;
-        }
-        // Delete entity?
-        if (keyDown(SDL_SCANCODE_DELETE)) {
-            delete_selected_entity();
+            // Moving entities?
+            if (leftMouseHeld()) {
+                if (m_selected_entity != nullptr && m_moving_entity) {
+                    m_selected_entity->set_pos(
+                        static_cast<int>((getMouseX() + m_camera_x) / m_scale) - m_entity_move_offset_x,
+                        static_cast<int>((getMouseY() + m_camera_y) / m_scale) - m_entity_move_offset_y
+                    );
+                }
+            } else {
+                // TODO: This flag might have to be reset upon switching into entity mode too
+                m_moving_entity = false;
+            }
+            // Trigger adding a new entity (SHORTCUT)
+            if (keyDown(SDL_SCANCODE_N)) {
+                trigger_add_new_entity();
+            }
+            // Delete entity?
+            if (keyDown(SDL_SCANCODE_DELETE)) {
+                delete_selected_entity();
+            }
         }
     }
 }
@@ -384,7 +398,9 @@ void Editor::trigger_add_new_entity() {
 }
 
 void Editor::add_new_entity(const std::string& name, const std::string& archetype) {
-    m_entities.emplace_back(&archetypeManager, name, archetype);
+    m_selected_entity = &(m_entities.emplace_back(&archetypeManager, name, archetype));
+    // Set the current entity to the new entity
+    m_setting_pos = true;
 }
 
 void Editor::delete_selected_entity() {
