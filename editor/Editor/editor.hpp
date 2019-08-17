@@ -54,6 +54,7 @@ public:
     void decrease_map_width();
     void decrease_map_height();
 
+    // Entity functions (defined in states/entity.cpp)
     void select_entity(int mouse_x, int mouse_y);
     Entity * get_selected_entity() const { return m_selected_entity; }
     void trigger_add_new_entity();
@@ -102,5 +103,10 @@ private:
     int m_pan_start_mouse_y;
     int m_pan_start_camera_x;
     int m_pan_start_camera_y;
+
+    /// --------------------------
+    /// Editor state helper functions
+    /// --------------------------
+    void update_entity_state();
 
 };
