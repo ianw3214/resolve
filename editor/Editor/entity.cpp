@@ -4,12 +4,36 @@
 using json = nlohmann::json;
 
 #include <fstream>
+#include <map>
+#include <string>
+
+/// A texture cache system
+class TextureCache {
+public:
+    Texture * load_texture(const std::string& path) {
+        // CREATE THE TEXTURE!
+        Texture * texture = new Texture(std::string("../") + path);
+        m_cache[path] = texture;
+        return texture;
+    }
+    Texture * get_texture(const std::string& path) {
+        if (path.size() == 0) return nullptr;
+        if (m_cache.find(path) != m_cache.end()) {
+            return m_cache[path];
+        }
+        return nullptr;
+    }
+private:
+    std::map<std::string, Texture *> m_cache;
+};
+static TextureCache s_cache;
 
 Entity::Entity(ArchetypeManager * archetypeManager) 
     : m_data()
     , archetypeManager(archetypeManager)
     , m_has_texture(false)
-    , m_texture(nullptr)
+    , m_texture()
+    , m_animated(false)
     , m_x(0)
     , m_y(0)
 {
@@ -22,7 +46,8 @@ Entity::Entity(ArchetypeManager * archetypeManager, const std::string& name, con
     : m_data()
     , archetypeManager(archetypeManager)
     , m_has_texture(false)
-    , m_texture(nullptr)
+    , m_texture()
+    , m_animated(false)
     , m_x(0)
     , m_y(0)
 {
@@ -37,7 +62,8 @@ Entity::Entity(ArchetypeManager * archetypeManager, json data)
     : m_data(data)
     , archetypeManager(archetypeManager)
     , m_has_texture(false) 
-    , m_texture(nullptr)
+    , m_texture()
+    , m_animated(false)
     , m_x(0)
     , m_y(0)
 {
@@ -56,8 +82,6 @@ Entity::Entity(Entity && rhs) noexcept {
     archetypeManager = rhs.archetypeManager;
     m_has_texture = rhs.m_has_texture;
     m_texture = rhs.m_texture;
-    // Make sure the texture isn't deleted
-    rhs.m_texture = nullptr;
     m_w = rhs.m_w;
     m_h = rhs.m_h;
     m_animated = rhs.m_animated;
@@ -74,10 +98,6 @@ Entity& Entity::operator=(Entity& rhs) {
     archetypeManager = rhs.archetypeManager;
     m_has_texture = rhs.m_has_texture;
     m_texture = rhs.m_texture;
-    // Make sure the texture isn't deleted
-    // TODO: This is probably not right in the copy constructor
-    // Need to maybe build a cache of textures so not owned by entity
-    rhs.m_texture = nullptr;
     m_w = rhs.m_w;
     m_h = rhs.m_h;
     m_animated = rhs.m_animated;
@@ -88,17 +108,20 @@ Entity& Entity::operator=(Entity& rhs) {
     return *this;
 }
 
-Entity::~Entity() {
-    delete m_texture;
-}
+Entity::~Entity() {}
 
 void Entity::render(int camera_x, int camera_y, float scale, bool outline) {
-    if (m_has_texture && m_texture != nullptr) {
+    if (m_has_texture && m_texture.size() > 0) {
         int x = static_cast<int>(m_x  * scale - camera_x);
         int y = static_cast<int>(m_y  * scale - camera_y);
         int w = static_cast<int>(m_w * scale);
         int h = static_cast<int>(m_h * scale);
-        m_texture->render(x, y, w, h);
+        if (s_cache.get_texture(m_texture)) {
+            if (m_animated) {
+                s_cache.get_texture(m_texture)->setSource(m_target_x, m_target_y, m_target_w, m_target_h);
+            }
+            s_cache.get_texture(m_texture)->render(x, y, w, h);
+        }
         // Render the outline if specified
         if (outline) {
             QcE::get_instance()->drawLine(x, y, x + w, y);
@@ -151,9 +174,8 @@ void Entity::load_texture() {
     }
     if (archetype.find("render") != archetype.end()) {
         m_has_texture = true;
-        std::string path = archetype["render"]["path"];
+        m_texture = archetype["render"]["path"];
         // CREATE THE TEXTURE!
-        m_texture = new Texture(std::string("../") + path);
         m_w = archetype["render"]["w"];
         m_h = archetype["render"]["h"];
         // Get correct info for animation if it exists
@@ -170,11 +192,10 @@ void Entity::load_texture() {
                 m_target_y = 0;
                 m_target_w = anim_json["frame_width"];
                 m_target_h = anim_json["frame_height"];
-
-                m_texture->setSource(m_target_x, m_target_y, m_target_w, m_target_h);
             } else {
                 // TODO: Error logging
             }
         }
+        s_cache.load_texture(m_texture);
     }
 }

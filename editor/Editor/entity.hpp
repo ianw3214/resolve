@@ -30,8 +30,8 @@ public:
 
     // Other utility functions
     void load_texture();
-    bool has_texture() const { return m_has_texture; }
-    Texture * get_texture() const { return m_texture; }
+    bool has_texture() const;
+    Texture * get_texture() const;
 private:
     // Use the raw json to store data
     nlohmann::json m_data;
@@ -42,7 +42,7 @@ private:
 
     // Cache texture for EZ optimization
     bool m_has_texture;
-    Texture * m_texture;
+    std::string m_texture;
     int m_w, m_h;
     // This is only relevant if animation exists
     bool m_animated;
