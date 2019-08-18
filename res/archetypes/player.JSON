@@ -7,7 +7,7 @@
     },
     "render": {
         "type": "texture",
-        "path": "res/player.png",
+        "path": "res/player/MIRA.png",
         "w": 64,
         "h": 64,
         "z": 100,
@@ -25,7 +25,7 @@
         "time": 0,
         "source": {},
         "data": {},
-        "path": "res/player.json",
+        "path": "res/player/player.json",
         "loaded": false,
         "loading": false
     },

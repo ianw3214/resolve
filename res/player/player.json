@@ -3,9 +3,9 @@
     "frame_width": 32,
     "frame_height": 32,
     "tilesheet": {
-        "width": 128,
-        "height": 256,
-        "columns": 4
+        "width": 320,
+        "height": 320,
+        "columns": 10
     },
     "states": {
         "IDLE_RIGHT": {
@@ -15,86 +15,118 @@
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
         "IDLE_LEFT": {
-            "start": 4,
-            "end": 4,
+            "start": 10,
+            "end": 10,
             "transition": {
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_LEFT"
             },
             "loop": true
         },
         "IDLE_UP": {
-            "start": 8,
-            "end": 8,
+            "start": 20,
+            "end": 20,
             "transition": {
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
         "IDLE_DOWN": {
-            "start": 12,
-            "end": 12,
+            "start": 30,
+            "end": 30,
             "transition": {
                 "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
-                "RUN_DOWN": "RUN_DOWN"
+                "RUN_DOWN": "RUN_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
             },
             "loop": true
         },
         "RUN_RIGHT": {
-            "start": 16,
-            "end": 19,
+            "start": 40,
+            "end": 47,
             "transition": {
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_RIGHT",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
+            },
+            "loop": true
+        },
+        "RUN_LEFT": {
+            "start": 50,
+            "end": 57,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_LEFT",
+                "BASIC_ATTACK": "BASIC_ATTACK_LEFT"
+            },
+            "loop": true
+        },
+        "RUN_UP": {
+            "start": 60,
+            "end": 65,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_UP",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
+            },
+            "loop": true
+        },
+        "RUN_DOWN": {
+            "start": 70,
+            "end": 75,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "IDLE": "IDLE_DOWN",
+                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
+            },
+            "loop": true
+        },
+        "BASIC_ATTACK_RIGHT": {
+            "start": 80,
+            "end": 84,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN",
                 "IDLE": "IDLE_RIGHT"
             },
-            "loop": true
+            "loop": false
         },
-        "RUN_LEFT": {
-            "start": 20,
-            "end": 23,
+        "BASIC_ATTACK_LEFT": {
+            "start": 90,
+            "end": 94,
             "transition": {
                 "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN",
                 "IDLE": "IDLE_LEFT"
             },
-            "loop": true
-        },
-        "RUN_UP": {
-            "start": 24,
-            "end": 27,
-            "transition": {
-                "RUN_RIGHT": "RUN_RIGHT",
-                "RUN_LEFT": "RUN_LEFT",
-                "RUN_DOWN": "RUN_DOWN",
-                "IDLE": "IDLE_UP"
-            },
-            "loop": true
-        },
-        "RUN_DOWN": {
-            "start": 28,
-            "end": 31,
-            "transition": {
-                "RUN_RIGHT": "RUN_RIGHT",
-                "RUN_LEFT": "RUN_LEFT",
-                "RUN_UP": "RUN_UP",
-                "IDLE": "IDLE_DOWN"
-            },
-            "loop": true
+            "loop": false
         }
     }
 }

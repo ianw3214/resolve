@@ -1,35 +1,5 @@
 "use strict";
 
-let player = {
-    render: renderSystem.generate("texture", "res/player.png", 64, 64, 100),
-    position: {
-        x: 200,
-        y: 200,
-        screen_x: 0,
-        screen_y: 0
-    },
-    move: moveSystem.generate(200),
-    camera: cameraSystem.generate(),
-    animation: animationSystem.generate("res/player.json"),
-    scaling: scalingSystem.generate(),
-    collision: collisionSystem.generate(collisionSystem.generateRect(32, 64), 16, 0),
-    attack: attackSystem.generate(),
-    health: healthSystem.generate()
-}
-
-let tree = {
-    render: renderSystem.generate("texture", "res/tree.png", 64, 128, 100),
-    position: {
-        x: 300,
-        y: 300,
-        screen_x: 0,
-        screen_y: 0
-    },
-    camera: cameraSystem.generate(),
-    scaling: scalingSystem.generate(),
-    collision: collisionSystem.generate(collisionSystem.generateRect(64, 128), 0, 0)
-}
-
 let game = {
     tile_map: [],
     draw_objects: [],
@@ -45,11 +15,6 @@ let game = {
         ECS.addSystem(moveSystem);
         ECS.addSystem(attackSystem);
         ECS.addSystem(healthSystem);
-        
-        /*
-        ECS.addEntity(player);
-        ECS.addEntity(tree);
-        */
 
         // TODO: Uncomment this for background music
         // audio.playTrack("res/sound/track.wav");
