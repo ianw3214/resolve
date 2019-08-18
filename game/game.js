@@ -66,6 +66,8 @@ let game = {
     draw: function (delta) {
         map.draw(cameraSystem.x, cameraSystem.y);
         // Then draw any game objects
+        // First sort by physical position, then sort by layer
+        game.draw_objects.sort(function(a, b) { return a.y + a.h - b.y - b.h });
         game.draw_objects.sort(function(a, b) { return a.z - b.z });
         for (let i in game.draw_objects) {
             let obj = game.draw_objects[i];
