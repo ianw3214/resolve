@@ -7,7 +7,7 @@
     },
     "render": {
         "type": "texture",
-        "path": "res/player/MIRA.png",
+        "path": "res/player/MIRA/MIRA.png",
         "w": 64,
         "h": 64,
         "z": 100,

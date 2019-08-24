@@ -5,7 +5,10 @@
 void Editor::update_entity_state() {
     // The initial setting of entity position
     if (m_setting_pos) {
-        m_selected_entity->set_pos(getMouseX(), getMouseY());
+        m_selected_entity->set_pos(
+            static_cast<int>((getMouseX() + m_camera_x) / m_scale) - m_entity_move_offset_x,
+            static_cast<int>((getMouseY() + m_camera_y) / m_scale) - m_entity_move_offset_y
+        );
     } else {
         // Moving entities?
         if (leftMouseHeld()) {
@@ -64,6 +67,8 @@ void Editor::add_new_entity(const std::string& name, const std::string& archetyp
     m_selected_entity = &(m_entities.emplace_back(&archetypeManager, name, archetype));
     // Set the current entity to the new entity
     m_setting_pos = true;
+    m_entity_move_offset_x = 0;
+    m_entity_move_offset_y = 0;
 }
 
 void Editor::delete_selected_entity() {

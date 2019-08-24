@@ -102,7 +102,9 @@ graphics.resize = function() {
 }
 
 graphics.setFullscreen = function() {
-    document.getElementById("glCanvas").requestFullscreen();
+    document.getElementById("glCanvas").requestFullscreen().catch(err => {
+        logger.warning("Unable to request fullscreen");
+    });
 }
 
 graphics.exitFullscreen = function() {
