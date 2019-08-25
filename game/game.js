@@ -15,6 +15,7 @@ let game = {
         ECS.addSystem(moveSystem);
         ECS.addSystem(attackSystem);
         ECS.addSystem(healthSystem);
+        ECS.addSystem(AISystem);
 
         // TODO: Uncomment this for background music
         // audio.playTrack("res/sound/track.wav");

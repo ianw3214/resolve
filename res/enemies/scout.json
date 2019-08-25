@@ -1,0 +1,100 @@
+{
+    "default": "IDLE_RIGHT",
+    "frame_width": 32,
+    "frame_height": 32,
+    "tilesheet": {
+        "width": 320,
+        "height": 320,
+        "columns": 10
+    },
+    "states": {
+        "IDLE_RIGHT": {
+            "start": 0,
+            "end": 0,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "IDLE_LEFT": {
+            "start": 10,
+            "end": 10,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "IDLE_UP": {
+            "start": 20,
+            "end": 20,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "IDLE_DOWN": {
+            "start": 30,
+            "end": 30,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN"
+            },
+            "loop": true
+        },
+        "RUN_RIGHT": {
+            "start": 40,
+            "end": 43,
+            "transition": {
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_RIGHT"
+            },
+            "loop": true
+        },
+        "RUN_LEFT": {
+            "start": 50,
+            "end": 53,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_LEFT"
+            },
+            "loop": true
+        },
+        "RUN_UP": {
+            "start": 60,
+            "end": 63,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_UP"
+            },
+            "loop": true
+        },
+        "RUN_DOWN": {
+            "start": 70,
+            "end": 73,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "IDLE": "IDLE_DOWN"
+            },
+            "loop": true
+        }
+    }
+}

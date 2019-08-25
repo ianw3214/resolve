@@ -12,11 +12,9 @@ let playerInputSystem = {
             }
             if (player.hasOwnProperty("move")) {
                 if (input.keyPressed(68) || input.keyPressed(39)) {
-                    // game.x += 5;
                     player.move.right = true;
                 }
                 if (input.keyPressed(65) || input.keyPressed(37)) {
-                    // game.x -= 5;
                     player.move.left = true;
                 }
                 if (input.keyPressed(87) || input.keyPressed(38)) {

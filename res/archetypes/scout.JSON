@@ -1,0 +1,62 @@
+{
+    "position": {
+        "x": 0,
+        "y": 0,
+        "screen_x": 0,
+        "screen_y": 0
+    },
+    "render": {
+        "type": "texture",
+        "path": "res/enemies/scout.png",
+        "w": 64,
+        "h": 64,
+        "z": 100,
+        "color": [
+            1.0,
+            0.0,
+            1.0,
+            1.0
+        ]
+    },
+    "animation": {
+        "state": "",
+        "hint": "",
+        "frame": 0,
+        "time": 0,
+        "source": {},
+        "data": {},
+        "path": "res/enemies/scout.json",
+        "loaded": false,
+        "loading": false
+    },
+    "move": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "was_moving": false,
+        "speed": 150
+    },
+    "camera": {
+        "affect": true
+    },
+    "scaling": {
+        "scaling": true
+    },
+    "collision": {
+        "shape": {
+            "type": "rect",
+            "width": 32,
+            "height": 64
+        },
+        "offset_x": 16,
+        "offset_y": 0
+    },
+    "health": {
+        "health": 3
+    },
+    "AI": {
+        "type": "scout",
+        "init": false
+    }
+}
