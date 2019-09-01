@@ -9,6 +9,9 @@ let cameraSystem = {
     player_y: 0,
     player_w: 0,
     player_h: 0,
+    // Cache player to improve performance
+    player: null,
+    reset_camera: false,
     generate: function(affect = true) {
         return {
             affect: affect
@@ -22,28 +25,32 @@ let cameraSystem = {
         // The fix as of right now is just initializing the scaling system first
         // If more systems need this kind of feature, something more elegant may be needed
         graphics.addFullscreenCallback((w, h) => {
-            // TODO: This doesn't work anymore for some reason
-            cameraSystem.x = cameraSystem.player_x * scalingSystem.scale - w / 2 + cameraSystem.player_w * scalingSystem.scale / 2;
-            cameraSystem.y = cameraSystem.player_y * scalingSystem.scale - h / 2 + cameraSystem.player_h * scalingSystem.scale / 2;
+            cameraSystem.reset_camera = true;
         });
     },
     update: function (entities, delta) {
         // Look for the player first (Assume there is only one)
-        let player = undefined;
-        for (let entity of entities) {
-            if (entity.hasOwnProperty("player_input") === true) {
-                // Cache these things so fullscreen callback can use
-                cameraSystem.player_x = entity.position.x;
-                cameraSystem.player_y = entity.position.y;
-                cameraSystem.player_w = entity.render.w;
-                cameraSystem.player_h = entity.render.h;
-                player = entity;
-                continue;
+        if (cameraSystem.player === null || cameraSystem.reset_camera === true) {
+            for (let entity of entities) {
+                if (entity.hasOwnProperty("player_input") === true) {
+                    // Cache these things so fullscreen callback can use
+                    cameraSystem.player_x = entity.position.x;
+                    cameraSystem.player_y = entity.position.y;
+                    cameraSystem.player_w = entity.render.w;
+                    cameraSystem.player_h = entity.render.h;
+                    cameraSystem.player = entity;
+                    // There should only be one, so we can break once we find it
+                    break;
+                }
             }
         }
-        if (player === undefined) {
-            return;
+        if (cameraSystem.player === null) return;
+        if (cameraSystem.reset_camera === true) {
+            cameraSystem.x = cameraSystem.player_x * scalingSystem.scale - graphics.width() / 2 + cameraSystem.player_w * scalingSystem.scale / 2;
+            cameraSystem.y = cameraSystem.player_y * scalingSystem.scale - graphics.height() / 2 + cameraSystem.player_h * scalingSystem.scale / 2;
+            cameraSystem.reset_camera = false;
         }
+        let player = cameraSystem.player;
         // Have the camera follow the player
         // TODO: Calculate target based on movement inputs
         let target_x = player.position.x * scalingSystem.scale - graphics.width() / 2 + player.render.w * scalingSystem.scale / 2;

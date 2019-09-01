@@ -1,15 +1,10 @@
 "use strict";
 
 let playerInputSystem = {
+    player: null,   // There should only be one player, so we can cache it
     update: function(entities, delta) {
-        for (let i in entities) {
-            let player = entities[i];
-            if (player.hasOwnProperty("player_input") !== true) {
-                continue;
-            }
-            if (player.player_input.affect !== true) {
-                continue;
-            }
+        if (playerInputSystem.player !== null) {
+            let player = playerInputSystem.player;
             if (player.hasOwnProperty("move")) {
                 if (input.keyPressed(68) || input.keyPressed(39)) {
                     player.move.right = true;
@@ -28,6 +23,16 @@ let playerInputSystem = {
                 if (input.keyPressed(49)) {
                     // BASIC ATTACK
                     player.attack.attacks.push("basic");
+                }
+            }
+        } else {
+            for (let i in entities) {
+                let target = entities[i];
+                if (target.hasOwnProperty("player_input") === true) {
+                    if (target.player_input.affect === true) {
+                        playerInputSystem.player = target;
+                        break;
+                    }   
                 }
             }
         }
