@@ -44,11 +44,11 @@
         "scaling": true
     },
     "attack": {
-        "attacks": [],
+        "input_attack": null,
         "attacking": false,
+        "attack_timer": 0,
         "basic": {
-            "anim_key": "BASIC_ATTACK",
-            "cooldown": 150,
+            "timer": 270,
             "curr_cooldown": 0
         }
     },
