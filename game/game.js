@@ -4,7 +4,6 @@ let game = {
     tile_map: [],
     draw_objects: [],
     init: function () {
-        map.load("res/maps/test.json");
         // Reset the ECS in case it was in use previously
         ECS.reset();
         ECS.addSystem(scalingSystem);
@@ -16,6 +15,8 @@ let game = {
         ECS.addSystem(attackSystem);
         ECS.addSystem(healthSystem);
         ECS.addSystem(AISystem);
+
+        map.load("res/maps/test.json");
 
         // TODO: Uncomment this for background music
         // audio.playTrack("res/sound/track.wav");
