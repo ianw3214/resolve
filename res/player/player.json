@@ -4,7 +4,7 @@
     "frame_height": 32,
     "tilesheet": {
         "width": 320,
-        "height": 320,
+        "height": 640,
         "columns": 10
     },
     "states": {
@@ -52,7 +52,7 @@
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN",
-                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
+                "BASIC_ATTACK": "BASIC_ATTACK_DOWN"
             },
             "loop": true
         },
@@ -100,7 +100,7 @@
                 "RUN_LEFT": "RUN_LEFT",
                 "RUN_UP": "RUN_UP",
                 "IDLE": "IDLE_DOWN",
-                "BASIC_ATTACK": "BASIC_ATTACK_RIGHT"
+                "BASIC_ATTACK": "BASIC_ATTACK_DOWN"
             },
             "loop": true
         },
@@ -125,6 +125,18 @@
                 "RUN_UP": "RUN_UP",
                 "RUN_DOWN": "RUN_DOWN",
                 "IDLE": "IDLE_LEFT"
+            },
+            "loop": false
+        },
+        "BASIC_ATTACK_DOWN": {
+            "start": 110,
+            "end": 114,
+            "transition": {
+                "RUN_RIGHT": "RUN_RIGHT",
+                "RUN_LEFT": "RUN_LEFT",
+                "RUN_UP": "RUN_UP",
+                "RUN_DOWN": "RUN_DOWN",
+                "IDLE": "IDLE_DOWN"
             },
             "loop": false
         }
